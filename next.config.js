@@ -51,7 +51,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/((?!favicon\\.ico|apple-touch-icon\\.png|site\\.webmanifest).*)',
         headers: [
           {
             key: 'X-Frame-Options',
