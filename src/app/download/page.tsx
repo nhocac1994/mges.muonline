@@ -93,7 +93,7 @@ export default function Download() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
                   <a 
-                    href="https://drive.google.com/file/d/1ABC123XYZ/view?usp=sharing" 
+                    href="https://drive.google.com/file/d/11XWOxM88XId3zXyeTC6HxiwcJr5m2Dth/view?usp=drive_link" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -126,7 +126,7 @@ export default function Download() {
               </div>
               
               {/* Launcher Download Links */}
-              <div className="mt-8 pt-6 border-t border-gray-600">
+              {/* <div className="mt-8 pt-6 border-t border-gray-600">
                 <h3 className="text-2xl font-bold text-white mb-6 text-center">🚀 LAUNCHER</h3>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="text-center">
@@ -160,65 +160,10 @@ export default function Download() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Client Download */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-blue-500/30">
-              <h2 className="text-3xl font-bold text-white mb-8">🎮 CLIENT GAME</h2>
-              <div className="space-y-6">
-                <div className="bg-gray-800/50 rounded-lg p-6">
-                  <h3 className="text-xl font-bold text-white mb-4">Mu Online Client v1.0</h3>
-                  <p className="text-gray-300 mb-4">Phiên bản client chính thức cho server</p>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-300">Kích thước:</span>
-                    <span className="text-blue-400 font-bold">2.5 GB</span>
-                  </div>
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-gray-300">Phiên bản:</span>
-                    <span className="text-green-400 font-bold">Season 1</span>
-                  </div>
-                  <a 
-                    href="https://drive.google.com/drive/folders/1ihPYz8zv3UpgbZd_xHFl4YnPCu2nhyy0?usp=sharing" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block text-center"
-                  >
-                    📥 Tải Xuống Client
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Launcher Download */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-green-500/30">
-              <h2 className="text-3xl font-bold text-white mb-8">🚀 LAUNCHER</h2>
-              <div className="space-y-6">
-                <div className="bg-gray-800/50 rounded-lg p-6">
-                  <h3 className="text-xl font-bold text-white mb-4">Mu Launcher v2.0</h3>
-                  <p className="text-gray-300 mb-4">Launcher tự động cập nhật và kết nối</p>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-300">Kích thước:</span>
-                    <span className="text-blue-400 font-bold">50 MB</span>
-                  </div>
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-gray-300">Tính năng:</span>
-                    <span className="text-green-400 font-bold">Auto Update</span>
-                  </div>
-                  <a 
-                    href="https://drive.google.com/file/d/1DEF456UVW/view?usp=sharing" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block text-center"
-                  >
-                    📥 Tải Xuống Launcher
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
