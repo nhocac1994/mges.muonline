@@ -19,6 +19,11 @@ const nextConfig = {
   // Output configuration
   output: 'standalone',
   
+  // Disable cache for development
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
+  
   // Environment variables
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
@@ -41,6 +46,10 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
           },
         ],
       },

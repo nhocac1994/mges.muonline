@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "build:analyze": "ANALYZE=true next build",
-    "build:production": "NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 next build"
+    "build:production": "NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 next build",
+    "clean": "rm -rf .next && rm -rf node_modules/.cache",
+    "build:clean": "npm run clean && npm run build"
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
