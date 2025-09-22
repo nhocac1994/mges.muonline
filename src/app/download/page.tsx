@@ -85,6 +85,85 @@ export default function Download() {
       {/* Download Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
+          {/* Alternative Download Links */}
+          <div className="mb-12">
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-yellow-500/30">
+              <h2 className="text-3xl font-bold text-white mb-6 text-center">🔗 LINK TẢI GAME</h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
+                  <a 
+                    href="https://drive.google.com/file/d/1ABC123XYZ/view?usp=sharing" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                  >
+                    📥 Tải Client
+                  </a>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
+                  <a 
+                    href="https://www.mediafire.com/file/xyz123/client.zip/file" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                  >
+                    📥 Tải Client
+                  </a>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
+                  <a 
+                    href="https://mega.nz/file/abc123#xyz789" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                  >
+                    📥 Tải Client
+                  </a>
+                </div>
+              </div>
+              
+              {/* Launcher Download Links */}
+              <div className="mt-8 pt-6 border-t border-gray-600">
+                <h3 className="text-2xl font-bold text-white mb-6 text-center">🚀 LAUNCHER</h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <a 
+                      href="https://drive.google.com/file/d/1DEF456UVW/view?usp=sharing" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                    >
+                      📥 Tải Launcher
+                    </a>
+                  </div>
+                  <div className="text-center">
+                    <a 
+                      href="https://www.mediafire.com/file/launcher123/launcher.exe/file" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                    >
+                      📥 Tải Launcher
+                    </a>
+                  </div>
+                  <div className="text-center">
+                    <a 
+                      href="https://mega.nz/file/launcher456#key789" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
+                    >
+                      📥 Tải Launcher
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Client Download */}
             <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-blue-500/30">
@@ -101,9 +180,14 @@ export default function Download() {
                     <span className="text-gray-300">Phiên bản:</span>
                     <span className="text-green-400 font-bold">Season 1</span>
                   </div>
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors">
-                    📥 Tải Xuống
-                  </button>
+                  <a 
+                    href="https://drive.google.com/drive/folders/1ihPYz8zv3UpgbZd_xHFl4YnPCu2nhyy0?usp=sharing" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block text-center"
+                  >
+                    📥 Tải Xuống Client
+                  </a>
                 </div>
               </div>
             </div>
@@ -123,9 +207,14 @@ export default function Download() {
                     <span className="text-gray-300">Tính năng:</span>
                     <span className="text-green-400 font-bold">Auto Update</span>
                   </div>
-                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors">
-                    📥 Tải Xuống
-                  </button>
+                  <a 
+                    href="https://drive.google.com/file/d/1DEF456UVW/view?usp=sharing" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block text-center"
+                  >
+                    📥 Tải Xuống Launcher
+                  </a>
                 </div>
               </div>
             </div>

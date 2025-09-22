@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const result = await loginAccount(body.username, body.password);
 
     return NextResponse.json(result);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, message: 'Lỗi server' },
       { status: 500 }

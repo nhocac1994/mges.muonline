@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
-import sql from 'mssql';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Mock data mặc định
   const defaultLevelRanking = [
     { CharacterName: 'cuccut', Class: 'Dark Knight', cLevel: 400, Experience: 999999999 },
@@ -103,7 +102,7 @@ export async function GET(request: NextRequest) {
       if (levelResult.recordset.length > 0) {
         levelRanking = levelResult.recordset;
       }
-    } catch (error) {
+    } catch {
       console.log('Character table not found or empty, using mock data');
     }
 
@@ -122,7 +121,7 @@ export async function GET(request: NextRequest) {
       if (guildResult.recordset.length > 0) {
         guildRanking = guildResult.recordset;
       }
-    } catch (error) {
+    } catch {
       console.log('Guild table not found or empty, using mock data');
     }
 
@@ -143,7 +142,7 @@ export async function GET(request: NextRequest) {
       if (eventsResult.recordset.length > 0) {
         events = eventsResult.recordset;
       }
-    } catch (error) {
+    } catch {
       console.log('Events table not found or empty, using mock data');
     }
 
