@@ -24,3 +24,107 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(59, 130, 246, 0.5),
+                 0 0 10px rgba(59, 130, 246, 0.3),
+                 0 0 15px rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8),
+                 0 0 20px rgba(59, 130, 246, 0.6),
+                 0 0 30px rgba(59, 130, 246, 0.4);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    border-color: transparent;
+  }
+  51%, 100% {
+    border-color: #3b82f6;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-typewriter {
+  overflow: hidden;
+  border-right: 2px solid #3b82f6;
+  white-space: nowrap;
+  animation: typewriter 3s steps(40, end), blink 0.75s step-end infinite;
+}
+
+/* Enhanced hover effects */
+.hover-lift {
+  transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Gradient text effects */
+.gradient-text {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ef4444);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
