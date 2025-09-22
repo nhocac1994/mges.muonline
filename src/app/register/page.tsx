@@ -18,7 +18,14 @@ export default function Register() {
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSuccess, setIsSuccess] = useState(false);
-  const [successData, setSuccessData] = useState<any>(null);
+  const [successData, setSuccessData] = useState<{
+    username: string;
+    characterName: string;
+    email: string;
+    phone: string;
+    securityQuestion: string;
+    securityAnswer: string;
+  } | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

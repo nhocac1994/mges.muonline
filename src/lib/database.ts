@@ -58,7 +58,7 @@ export async function createAccount(accountData: {
     }
 
     // Insert new account
-    const result = await pool.request()
+    await pool.request()
       .input('username', sql.VarChar(10), accountData.username)
       .input('password', sql.VarChar(10), accountData.password)
       .input('characterName', sql.VarChar(10), accountData.characterName)

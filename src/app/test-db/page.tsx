@@ -1,9 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function TestDatabase() {
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
 
   const testConnection = async () => {
@@ -12,7 +16,7 @@ export default function TestDatabase() {
       const response = await fetch('/api/test-db');
       const data = await response.json();
       setResult(data);
-    } catch (error) {
+    } catch {
       setResult({ success: false, message: 'Lỗi kết nối API' });
     } finally {
       setLoading(false);
@@ -76,12 +80,12 @@ export default function TestDatabase() {
             )}
 
             <div className="mt-8 text-center">
-              <a 
+              <Link 
                 href="/" 
                 className="text-yellow-400 hover:text-yellow-300"
               >
                 ← Quay lại trang chủ
-              </a>
+              </Link>
             </div>
           </div>
         </div>

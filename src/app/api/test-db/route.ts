@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const result = await testConnection();
     return NextResponse.json(result);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, message: 'Lỗi server' },
       { status: 500 }

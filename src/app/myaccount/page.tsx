@@ -5,7 +5,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function MyAccount() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{
+    username: string;
+    characterName: string;
+    email: string;
+    phone: string;
+    securityQuestion: string;
+    securityAnswer: string;
+    joinDate: string;
+    lastLogin: string;
+    accountLevel: number;
+    accountExpire: string;
+  } | null>(null);
   const [activeTab, setActiveTab] = useState('profile');
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
