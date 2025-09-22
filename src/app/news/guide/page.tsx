@@ -98,7 +98,7 @@ export default function NewsGuide() {
               </div>
               
               <h1 className="text-4xl font-bold text-white mb-6">
-                HƯỚNG DẪN CHƠI MUBANVIET - SEASON 1
+                HƯỚNG DẪN CHƠI MU DAU TRUONG - SEASON 1
               </h1>
               
               <div className="prose prose-invert max-w-none">

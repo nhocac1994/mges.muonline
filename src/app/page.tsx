@@ -53,7 +53,7 @@ export default function Home() {
   };
   const news = [
     {
-      title: 'HƯỚNG DẪN CHƠI MUBANVIET - SEASON 1',
+      title: 'HƯỚNG DẪN CHƠI MU DAU TRUONG - SEASON 1',
       date: '14/09/2025',
       type: 'Notice',
       link: '/news/guide'

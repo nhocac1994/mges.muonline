@@ -112,7 +112,7 @@ export default function News() {
                   <span className="text-gray-400">22/09/2024</span>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-4">
-                  HƯỚNG DẪN CHƠI MUBANVIET - SEASON 1
+                  HƯỚNG DẪN CHƠI MU DAU TRUONG - SEASON 1
                 </h2>
                 <p className="text-gray-300 mb-6">
                   Hướng dẫn chi tiết cách chơi game Mu Online Season 1, từ việc tạo nhân vật đến các tính năng nâng cao. 
