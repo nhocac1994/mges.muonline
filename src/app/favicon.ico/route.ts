@@ -4,7 +4,7 @@ import { join } from 'path';
 
 export async function GET(request: NextRequest) {
   try {
-    const faviconPath = join(process.cwd(), 'public', 'favicon.ico');
+    const faviconPath = join(process.cwd(), 'public', 'favicon', 'favicon.ico');
     const faviconBuffer = await readFile(faviconPath);
     
     return new NextResponse(new Uint8Array(faviconBuffer), {
