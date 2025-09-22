@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Disable telemetry
-  telemetry: false,
-  
   // Optimize images
   images: {
     domains: ['localhost'],
