@@ -7,11 +7,28 @@ const config = {
   password: process.env.DB_PASSWORD || 'your_password',
   port: parseInt(process.env.DB_PORT || '1433'),
   options: {
-    encrypt: false,
-    trustServerCertificate: true,
-    enableArithAbort: true
+    encrypt: true,  // ✅ Enable encryption
+    trustServerCertificate: false,  // ✅ Don't trust all certificates
+    enableArithAbort: true,
+    connectionTimeout: 30000,  // 30 seconds timeout
+    requestTimeout: 30000,     // 30 seconds timeout
+    pool: {
+      max: 10,        // Maximum 10 connections
+      min: 0,         // Minimum 0 connections
+      idleTimeoutMillis: 30000  // 30 seconds idle timeout
+    }
   }
 };
+
+// Connection pool to prevent connection flooding
+let pool: sql.ConnectionPool | null = null;
+
+export async function getConnectionPool(): Promise<sql.ConnectionPool> {
+  if (!pool) {
+    pool = await sql.connect(config);
+  }
+  return pool;
+}
 
 export async function connectToDatabase() {
   try {
@@ -20,6 +37,13 @@ export async function connectToDatabase() {
   } catch (error) {
     console.error('Database connection error:', error);
     throw error;
+  }
+}
+
+export async function closeConnectionPool() {
+  if (pool) {
+    await pool.close();
+    pool = null;
   }
 }
 

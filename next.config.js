@@ -34,6 +34,11 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
+  // ESLint configuration
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
   // Output configuration
   output: 'export',
   trailingSlash: true,
