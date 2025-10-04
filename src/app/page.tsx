@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import EventCountdown from '@/components/EventCountdown';
-import RankingSection from '@/components/RankingSection';
 
 export default function Home() {
   const news = [
@@ -69,9 +68,6 @@ export default function Home() {
             <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-8 justify-center">
               <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               TRANG CHỦ
-            </Link>
-              <Link href="/ranking" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
-              XẾP HẠNG
             </Link>
               <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               THÔNG TIN
@@ -194,10 +190,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Ranking Section */}
-          <section className="mb-12">
-            <RankingSection />
-          </section>
 
           {/* Download Section */}
           <section className="py-16 bg-black/30">
