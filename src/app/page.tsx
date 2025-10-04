@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import EventCountdown from '@/components/EventCountdown';
+import RankingSection from '@/components/RankingSection';
 
 export default function Home() {
   const news = [
@@ -68,6 +69,9 @@ export default function Home() {
             <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-8 justify-center">
               <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               TRANG CHỦ
+            </Link>
+              <Link href="/ranking" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              XẾP HẠNG
             </Link>
               <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
               THÔNG TIN
@@ -190,6 +194,11 @@ export default function Home() {
             </div>
           </section>
 
+          {/* Ranking Section */}
+          <section className="mb-12">
+            <RankingSection />
+          </section>
+
           {/* Download Section */}
           <section className="py-16 bg-black/30">
             <div className="container mx-auto px-4">
@@ -279,7 +288,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
-                  <p className="text-blue-300 text-sm">Server Mu Online Season 1</p>
+                  <p className="text-blue-300 text-sm">033.77.14.654</p>
                 </div>
               </div>
               <p className="text-gray-300 text-sm leading-relaxed">
@@ -321,13 +330,13 @@ export default function Home() {
                 Mạng Xã Hội
               </h4>
               <div className="flex space-x-4">
-                <a href="#" className="group flex items-center justify-center w-12 h-12 bg-blue-600/20 hover:bg-blue-600/40 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110">
+                <a href="https://www.facebook.com/share/1M4JHtJCpS/?mibextid=wwXIfr" className="group flex items-center justify-center w-12 h-12 bg-blue-600/20 hover:bg-blue-600/40 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110">
                   <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} className="group-hover:scale-110 transition-transform" />
                 </a>
-                <a href="#" className="group flex items-center justify-center w-12 h-12 bg-pink-600/20 hover:bg-pink-600/40 rounded-lg border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300 hover:scale-110">
+                <a href="https://www.tiktok.com/@mu_dautruong?is_from_webapp=1&sender_device=pc" className="group flex items-center justify-center w-12 h-12 bg-pink-600/20 hover:bg-pink-600/40 rounded-lg border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300 hover:scale-110">
                   <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} className="group-hover:scale-110 transition-transform" />
                 </a>
-                <a href="#" className="group flex items-center justify-center w-12 h-12 bg-blue-500/20 hover:bg-blue-500/40 rounded-lg border border-blue-400/30 hover:border-blue-300/50 transition-all duration-300 hover:scale-110">
+                <a href="https://zalo.me/0337714654" className="group flex items-center justify-center w-12 h-12 bg-blue-500/20 hover:bg-blue-500/40 rounded-lg border border-blue-400/30 hover:border-blue-300/50 transition-all duration-300 hover:scale-110">
                   <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} className="group-hover:scale-110 transition-transform" />
                 </a>
               </div>
