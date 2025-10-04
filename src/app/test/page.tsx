@@ -19,18 +19,39 @@ export default function TestPage() {
     }
   };
 
+  const testDatabase = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/test-db-simple');
+      const data = await response.json();
+      setResult(data);
+    } catch (error) {
+      setResult({ success: false, message: 'Lỗi kiểm tra database config' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white p-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-center">🧪 Test Server</h1>
         
-        <div className="bg-black/50 rounded-lg p-6">
+        <div className="bg-black/50 rounded-lg p-6 space-y-4">
           <button
             onClick={testConnection}
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >
             {loading ? 'Đang test...' : 'Test Kết Nối Server'}
+          </button>
+          
+          <button
+            onClick={testDatabase}
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+          >
+            {loading ? 'Đang test...' : 'Test Database Config'}
           </button>
 
           {result && (
