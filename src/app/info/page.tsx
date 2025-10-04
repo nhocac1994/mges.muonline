@@ -225,7 +225,7 @@ export default function Info() {
                       <td className="py-4 px-6">Auto Reset your character</td>
                     </tr>
                     <tr className="border-b border-gray-700/50 hover:bg-gray-800/30 transition-colors">
-                      <td className="py-4 px-6 font-mono text-green-400">/change</td>
+                      <td className="py-4 px-6 font-mono text-green-400">/nv</td>
                       <td className="py-4 px-6">Làm nhiệm vụ nhanh</td>
                     </tr>
                     <tr className="border-b border-gray-700/50 hover:bg-gray-800/30 transition-colors">
@@ -273,12 +273,8 @@ export default function Info() {
                       <td className="py-4 px-6">Cộng điểm mệnh lệnh</td>
                     </tr>
                     <tr className="border-b border-gray-700/50 hover:bg-gray-800/30 transition-colors">
-                      <td className="py-4 px-6 font-mono text-green-400">/ware [0-5]</td>
+                      <td className="py-4 px-6 font-mono text-green-400">/thungdo [0-5]</td>
                       <td className="py-4 px-6">Mở thùng đồ cá nhân từ 1 - 5</td>
-                    </tr>
-                    <tr className="border-b border-gray-700/50 hover:bg-gray-800/30 transition-colors">
-                      <td className="py-4 px-6 font-mono text-green-400">/requests [on/off]</td>
-                      <td className="py-4 px-6">Bật / tắt requests trong game</td>
                     </tr>
                   </tbody>
                 </table>

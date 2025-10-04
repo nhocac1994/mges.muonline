@@ -71,7 +71,7 @@ export default function TestDatabase() {
                 
                 {result.success && (
                   <div className="mt-4 text-sm text-gray-300">
-                    <p>Server: 103.110.85.229</p>
+                    <p>Server: [Hidden for security]</p>
                     <p>Database: MuOnline</p>
                     <p>Port: 1433</p>
                   </div>

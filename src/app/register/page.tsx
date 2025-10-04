@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import SimpleCaptcha from '@/components/SimpleCaptcha';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ export default function Register() {
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSuccess, setIsSuccess] = useState(false);
+  const [captchaValid, setCaptchaValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [successData, setSuccessData] = useState<{
     username: string;
     characterName: string;
@@ -70,6 +73,8 @@ export default function Register() {
     
     if (!validateForm()) return;
 
+    setIsLoading(true);
+
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -102,6 +107,8 @@ export default function Register() {
     } catch (error) {
       console.error('Registration error:', error);
       alert('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -427,13 +434,37 @@ export default function Register() {
                 </div>
               </div>
 
+              {/* CAPTCHA */}
+              <div>
+                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Xác thực bảo mật</h3>
+                <SimpleCaptcha onVerify={setCaptchaValid} />
+              </div>
+
               {/* Submit Button */}
               <div className="text-center">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-yellow-500 to-red-500 text-white font-bold py-4 px-8 rounded-lg hover:from-yellow-600 hover:to-red-600 transition-all text-lg"
+                  disabled={!captchaValid || isLoading}
+                  className={`font-bold py-4 px-8 rounded-lg transition-all text-lg flex items-center justify-center gap-3 ${
+                    captchaValid && !isLoading
+                      ? 'bg-gradient-to-r from-yellow-500 to-red-500 text-white hover:from-yellow-600 hover:to-red-600' 
+                      : 'bg-gray-500 text-gray-300 cursor-not-allowed'
+                  }`}
                 >
-                  TẠO TÀI KHOẢN
+                  {isLoading ? (
+                    <>
+                      <div className="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                      ĐANG XỬ LÝ...
+                    </>
+                  ) : captchaValid ? (
+                    'TẠO TÀI KHOẢN'
+                  ) : (
+                    'VUI LÒNG XÁC THỰC CAPTCHA'
+                  )}
                 </button>
               </div>
 

@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SecurityGuard from "@/components/SecurityGuard";
+import SecurityWarning from "@/components/SecurityWarning";
 
-const geistSans = Geist({
+// Sử dụng font system thay vì Google Fonts để tránh timeout
+const geistSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+};
 
 export const metadata: Metadata = {
   title: "MuDauTruongSS1.Net - Mu Online Season 1",
@@ -118,6 +118,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <SecurityGuard />
+        <SecurityWarning />
         {children}
       </body>
     </html>

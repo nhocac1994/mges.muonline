@@ -1,16 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+import SimpleCaptcha from '@/components/SimpleCaptcha';
 
 export default function Login() {
   const [formData, setFormData] = useState({
     username: '',
-    password: '',
-    captcha: ''
+    password: ''
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [captchaValid, setCaptchaValid] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,89 +34,41 @@ export default function Login() {
 
     if (!formData.username) newErrors.username = 'Tên đăng nhập là bắt buộc';
     if (!formData.password) newErrors.password = 'Mật khẩu là bắt buộc';
-    if (!formData.captcha) newErrors.captcha = 'Vui lòng nhập kết quả CAPTCHA';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  const [captchaQuestion, setCaptchaQuestion] = useState('');
-  const [captchaAnswer, setCaptchaAnswer] = useState(0);
-
-  // Generate math CAPTCHA
-  const generateCaptcha = () => {
-    const num1 = Math.floor(Math.random() * 10) + 1;
-    const num2 = Math.floor(Math.random() * 10) + 1;
-    const operation = ['+', '-', '*'][Math.floor(Math.random() * 3)];
-    
-    let question: string;
-    let answer: number;
-    
-    switch (operation) {
-      case '+':
-        question = `${num1} + ${num2} = ?`;
-        answer = num1 + num2;
-        break;
-      case '-':
-        question = `${num1} - ${num2} = ?`;
-        answer = num1 - num2;
-        break;
-      case '*':
-        question = `${num1} × ${num2} = ?`;
-        answer = num1 * num2;
-        break;
-      default:
-        question = `${num1} + ${num2} = ?`;
-        answer = num1 + num2;
-    }
-    
-    setCaptchaQuestion(question);
-    setCaptchaAnswer(answer);
-  };
-
-  // Generate CAPTCHA on component mount
-  useEffect(() => {
-    generateCaptcha();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) return;
 
-    // Validate CAPTCHA
-    if (parseInt(formData.captcha) !== captchaAnswer) {
-      setErrors({ captcha: 'Sai kết quả CAPTCHA' });
-      generateCaptcha(); // Generate new CAPTCHA
-      return;
-    }
-
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          captcha: 'verified' // CAPTCHA already verified
-        }),
+        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
       
       if (result.success) {
+        // Store user data in localStorage
+        localStorage.setItem('auth_token', 'temp_token_' + Date.now());
+        localStorage.setItem('user_data', JSON.stringify(result.data));
+        
         alert('Đăng nhập thành công!');
-        // Redirect to myaccount page
-        window.location.href = '/myaccount';
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
       } else {
         alert(result.message);
-        generateCaptcha(); // Generate new CAPTCHA on failure
       }
     } catch (error) {
       console.error('Login error:', error);
       alert('Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.');
-      generateCaptcha();
     }
   };
 
@@ -218,7 +171,6 @@ export default function Login() {
                     errors.username ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
                   }`}
                   placeholder="Nhập tên đăng nhập"
-                  maxLength={10}
                 />
                 {errors.username && <p className="text-red-400 text-sm mt-1">{errors.username}</p>}
               </div>
@@ -236,26 +188,8 @@ export default function Login() {
                     errors.password ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
                   }`}
                   placeholder="Nhập mật khẩu"
-                  maxLength={10}
                 />
                 {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
-              </div>
-
-              <div>
-                <label className="block text-white font-semibold mb-2">
-                  Xác minh: {captchaQuestion}
-                </label>
-                <input
-                  type="number"
-                  name="captcha"
-                  value={formData.captcha}
-                  onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none ${
-                    errors.captcha ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                  }`}
-                  placeholder="Nhập kết quả"
-                />
-                {errors.captcha && <p className="text-red-400 text-sm mt-1">{errors.captcha}</p>}
               </div>
 
               <div className="text-right">
@@ -264,11 +198,19 @@ export default function Login() {
                 </Link>
               </div>
 
+              {/* CAPTCHA */}
+              <SimpleCaptcha onVerify={setCaptchaValid} />
+
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-yellow-500 to-red-500 text-white font-bold py-3 px-6 rounded-lg hover:from-yellow-600 hover:to-red-600 transition-all"
+                disabled={!captchaValid}
+                className={`w-full font-bold py-3 px-6 rounded-lg transition-all ${
+                  captchaValid 
+                    ? 'bg-gradient-to-r from-yellow-500 to-red-500 text-white hover:from-yellow-600 hover:to-red-600' 
+                    : 'bg-gray-500 text-gray-300 cursor-not-allowed'
+                }`}
               >
-                ĐĂNG NHẬP
+                {captchaValid ? 'ĐĂNG NHẬP' : 'VUI LÒNG XÁC THỰC CAPTCHA'}
               </button>
 
               <div className="text-center text-white">

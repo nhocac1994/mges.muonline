@@ -51,10 +51,10 @@ git push -u origin main
 
 ### 3.2. Thêm các biến môi trường
 ```
-DB_SERVER=103.110.85.229
+DB_SERVER=your_sql_server_ip
 DB_NAME=MuOnline
 DB_USERNAME=sa
-DB_PASSWORD=Nhocac@110994
+DB_PASSWORD=your_secure_password
 DB_PORT=1433
 NEXTAUTH_URL=https://your-site-name.netlify.app
 NEXTAUTH_SECRET=your-secret-key-here

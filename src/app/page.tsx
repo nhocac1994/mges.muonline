@@ -1,55 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-
-interface LevelRanking {
-  CharacterName: string;
-  Class: string;
-  cLevel: number;
-  Experience: number;
-}
-
-interface GuildRanking {
-  GuildName: string;
-  Points: number;
-  Logo: string;
-}
-
-interface Event {
-  EventName: string;
-  EventTime: string;
-  EventType: string;
-  Status: string;
-  Countdown: string;
-}
+import EventCountdown from '@/components/EventCountdown';
 
 export default function Home() {
-  const [levelRanking, setLevelRanking] = useState<LevelRanking[]>([]);
-  const [guildRanking, setGuildRanking] = useState<GuildRanking[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchRankingData();
-  }, []);
-
-  const fetchRankingData = async () => {
-    try {
-      const response = await fetch('/api/ranking');
-      const result = await response.json();
-      
-      if (result.success) {
-        setLevelRanking(result.data.levelRanking);
-        setGuildRanking(result.data.guildRanking);
-        setEvents(result.data.events);
-      }
-    } catch (error) {
-      console.error('Error fetching ranking data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
   const news = [
     {
       title: 'HƯỚNG DẪN CHƠI MU DAU TRUONG - SEASON 1',
@@ -148,30 +102,23 @@ export default function Home() {
               
               {/* Main Logo with Effects */}
               <div className="relative inline-block">
-                <div className="text-4xl sm:text-6xl md:text-8xl font-black text-white mb-4 relative" style={{fontFamily: 'Orbitron, monospace'}}>
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent animate-pulse">
-                    MU
-                  </span>
-                  {/* Glow Effect */}
-                  <div className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-red-400 bg-clip-text text-transparent blur-sm opacity-50 animate-pulse">
-                    MU
-                  </div>
+                {/* Main Logo with Effects */}
+                <div className="relative mb-4">
+                  <img 
+                    src="/MU.PNG" 
+                    alt="Mu Online Logo" 
+                    className="w-32 sm:w-48 md:w-64 lg:w-80 h-auto mx-auto logo-animated drop-shadow-2xl"
+                  />
+                  {/* Glow Effect Overlay */}
+                  <div 
+                    className="absolute inset-0 w-32 sm:w-48 md:w-64 lg:w-80 h-auto mx-auto opacity-30 blur-sm"
+                    style={{
+                      background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3), rgba(239, 68, 68, 0.3))',
+                      animation: 'pulse 2s ease-in-out infinite'
+                    }}
+                  ></div>
                 </div>
-
-                {/* Subtitle with Animation */}
-                <div className="text-lg sm:text-2xl md:text-3xl font-bold text-blue-300 mb-4 animate-fade-in-up px-4" style={{animationDelay: '0.5s'}}>
-                  <span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
-                    ĐẤU TRƯỜNG SS1
-                  </span>
-                </div>
-                
-                {/* Domain with Typewriter Effect */}
-                <div className="text-sm sm:text-lg md:text-2xl font-semibold text-white animate-fade-in-up px-4" style={{animationDelay: '1s'}}>
-                  <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                    MuDauTruongSS1.Net
-                  </span>
-                </div>
-                
+                               
                 {/* Floating Particles */}
                 <div className="absolute inset-0 pointer-events-none">
                   <div className="absolute top-0 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-float" style={{animationDelay: '0s'}}></div>
@@ -185,63 +132,39 @@ export default function Home() {
 
           {/* Content Grid */}
           <section className="grid lg:grid-cols-2 gap-8 mb-12">
-          {/* News Section */}
+            {/* Game Events Section */}
             <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-white">Tin Tức Mới Nhất</h3>
-                <Link href="/news" className="text-blue-400 hover:text-blue-300 transition-colors">Xem Thêm</Link>
+                <h3 className="text-xl font-bold text-white">🎮 Sự Kiện Game</h3>
+                <div className="text-green-400 text-sm font-medium">🟢 Đang diễn ra</div>
               </div>
-              <div className="space-y-4">
-                {news.map((item, index) => (
-                  <div key={index} className="bg-white/10 rounded-lg p-4 border border-white/20 hover:bg-white/20 hover:border-blue-400/50 transition-all duration-300 hover:shadow-md hover:shadow-blue-500/20 group">
-                    <div className="flex items-start gap-3">
-                      <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded group-hover:bg-blue-500 transition-colors">{item.type}</span>
-                      <div className="flex-1">
-                        <h4 className="text-white font-semibold mb-1">
-                          <Link href={item.link} className="hover:text-blue-300 transition-colors group-hover:text-blue-200">
-                            {item.title}
-                          </Link>
-                        </h4>
-                        <span className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors">{item.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <EventCountdown />
             </div>
-          </div>
 
-          {/* Login Section */}
+            {/* News Section */}
             <div className="space-y-6">
               <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
-                <h3 className="text-xl font-bold text-white mb-6">Đăng nhập</h3>
-                <form className="space-y-4">
-                  <div className="text-right">
-                    <Link href="#" className="text-blue-400 hover:text-blue-300 text-sm">quên mật khẩu?</Link>
-                  </div>
-                  <div>
-              <input 
-                type="text" 
-                placeholder="Tên đăng nhập" 
-                      className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
-              />
-                  </div>
-                  <div>
-              <input 
-                type="password" 
-                placeholder="Mật khẩu" 
-                      className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
-                    />
-                  </div>
-                  <button 
-                    type="submit" 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
-                  >
-                    Đăng Nhập
-              </button>
-                  <div className="text-center">
-                    <Link href="/register" className="text-blue-400 hover:text-blue-300 text-sm">Đăng ký tài khoản mới</Link>
-                  </div>
-                </form>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-white">📰 Bản Tin Mới</h3>
+                  <Link href="/news" className="text-blue-400 hover:text-blue-300 transition-colors">Xem Thêm</Link>
+                </div>
+                <div className="space-y-4">
+                  {news.map((item, index) => (
+                    <div key={index} className="bg-white/10 rounded-lg p-4 border border-white/20 hover:bg-white/20 hover:border-blue-400/50 transition-all duration-300 hover:shadow-md hover:shadow-blue-500/20 group">
+                      <div className="flex items-start gap-3">
+                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded group-hover:bg-blue-500 transition-colors">{item.type}</span>
+                        <div className="flex-1">
+                          <h4 className="text-white font-semibold mb-1">
+                            <Link href={item.link} className="hover:text-blue-300 transition-colors group-hover:text-blue-200">
+                              {item.title}
+                            </Link>
+                          </h4>
+                          <span className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors">{item.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               
               {/* Join Banner */}
@@ -257,9 +180,9 @@ export default function Home() {
                   <p className="text-white/90 mb-4 drop-shadow-md">TẠO TÀI KHOẢN CỦA BẠN</p>
                   <Link href="/register" className="inline-block bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-lg font-bold hover:bg-white/30 transition-all duration-300 border border-white/30 hover:border-white/50">
                     Đăng Ký Ngay
-              </Link>
-            </div>
-          </div>
+                  </Link>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -269,7 +192,7 @@ export default function Home() {
               <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold text-white mb-4">
                   <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    🎮 TẢI GAME NGAY
+                    TẢI GAME NGAY
                   </span>
                 </h2>
                 <p className="text-xl text-gray-300">Tải client và launcher để bắt đầu hành trình Mu Online</p>
@@ -279,7 +202,7 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
                   <a 
-                    href="https://drive.google.com/file/d/11XWOxM88XId3zXyeTC6HxiwcJr5m2Dth/view?usp=drive_link" 
+                    href="https://drive.google.com/file/d/18YF91lb4zvcFvcQC_hf-4R000o5L21CV/view" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -290,7 +213,7 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <a 
-                    href="https://www.mediafire.com/file/xyz123/client.zip/file" 
+                    href="https://www.mediafire.com/file/6pi08fbvd798ptn/MU-DAUTRUONGSS1.zip/file" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -301,7 +224,7 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
                   <a 
-                    href="https://mega.nz/file/abc123#xyz789" 
+                    href="https://mega.nz/file/RF00SKLZ#1Qkl6KAjQkR99OlB4bpD4ygTDLqq7m87kVe5FIUfur8" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -313,130 +236,28 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Bottom Sections */}
+          {/* Game Features */}
           <section className="grid lg:grid-cols-3 gap-8">
-            {/* Top Level */}
             <div className="bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
-              <div className="flex justify-between items-center p-4 border-b border-white/20">
-                <h3 className="text-lg font-bold text-white">Xếp Hạng Cấp Độ</h3>
-                <span className="text-white text-xl">+</span>
-              </div>
-              <div className="p-4">
-                {loading ? (
-                  <div className="text-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
-                    <p className="text-gray-400 mt-2">Đang tải...</p>
-                  </div>
-                ) : (
-                  <table className="w-full text-white">
-                    <thead>
-                      <tr className="border-b border-white/20">
-                        <th className="text-left py-2">Nhân Vật</th>
-                        <th className="text-left py-2">Lớp</th>
-                        <th className="text-left py-2">Cấp Độ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {levelRanking.length > 0 ? (
-                        levelRanking.map((player, index) => (
-                          <tr key={index} className="border-b border-white/10">
-                            <td className="py-2">{player.CharacterName}</td>
-                            <td className="py-2">{player.Class}</td>
-                            <td className="py-2">{player.cLevel}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={3} className="py-4 text-center text-gray-400">
-                            Chưa có dữ liệu
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
-          </div>
-        </div>
-
-            {/* Top Guilds */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
-              <div className="flex justify-between items-center p-4 border-b border-white/20">
-                <h3 className="text-lg font-bold text-white">Xếp Hạng Guild</h3>
-                <span className="text-white text-xl">+</span>
-              </div>
-              <div className="p-4">
-                {loading ? (
-                  <div className="text-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
-                    <p className="text-gray-400 mt-2">Đang tải...</p>
-                  </div>
-                ) : (
-                  <table className="w-full text-white">
-                    <thead>
-                      <tr className="border-b border-white/20">
-                        <th className="text-left py-2">Tên Guild</th>
-                        <th className="text-left py-2">Logo Guild</th>
-                        <th className="text-left py-2">Điểm</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {guildRanking.length > 0 ? (
-                        guildRanking.map((guild, index) => (
-                          <tr key={index} className="border-b border-white/10">
-                            <td className="py-2">{guild.GuildName}</td>
-                            <td className="py-2">
-                              <div className={`w-6 h-4 rounded ${
-                                guild.Logo === 'blue-red' ? 'bg-gradient-to-r from-blue-500 to-red-500' :
-                                guild.Logo === 'red-black' ? 'bg-gradient-to-r from-red-500 to-black' :
-                                guild.Logo === 'yellow-orange' ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
-                                guild.Logo === 'black-red' ? 'bg-gradient-to-r from-black to-red-500' :
-                                guild.Logo === 'blue-white' ? 'bg-gradient-to-r from-blue-500 to-white' :
-                                'bg-gradient-to-r from-gray-500 to-gray-700'
-                              }`}></div>
-                            </td>
-                            <td className="py-2">{guild.Points}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={3} className="py-4 text-center text-gray-400">
-                            Chưa có dữ liệu
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
+              <div className="p-6 text-center">
+                <div className="text-4xl mb-4">⚔️</div>
+                <h3 className="text-xl font-bold text-white mb-3">PvP Combat</h3>
+                <p className="text-gray-300">Chiến đấu với người chơi khác trong các cuộc chiến gay cấn</p>
               </div>
             </div>
-
-            {/* Events Schedule */}
             <div className="bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
-              <div className="flex justify-between items-center p-4 border-b border-white/20">
-                <h3 className="text-lg font-bold text-white">Lịch Sự Kiện</h3>
+              <div className="p-6 text-center">
+                <div className="text-4xl mb-4">🏰</div>
+                <h3 className="text-xl font-bold text-white mb-3">Guild System</h3>
+                <p className="text-gray-300">Tham gia guild và chiến đấu cùng đồng đội</p>
               </div>
-              <div className="p-4 space-y-3">
-                {loading ? (
-                  <div className="text-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
-                    <p className="text-gray-400 mt-2">Đang tải...</p>
-                  </div>
-                ) : events.length > 0 ? (
-                  events.map((event, index) => (
-                    <div key={index} className="bg-white/10 rounded-lg p-3 hover:bg-white/20 hover:border-green-400/50 transition-all duration-300 hover:shadow-md hover:shadow-green-500/20 group">
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="text-white font-semibold group-hover:text-green-300 transition-colors">{event.EventName}</div>
-                        <div className="text-blue-400 text-sm group-hover:text-blue-300 transition-colors">Sun {event.EventTime} PM</div>
-                      </div>
-                      <div className="text-green-400 text-sm group-hover:text-green-300 transition-colors">Bắt đầu sau {event.Countdown}</div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-4 text-gray-400">
-                    Chưa có sự kiện nào
-                  </div>
-                )}
             </div>
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30 hover-lift transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
+              <div className="p-6 text-center">
+                <div className="text-4xl mb-4">🎯</div>
+                <h3 className="text-xl font-bold text-white mb-3">Events</h3>
+                <p className="text-gray-300">Tham gia các sự kiện đặc biệt và nhận phần thưởng</p>
+              </div>
             </div>
           </section>
         </div>
@@ -522,13 +343,13 @@ export default function Home() {
                   <span className="text-white text-xs font-bold">M</span>
                 </div>
                 <p className="text-gray-400 text-sm">
-                  © 2024 MuDauTruongSS1.Net. All rights reserved.
+                  © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
                 </p>
               </div>
               <div className="flex items-center space-x-6 text-sm text-gray-400">
-                <span>Được phát triển với ❤️</span>
+                <span>Được phát triển với MGeS</span>
                 <span>•</span>
-                <span>Version 1.0</span>
+                <span>Version 1.2</span>
               </div>
             </div>
           </div>
