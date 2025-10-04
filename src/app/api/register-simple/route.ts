@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAccount } from '@/lib/database';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,40 +13,25 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Use the createAccount function from database.ts
-    const result = await createAccount({
+    // Simulate account creation (without database)
+    console.log('Account registration attempt:', {
       username,
-      password,
       characterName,
       email,
-      phone,
-      securityQuestion,
-      securityAnswer
+      phone
     });
 
-    if (result.success) {
-      return NextResponse.json({ 
-        success: true, 
-        message: result.message,
-        data: {
-          username,
-          characterName,
-          email,
-          phone
-        }
-      });
-    } else {
-      return NextResponse.json({ 
-        success: false, 
-        message: result.message 
-      }, { status: 400 });
-    }
+    // Return success response
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Tạo tài khoản thành công! (Demo mode - không lưu database)' 
+    });
 
   } catch (error) {
-    console.error('Registration error: [Hidden for security]');
+    console.error('Register error:', error);
     return NextResponse.json({ 
       success: false, 
-      message: 'Lỗi hệ thống. Vui lòng thử lại sau.' 
+      message: 'Lỗi xử lý đăng ký. Vui lòng thử lại sau.' 
     }, { status: 500 });
   }
 }

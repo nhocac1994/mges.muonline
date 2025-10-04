@@ -57,10 +57,10 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Login error: [Hidden for security]');
     return NextResponse.json({ 
       success: false, 
-      message: 'Lỗi kết nối database. Vui lòng thử lại sau.' 
+      message: 'Lỗi hệ thống. Vui lòng thử lại sau.' 
     }, { status: 500 });
   }
 }
