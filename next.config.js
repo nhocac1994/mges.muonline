@@ -9,9 +9,7 @@ const nextConfig = {
     ],
     unoptimized: true, // Disable image optimization for static files
   },
-  experimental: {
-    serverComponentsExternalPackages: ['mssql'],
-  },
+  serverExternalPackages: ['mssql'],
 }
 
 module.exports = nextConfig

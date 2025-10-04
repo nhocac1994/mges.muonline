@@ -20,6 +20,8 @@ DB_PORT=1433
 NEXT_TELEMETRY_DISABLED=1
 ```
 
+**Lưu ý:** Thay YOUR_VPS_IP và YOUR_DB_PASSWORD bằng thông tin thực của bạn.
+
 ### 2. Kiểm tra kết nối:
 - Đảm bảo SQL Server đang chạy
 - Kiểm tra port 1433 có mở không
