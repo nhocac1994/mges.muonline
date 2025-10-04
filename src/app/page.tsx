@@ -106,7 +106,7 @@ export default function Home() {
                 {/* Main Logo with Effects */}
                 <div className="relative mb-4">
                   <Image 
-                    src="/MU.PNG" 
+                    src="/Mu.PNG" 
                     alt="Mu Online Logo" 
                     width={320}
                     height={120}

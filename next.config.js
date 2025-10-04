@@ -1,132 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Optimize images
   images: {
-    domains: ['localhost'],
-    formats: ['image/webp', 'image/avif'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+    unoptimized: true, // Disable image optimization for static files
   },
-  
-  // Static file handling - removed for development
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/favicon.ico',
-  //       destination: '/favicon.ico',
-  //     },
-  //     {
-  //       source: '/apple-touch-icon.png',
-  //       destination: '/apple-touch-icon.png',
-  //     },
-  //     {
-  //       source: '/site.webmanifest',
-  //       destination: '/site.webmanifest',
-  //     },
-  //   ];
-  // },
-  
-  // Enable experimental features
   experimental: {
-    // optimizeCss: true, // Disabled due to critters dependency
+    serverComponentsExternalPackages: ['mssql'],
   },
-  
-  // Compiler options
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  
-  // Output configuration - removed for development
-  // output: 'export',
-  // trailingSlash: true,
-  // images: {
-  //   unoptimized: true
-  // },
-  
-  // Disable cache for development
-  generateBuildId: async () => {
-    return `build-${Date.now()}`;
-  },
-  
-  // Environment variables
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
-  
-  // Headers for security - removed for development
-  // async headers() {
-  //   return [
-  //     {
-  //       source: '/((?!favicon\\.ico|apple-touch-icon\\.png|site\\.webmanifest).*)',
-  //       headers: [
-  //         {
-  //           key: 'X-Frame-Options',
-  //           value: 'DENY',
-  //         },
-  //         {
-  //           key: 'X-Content-Type-Options',
-  //           value: 'nosniff',
-  //         },
-  //         {
-  //           key: 'Referrer-Policy',
-  //           value: 'origin-when-cross-origin',
-  //         },
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'no-cache, no-store, must-revalidate',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       source: '/favicon.ico',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable',
-  //         },
-  //         {
-  //           key: 'Content-Type',
-  //           value: 'image/x-icon',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       source: '/apple-touch-icon.png',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable',
-  //         },
-  //         {
-  //           key: 'Content-Type',
-  //           value: 'image/png',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       source: '/site.webmanifest',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable',
-  //         },
-  //         {
-  //           key: 'Content-Type',
-  //           value: 'application/manifest+json',
-  //         },
-  //       ],
-  //     },
-  //   ];
-  // },
-  
-  // Redirects - removed for development
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/home',
-  //       destination: '/',
-  //       permanent: true,
-  //     },
-  //   ];
-  // },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
