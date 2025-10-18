@@ -247,13 +247,13 @@ export default function Login() {
                   Cộng đồng game thủ Việt Nam hàng đầu.
                 </p>
                 <div className="flex space-x-4">
-                  <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <a href="https://www.facebook.com/share/1K54dD4kW1/?mibextid=wwXIfr" className="text-gray-400 hover:text-blue-400 transition-colors">
                     <Image src="/facebook-logo.webp" alt="Facebook" width={24} height={24} />
                   </a>
-                  <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <a href="https://www.tiktok.com/@mudautruongss1?_t=ZS-90eQbTHy1sf&_r=1" className="text-gray-400 hover:text-blue-400 transition-colors">
                     <Image src="/tiktok-logo.webp" alt="TikTok" width={24} height={24} />
                   </a>
-                  <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <a href="https://zalo.me/g/xeupyo721" className="text-gray-400 hover:text-blue-400 transition-colors">
                     <Image src="/Zalo-icon.webp" alt="Zalo" width={24} height={24} />
                   </a>
                 </div>
