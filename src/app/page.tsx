@@ -203,11 +203,11 @@ export default function Home() {
                 <p className="text-xl text-gray-300">Tải client và launcher để bắt đầu hành trình Mu Online</p>
               </div>
               
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <a 
-                    href="http://www.mediafire.com/file/7hla0cze67jfxc0/MU-DAUTRUONGSS1.NET_V1.zip" 
+                    href="https://www.mediafire.com/file/80da7ro14lblw2w/MU-DAUTRUONGSS1.NET_V2.zip/file" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
@@ -218,21 +218,10 @@ export default function Home() {
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">Mega</h3>
                   <a 
-                    href="https://mega.nz/file/JEsmwLrL#YEh2zgJ4HNlBgVpqAEfVRTCDbCTsMlGewt1ImuILoJ8" 
+                    href="https://mega.nz/file/4BkRgY4B#vw5Y2oP0ifXDLhLCSapEdjM-4f4dNd8XtWorO-0I_Oc" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
-                  >
-                    📥 Tải Client
-                  </a>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-white mb-4">Google Drive</h3>
-                  <a 
-                    href="https://drive.google.com/file/d/1Duuwi6OkHHJro1nmJAtywq5ebMeACaRN/view?usp=sharing" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
                     📥 Tải Client
                   </a>
