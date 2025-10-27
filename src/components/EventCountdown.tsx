@@ -222,7 +222,7 @@ const EventCountdown: React.FC = () => {
     if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
       navigator.serviceWorker.ready.then((registration) => {
         // Register for background sync
-        registration.sync.register('background-sync').catch((err) => {
+        (registration as any).sync.register('background-sync').catch((err: any) => {
           console.log('Background sync registration failed:', err);
         });
       });

@@ -80,7 +80,6 @@ export const metadata: Metadata = {
     ],
     shortcut: '/favicon.ico'
   },
-  manifest: '/site.webmanifest',
   appleWebApp: {
     title: 'MU',
     statusBarStyle: 'default',
