@@ -1,33 +1,29 @@
-// Demo script để test browser notifications
-// Chạy trong browser console để test
+// Test notification functionality
+// Add this to browser console to test notifications
 
-// Test notification permission
-console.log('Notification support:', 'Notification' in window);
-console.log('Current permission:', Notification.permission);
-
-// Test notification
-if ('Notification' in window && Notification.permission === 'granted') {
-  const testNotification = new Notification('🎮 Test Event Notification', {
-    body: 'Chaos Castle sẽ bắt đầu trong 5 phút!',
-    icon: '/icon.jpg',
-    badge: '/icon.jpg',
-    tag: 'test-event',
-    requireInteraction: true
-  });
+// Check if notifications are supported
+if ('Notification' in window) {
+  console.log('✅ Notifications are supported');
   
-  // Auto close after 5 seconds
-  setTimeout(() => {
-    testNotification.close();
-  }, 5000);
+  // Check current permission
+  console.log('Current permission:', Notification.permission);
   
-  console.log('Test notification sent!');
-} else {
-  console.log('Cannot send notification. Permission:', Notification.permission);
-}
-
-// Request permission
-if ('Notification' in window && Notification.permission === 'default') {
+  // Request permission
   Notification.requestPermission().then((permission) => {
     console.log('Permission result:', permission);
+    
+    if (permission === 'granted') {
+      // Test notification
+      new Notification('🎮 Test Notification', {
+        body: 'Thông báo test từ MuDauTruongSS1.Net',
+        icon: '/icon.jpg',
+        tag: 'test-notification'
+      });
+      console.log('✅ Test notification sent!');
+    } else {
+      console.log('❌ Permission denied');
+    }
   });
+} else {
+  console.log('❌ Notifications are not supported');
 }

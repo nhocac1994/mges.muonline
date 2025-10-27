@@ -1,42 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-interface Character {
-  name: string;
-  level: number;
-  class: number;
-  className: string;
-  resetCount: number;
-  masterResetCount: number;
-  stats: {
-    strength: number;
-    dexterity: number;
-    vitality: number;
-    energy: number;
-    leadership: number;
-  };
-  life: number;
-  maxLife: number;
-  mana: number;
-  maxMana: number;
-  money: number;
-  mapNumber: number;
-  mapPosX: number;
-  mapPosY: number;
-  pkCount: number;
-  pkLevel: number;
-}
-
 import Link from 'next/link';
 import Image from 'next/image';
 
 interface Character {
   name: string;
   level: number;
-  class: number; // Raw class ID
-  className: string; // Mapped class name
+  class: number;
+  className: string;
   resetCount: number;
   masterResetCount: number;
   stats: {
@@ -142,7 +115,26 @@ export default function Dashboard() {
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setScrollY(scrollTop);
+      setIsScrolled(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const getClassName = (classId: number): string => {
     const classNames: {[key: number]: string} = {
@@ -343,76 +335,175 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900/80 to-purple-900/80 backdrop-blur-sm border-b border-blue-500/30">
-        <div className="max-w-6xl mx-auto px-5 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <Image src="/icon.jpg" alt="Mu Online Logo" width={40} height={40} className="rounded-lg"/>
-              <div>
-                <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
-                <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
+    <div className="min-h-screen relative overflow-hidden" style={{
+      fontFamily: 'Roboto, sans-serif'
+    }}>
+      {/* Background Image - Desktop Only */}
+      {isClient && (
+        <>
+          <div 
+            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url(/logoweb.jpg)',
+              backgroundAttachment: 'fixed'
+            }}
+          ></div>
+          
+          {/* Mobile Background - Simple gradient */}
+          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
+        </>
+      )}
+      
+      {/* Background Overlay */}
+      <div className="fixed inset-0 bg-black/60"></div>
+      
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Top Header - Hidden initially, shows on scroll */}
+        <div className={`fixed top-0 left-0 right-0 bg-black/95 py-2 border-b border-gray-600 z-50 transition-all duration-500 ${
+          isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        }`}>
+        <div className="max-w-6xl mx-auto px-5 flex justify-between items-center">
+          <div className="text-green-400 text-sm font-medium whitespace-nowrap">🟢 Server Online</div>
+          <div className="flex gap-3 items-center">
+            <Link href="/register" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
+              ĐĂNG KÝ
+            </Link>
+            <span className="text-gray-400">|</span>
+            <Link href="/login" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
+              ĐĂNG NHẬP
+            </Link>
+          </div>
+        </div>
+        </div>
+
+        {/* Navigation - Hidden initially, shows on scroll */}
+        <nav className={`fixed top-12 left-0 right-0 bg-black/95 py-4 border-b-2 border-blue-400 z-50 transition-all duration-500 ${
+          isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        }`}>
+          <div className="max-w-6xl mx-auto px-5">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex justify-center">
+              <div className="flex gap-8 justify-center">
+                <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
+                  TRANG CHỦ
+                </Link>
+                <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
+                  THÔNG TIN
+                </Link>
+                <Link href="/download" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
+                  TẢI GAME
+                </Link>
+                <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
+                  QUYÊN GÓP
+                </Link>
+                <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
+                  TIN TỨC
+                </Link>
+                <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
+                  XẾP HẠNG
+                </Link>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-white text-sm">Xin chào, {user?.memb_name}</span>
-              
-              {/* Character Selector */}
-              {characters.length > 0 && (
+            
+            {/* Mobile Navigation */}
+            <div className="md:hidden">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <span className="text-gray-300 text-sm">Character:</span>
-                  <select
-                    value={selectedCharacter?.name || ''}
-                    onChange={(e) => handleCharacterChange(e.target.value)}
-                    disabled={charactersLoading}
-                    className="bg-gray-800 text-white px-3 py-1 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  >
-                    {characters.map((char) => (
-                      <option key={char.name} value={char.name}>
-                        {char.name} ({char.className}) - Lv.{char.level}
-                      </option>
-                    ))}
-                  </select>
+                  <Image 
+                    src="/Mu.PNG" 
+                    alt="Mu Logo" 
+                    width={40}
+                    height={16}
+                    className="w-8 h-auto"
+                  />
+                  <span className="text-white font-bold text-sm">MuDauTruongSS1</span>
                 </div>
-              )}
+                
+                <button 
+                  className="text-white p-2"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
               
-              <button
-                onClick={() => setShowAccountModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
-              >
-                Quản lý tài khoản
-              </button>
-              
-              <button 
-                onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                Đăng xuất
-              </button>
+              {/* Mobile Menu */}
+              <div className={`transition-all duration-300 ${
+                mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+              } overflow-hidden`}>
+                <div className="py-4 space-y-3 border-t border-gray-700 mt-3">
+                  <Link href="/" className="block text-white hover:text-blue-400 transition-colors py-2">TRANG CHỦ</Link>
+                  <Link href="/info" className="block text-white hover:text-blue-400 transition-colors py-2">THÔNG TIN</Link>
+                  <Link href="/download" className="block text-white hover:text-blue-400 transition-colors py-2">TẢI GAME</Link>
+                  <Link href="/donate" className="block text-white hover:text-blue-400 transition-colors py-2">QUYÊN GÓP</Link>
+                  <Link href="/news" className="block text-white hover:text-blue-400 transition-colors py-2">TIN TỨC</Link>
+                  <Link href="/rankings" className="block text-white hover:text-blue-400 transition-colors py-2">XẾP HẠNG</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Navigation dot */}
+          <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-5 h-5 bg-blue-400 rounded-full shadow-lg shadow-blue-400/50"></div>
+        </nav>
+
+        {/* User Info Header - Always visible */}
+        <div className="bg-gradient-to-r from-blue-900/80 to-purple-900/80 backdrop-blur-sm border-b border-blue-500/30 mt-20">
+          <div className="max-w-6xl mx-auto px-5 py-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="flex items-center space-x-4">
+                <Image src="/icon.jpg" alt="Mu Online Logo" width={40} height={40} className="rounded-lg"/>
+                <div>
+                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.Net</h1>
+                  <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4">
+                <span className="text-white text-sm">Xin chào, {user?.memb_name}</span>
+                
+                {/* Character Selector */}
+                {characters.length > 0 && (
+                  <div className="flex items-center space-x-2">
+                    <span className="text-gray-300 text-sm">Character:</span>
+                    <select
+                      value={selectedCharacter?.name || ''}
+                      onChange={(e) => handleCharacterChange(e.target.value)}
+                      disabled={charactersLoading}
+                      className="bg-gray-800 text-white px-3 py-1 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                    >
+                      {characters.map((char) => (
+                        <option key={char.name} value={char.name}>
+                          {char.name} ({char.className}) - Lv.{char.level}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowAccountModal(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    Quản lý
+                  </button>
+                  
+                  <button 
+                    onClick={handleLogout}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Navigation */}
-      <nav className="bg-black/95 py-4 border-b-2 border-blue-400">
-        <div className="max-w-6xl mx-auto px-5">
-          <div className="flex justify-center">
-            <div className="flex gap-8">
-              <Link className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/">TRANG CHỦ</Link>
-              <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/info">THÔNG TIN</a>
-              <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/download">TẢI GAME</a>
-              <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/donate">QUYÊN GÓP</a>
-              <a className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/news">TIN TỨC</a>
-              <Link className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10" href="/rankings">XẾP HẠNG</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-16">
+        {/* Main Content */}
+        <main className="relative z-10 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center text-white mb-12">
             <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
@@ -744,110 +835,7 @@ export default function Dashboard() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-b from-black/90 to-black backdrop-blur-sm border-t border-blue-500/30 py-12 mt-12">
-        <div className="max-w-6xl mx-auto px-5">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {/* Brand Section */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Image 
-                  src="/icon.jpg" 
-                  alt="Mu Logo" 
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-lg"
-                />
-                <div>
-                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
-                  <p className="text-blue-300 text-sm">033.77.14.654</p>
-                </div>
-              </div>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                Server Mu Online Season 1 chuyên nghiệp với hệ thống game ổn định, 
-                cộng đồng sôi động và sự kiện thường xuyên.
-              </p>
-            </div>
 
-            {/* Links Section */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                Liên Kết
-              </h4>
-              <div className="space-y-3">
-                <Link href="/info" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Thông Tin Server
-                </Link>
-                <Link href="/download" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Tải Game
-                </Link>
-                <Link href="/donate" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Ủng Hộ Server
-                </Link>
-                <Link href="/news" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Tin Tức
-                </Link>
-                <Link href="/rankings" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
-                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
-                  Bảng Xếp Hạng
-                </Link>
-              </div>
-            </div>
-
-            {/* Social Media Section */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center">
-                <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                Mạng Xã Hội
-              </h4>
-              <div className="flex space-x-4">
-                <a href="https://www.facebook.com/share/1K54dD4kW1/?mibextid=wwXIfr" className="group flex items-center justify-center w-12 h-12 bg-blue-600/20 hover:bg-blue-600/40 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110">
-                  <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-                <a href="https://www.tiktok.com/@mudautruongss1?_t=ZS-90eQbTHy1sf&_r=1" className="group flex items-center justify-center w-12 h-12 bg-pink-600/20 hover:bg-pink-600/40 rounded-lg border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300 hover:scale-110">
-                  <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-                <a href="https://zalo.me/g/xeupyo721" className="group flex items-center justify-center w-12 h-12 bg-blue-500/20 hover:bg-blue-500/40 rounded-lg border border-blue-400/30 hover:border-blue-300/50 transition-all duration-300 hover:scale-110">
-                  <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-              </div>
-              <div className="pt-4">
-                <p className="text-gray-400 text-sm">
-                  Theo dõi chúng tôi để cập nhật tin tức mới nhất
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="border-t border-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 pt-6">
-            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <div className="flex items-center space-x-2">
-                <Image 
-                  src="/icon.jpg" 
-                  alt="Mu Logo" 
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 rounded"
-                />
-                <p className="text-gray-400 text-sm">
-                  © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
-                </p>
-              </div>
-              <div className="flex items-center space-x-6 text-sm text-gray-400">
-                <span>Được phát triển với MGeS</span>
-                <span>•</span>
-                <span>Version 1.2</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
 
       {/* Account Management Modal */}
       {showAccountModal && (
@@ -984,6 +972,112 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <footer className="bg-gradient-to-b from-black/90 to-black backdrop-blur-sm border-t border-blue-500/30 py-12 mt-12">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <Image 
+                  src="/icon.jpg" 
+                  alt="Mu Logo" 
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-lg"
+                />
+                <div>
+                  <h3 className="text-xl font-bold text-white">MuDauTruongSS1.Net</h3>
+                  <p className="text-blue-300 text-sm">033.77.14.654</p>
+                </div>
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Server Mu Online Season 1 chuyên nghiệp với hệ thống game ổn định, 
+                cộng đồng sôi động và sự kiện thường xuyên.
+              </p>
+            </div>
+
+            {/* Links Section */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-white flex items-center">
+                <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                Liên Kết
+              </h4>
+              <div className="space-y-3">
+                <Link href="/info" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                  Thông Tin Server
+                </Link>
+                <Link href="/download" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                  Tải Game
+                </Link>
+                <Link href="/donate" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                  Ủng Hộ Server
+                </Link>
+                <Link href="/news" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                  Tin Tức
+                </Link>
+                <Link href="/rankings" className="block text-gray-300 hover:text-blue-400 transition-colors flex items-center group">
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mr-3 group-hover:bg-blue-400 transition-colors"></span>
+                  Bảng Xếp Hạng
+                </Link>
+              </div>
+            </div>
+
+            {/* Social Media Section */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-white flex items-center">
+                <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                Mạng Xã Hội
+              </h4>
+              <div className="flex space-x-4">
+                <a href="https://www.facebook.com/share/1K54dD4kW1/?mibextid=wwXIfr" className="group flex items-center justify-center w-12 h-12 bg-blue-600/20 hover:bg-blue-600/40 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-110">
+                  <Image src="/facebook-logo.webp" alt="Facebook" width={20} height={20} className="group-hover:scale-110 transition-transform" />
+                </a>
+                <a href="https://www.tiktok.com/@mudautruongss1?_t=ZS-90eQbTHy1sf&_r=1" className="group flex items-center justify-center w-12 h-12 bg-pink-600/20 hover:bg-pink-600/40 rounded-lg border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300 hover:scale-110">
+                  <Image src="/tiktok-logo.webp" alt="TikTok" width={20} height={20} className="group-hover:scale-110 transition-transform" />
+                </a>
+                <a href="https://zalo.me/g/xeupyo721" className="group flex items-center justify-center w-12 h-12 bg-blue-500/20 hover:bg-blue-500/40 rounded-lg border border-blue-400/30 hover:border-blue-300/50 transition-all duration-300 hover:scale-110">
+                  <Image src="/Zalo-icon.webp" alt="Zalo" width={20} height={20} className="group-hover:scale-110 transition-transform" />
+                </a>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-400 text-sm">
+                  Theo dõi chúng tôi để cập nhật tin tức mới nhất
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="border-t border-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <div className="flex items-center space-x-2">
+                <Image 
+                  src="/icon.jpg" 
+                  alt="Mu Logo" 
+                  width={24}
+                  height={24}
+                  className="w-4 h-4 sm:w-6 sm:h-6 rounded"
+                />
+                <p className="text-gray-400 text-xs sm:text-sm">
+                  © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
+                </p>
+              </div>
+              <div className="flex items-center space-x-3 sm:space-x-6 text-xs sm:text-sm text-gray-400">
+                <span>Được phát triển với MGeS</span>
+                <span>•</span>
+                <span>Version 1.2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+      </div>
     </div>
   );
 }

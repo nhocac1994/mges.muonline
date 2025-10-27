@@ -199,17 +199,35 @@ const EventCountdown: React.FC = () => {
     return () => clearInterval(interval);
   }, [notificationsEnabled, permission.granted, showEventNotification]);
 
-  // Initialize notifications on component mount
+  // Initialize notifications on component mount and auto-request permission
   useEffect(() => {
-    if (isSupported && permission.default) {
-      // Auto-request permission on first load
-      requestPermission().then((granted) => {
-        setNotificationsEnabled(granted);
-      });
-    } else if (permission.granted) {
-      setNotificationsEnabled(true);
+    if (isSupported) {
+      if (permission.granted) {
+        setNotificationsEnabled(true);
+        // Show welcome notification when permission is first granted
+        showEventNotification('Chào mừng!', 0, false);
+      } else if (permission.default) {
+        // Auto-request permission when page loads
+        requestPermission();
+      } else {
+        setNotificationsEnabled(false);
+      }
+    } else {
+      setNotificationsEnabled(false);
     }
-  }, [isSupported, permission, requestPermission]);
+  }, [isSupported, permission, requestPermission, showEventNotification]);
+
+  // Register for background sync
+  useEffect(() => {
+    if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+      navigator.serviceWorker.ready.then((registration) => {
+        // Register for background sync
+        registration.sync.register('background-sync').catch((err) => {
+          console.log('Background sync registration failed:', err);
+        });
+      });
+    }
+  }, []);
 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
@@ -240,52 +258,53 @@ const EventCountdown: React.FC = () => {
     return false;
   };
 
-  const handleNotificationToggle = async () => {
-    if (!notificationsEnabled) {
-      const granted = await requestPermission();
-      setNotificationsEnabled(granted);
-    } else {
-      setNotificationsEnabled(false);
-    }
-  };
 
   return (
     <div className="space-y-4">
-      {/* Notification Settings */}
-      <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg p-4 border border-blue-500/30">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-            <span className="text-white font-semibold">🔔 Thông báo sự kiện</span>
+      {/* Notification Status */}
+      <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg p-3 sm:p-4 border border-blue-500/30">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full animate-pulse ${
+              notificationsEnabled ? 'bg-green-500' : 'bg-gray-500'
+            }`}></div>
+            <span className="text-white font-semibold text-sm sm:text-base">🔔 Thông báo sự kiện</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
             {isSupported ? (
-              <>
-                <span className="text-sm text-gray-300">
-                  {notificationsEnabled ? 'Đã bật' : 'Đã tắt'}
+              <div className="flex items-center gap-2">
+                <span className={`text-xs sm:text-sm font-medium ${
+                  notificationsEnabled ? 'text-green-400' : 'text-gray-400'
+                }`}>
+                  {notificationsEnabled ? '✅ Đã bật thông báo' : '❌ Chưa bật thông báo'}
                 </span>
-                <button
-                  onClick={handleNotificationToggle}
-                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                    notificationsEnabled
-                      ? 'bg-green-600 hover:bg-green-700 text-white'
-                      : 'bg-gray-600 hover:bg-gray-700 text-white'
-                  }`}
-                >
-                  {notificationsEnabled ? 'Tắt thông báo' : 'Bật thông báo'}
-                </button>
-              </>
+                {!notificationsEnabled && (
+                  <button
+                    onClick={requestPermission}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold transition-colors"
+                  >
+                    Cho phép
+                  </button>
+                )}
+              </div>
             ) : (
-              <span className="text-sm text-red-400">Trình duyệt không hỗ trợ</span>
+              <span className="text-xs sm:text-sm text-red-400">Trình duyệt không hỗ trợ</span>
             )}
           </div>
         </div>
         <div className="mt-2 text-xs text-gray-400">
           {notificationsEnabled 
-            ? 'Bạn sẽ nhận thông báo trước 5 phút và khi sự kiện bắt đầu'
-            : 'Bật thông báo để không bỏ lỡ các sự kiện quan trọng'
+            ? 'Bạn sẽ nhận thông báo trước 5 phút và khi sự kiện bắt đầu (kể cả khi đóng app)'
+            : permission.default 
+              ? 'Đang yêu cầu quyền thông báo...'
+              : 'Nhấn "Cho phép" để nhận thông báo về các sự kiện quan trọng'
           }
         </div>
+        {notificationsEnabled && (
+          <div className="mt-2 p-2 bg-green-900/20 border border-green-500/30 rounded text-xs text-green-300">
+            💡 <strong>Tip:</strong> Thêm website vào màn hình chính để nhận thông báo ngay cả khi đóng app!
+          </div>
+        )}
       </div>
 
       {/* Events List */}
@@ -293,19 +312,19 @@ const EventCountdown: React.FC = () => {
         {events.map((event, index) => (
         <div 
           key={index}
-          className={`bg-gradient-to-r ${event.bgColor} rounded-lg p-4 border ${event.borderColor} hover:border-opacity-50 transition-all duration-300 ${
+          className={`bg-gradient-to-r ${event.bgColor} rounded-lg p-3 sm:p-4 border ${event.borderColor} hover:border-opacity-50 transition-all duration-300 ${
             isEventRunning(event) ? 'ring-2 ring-green-400 ring-opacity-50' : ''
           }`}
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`w-3 h-3 ${getDotColor(event)} rounded-full animate-pulse`}></div>
-              <span className="text-white font-semibold">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className={`w-2 h-2 sm:w-3 sm:h-3 ${getDotColor(event)} rounded-full animate-pulse`}></div>
+              <span className="text-white font-semibold text-sm sm:text-base">
                 {event.name}
-                {isEventRunning(event) && <span className="text-green-400 ml-2">(Đang diễn ra)</span>}
+                {isEventRunning(event) && <span className="text-green-400 ml-2 text-xs sm:text-sm">(Đang diễn ra)</span>}
               </span>
             </div>
-            <div className={`${event.color} font-mono text-lg font-bold`}>
+            <div className={`${event.color} font-mono text-base sm:text-lg font-bold`}>
               {formatTime(timeLeft[event.name] || 0)}
             </div>
           </div>

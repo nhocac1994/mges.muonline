@@ -1,13 +1,20 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
 import EventCountdown from '@/components/EventCountdown';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,19 +64,30 @@ export default function Home() {
     <div className="min-h-screen relative" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/panel-home.webp)',
-          backgroundAttachment: 'fixed'
-        }}
-      ></div>
+      {/* Background Image - Desktop Only */}
+      {isClient && (
+        <>
+          <div 
+            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url(/panel-home.webp)',
+              backgroundAttachment: 'fixed'
+            }}
+          ></div>
+          
+          {/* Mobile Background - Simple gradient */}
+          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
+        </>
+      )}
       {/* Hero Section - Full Screen */}
-      <section className={`fixed inset-0 z-0 transition-all duration-1000 ease-out ${
-        isScrolled ? 'opacity-10 pointer-events-none' : 'opacity-1000'
+      <section className={`fixed inset-0 z-0 transition-all duration-1000 ease-out mobile-hero-optimized ${
+        isClient && isScrolled ? 'opacity-10 pointer-events-none' : 'opacity-1000'
       }`}>
-        <div className="absolute inset-0 bg-black/20"></div>
+        {/* Desktop overlay */}
+        <div className="hidden md:block absolute inset-0 bg-black/20"></div>
+        
+        {/* Mobile overlay - lighter for better visibility */}
+        <div className="md:hidden absolute inset-0 bg-black/40 mobile-overlay-optimized"></div>
         
         {/* Hero Content */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -77,7 +95,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30"></div>
           
           <div className="text-center text-white px-4 relative z-10">
-            <div className="mb-8 relative">
+            <div className="mb-6 md:mb-8 relative">
               {/* Main Logo with Effects */}
               <div className="relative inline-block">
               <Image 
@@ -86,14 +104,14 @@ export default function Home() {
                     width={320}
                     height={120}
                     style={{ width: "auto", height: "auto" }}
-                    className="w-32 sm:w-48 md:w-64 lg:w-80 h-auto mx-auto logo-animated drop-shadow-2xl"
+                    className="w-24 sm:w-32 md:w-48 lg:w-64 xl:w-80 h-auto mx-auto logo-animated drop-shadow-2xl"
                     priority
                   />
-                {/* Logo Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 rounded-full blur-xl scale-110"></div>
+                {/* Logo Glow Effect - Desktop only */}
+                <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 rounded-full blur-xl scale-110"></div>
                 
-                {/* Floating Particles */}
-                <div className="absolute inset-0 pointer-events-none">
+                {/* Floating Particles - Desktop only */}
+                <div className="hidden md:block absolute inset-0 pointer-events-none">
                   <div className="absolute top-0 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-float" style={{animationDelay: '0s'}}></div>
                   <div className="absolute top-1/4 right-1/4 w-1 h-1 bg-purple-400 rounded-full animate-float" style={{animationDelay: '1s'}}></div>
                   <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-red-400 rounded-full animate-float" style={{animationDelay: '2s'}}></div>
@@ -102,30 +120,30 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="relative inline-block mb-8">
-              <p className="text-xl sm:text-2xl animate-fade-in-up font-bold drop-shadow-2xl relative z-10 px-6 py-3 rounded-lg bg-gradient-to-r from-yellow-200 via-white to-yellow-200 bg-clip-text text-transparent" style={{
+            <div className="relative inline-block mb-6 md:mb-8">
+              <p className="text-lg sm:text-xl md:text-2xl animate-fade-in-up font-bold drop-shadow-2xl relative z-10 px-4 sm:px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-yellow-200 via-white to-yellow-200 bg-clip-text text-transparent" style={{
                 animationDelay: '0.2s',
-                textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.7)',
-                filter: 'brightness(1.4) contrast(1.3)',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.7)',
+                filter: 'brightness(1.3) contrast(1.2)',
                 fontFamily: 'Arial, sans-serif',
                 fontWeight: '900',
-                letterSpacing: '0.5px'
+                letterSpacing: '0.3px'
               }}>
                 Season 1 - Hành trình huyền thoại bắt đầu
               </p>
-              {/* Background highlight */}
-              <div className="absolute inset-0 bg-black/80 rounded-lg blur-sm"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/50 via-purple-500/50 to-pink-500/50 rounded-lg"></div>
-              <div className="absolute inset-0 bg-white/30 rounded-lg"></div>
+              {/* Background highlight - Desktop only */}
+              <div className="hidden md:block absolute inset-0 bg-black/80 rounded-lg blur-sm"></div>
+              <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-blue-500/50 via-purple-500/50 to-pink-500/50 rounded-lg"></div>
+              <div className="hidden md:block absolute inset-0 bg-white/30 rounded-lg"></div>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up mobile-btn-optimized" style={{animationDelay: '0.4s'}}>
               <Link 
                 href="/register" 
-                className="bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-500 hover:to-purple-500 text-white px-8 py-4 rounded-lg font-black text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-xl border-2 border-white/30"
+                className="bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-500 hover:to-purple-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-black text-base sm:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-xl border-2 border-white/30 mobile-btn-optimized touch-target"
                 style={{ 
-                  filter: "brightness(1.3) contrast(1.2) saturate(1.1)",
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                  filter: "brightness(1.2) contrast(1.1)",
+                  textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
                   fontWeight: "900"
                 }}
               >
@@ -133,10 +151,10 @@ export default function Home() {
               </Link>
               <Link 
                 href="/download" 
-                className="bg-gradient-to-r from-green-400 to-teal-400 hover:from-green-500 hover:to-teal-500 text-white px-8 py-4 rounded-lg font-black text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-xl border-2 border-white/30"
+                className="bg-gradient-to-r from-green-400 to-teal-400 hover:from-green-500 hover:to-teal-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-black text-base sm:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-xl border-2 border-white/30 mobile-btn-optimized touch-target"
                 style={{ 
-                  filter: "brightness(1.3) contrast(1.2) saturate(1.1)",
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                  filter: "brightness(1.2) contrast(1.1)",
+                  textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
                   fontWeight: "900"
                 }}
               >
@@ -159,15 +177,16 @@ export default function Home() {
 
       {/* Top Header - Hidden initially, shows on scroll */}
       <div className={`fixed top-0 left-0 right-0 bg-black/95 py-2 border-b border-gray-600 z-50 transition-all duration-500 ${
-        isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
       }`}>
-        <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="text-green-400 text-xs sm:text-sm font-medium">🟢 Server Online</div>
-          <div className="flex gap-2 sm:gap-5">
-            <Link href="/register" className="text-white text-xs sm:text-sm font-medium px-2 sm:px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
+        <div className="max-w-6xl mx-auto px-5 flex justify-between items-center">
+          <div className="text-green-400 text-sm font-medium whitespace-nowrap">🟢 Server Online</div>
+          <div className="flex gap-3 items-center">
+            <Link href="/register" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
               ĐĂNG KÝ
             </Link>
-            <Link href="/login" className="text-white text-xs sm:text-sm font-medium px-2 sm:px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
+            <span className="text-gray-400">|</span>
+            <Link href="/login" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
               ĐĂNG NHẬP
             </Link>
           </div>
@@ -176,29 +195,69 @@ export default function Home() {
 
       {/* Navigation - Hidden initially, shows on scroll */}
       <nav className={`fixed top-12 left-0 right-0 bg-black/95 py-4 border-b-2 border-blue-400 z-50 transition-all duration-500 ${
-        isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
       }`}>
         <div className="max-w-6xl mx-auto px-5">
-          <div className="flex justify-center">
-            <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-8 justify-center">
-              <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex justify-center">
+            <div className="flex gap-8 justify-center">
+              <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 TRANG CHỦ
               </Link>
-              <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 THÔNG TIN
               </Link>
-              <Link href="/download" className="text-blue-300 font-bold hover:text-blue-200 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/download" className="text-blue-300 font-bold hover:text-blue-200 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 TẢI GAME
               </Link>
-              <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 QUYÊN GÓP
               </Link>
-              <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 TIN TỨC
               </Link>
-              <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 XẾP HẠNG
               </Link>
+            </div>
+          </div>
+          
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Image 
+                  src="/Mu.PNG" 
+                  alt="Mu Logo" 
+                  width={40}
+                  height={16}
+                  className="w-8 h-auto"
+                />
+                <span className="text-white font-bold text-sm">MuDauTruongSS1</span>
+              </div>
+              
+              <button 
+                className="text-white p-2"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Mobile Menu */}
+            <div className={`transition-all duration-300 ${
+              mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            } overflow-hidden`}>
+              <div className="py-4 space-y-3 border-t border-gray-700 mt-3">
+                <Link href="/" className="block text-white hover:text-blue-400 transition-colors py-2">TRANG CHỦ</Link>
+                <Link href="/info" className="block text-white hover:text-blue-400 transition-colors py-2">THÔNG TIN</Link>
+                <Link href="/download" className="block text-blue-300 hover:text-blue-200 transition-colors py-2">TẢI GAME</Link>
+                <Link href="/donate" className="block text-white hover:text-blue-400 transition-colors py-2">QUYÊN GÓP</Link>
+                <Link href="/news" className="block text-white hover:text-blue-400 transition-colors py-2">TIN TỨC</Link>
+                <Link href="/rankings" className="block text-white hover:text-blue-400 transition-colors py-2">XẾP HẠNG</Link>
+              </div>
             </div>
           </div>
         </div>
@@ -331,24 +390,24 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-4">MediaFire</h3>
                   <p className="text-sm text-gray-400 mb-3">File size: 155.35MB</p>
                   <a 
-                    href="https://www.mediafire.com/file/3o03twf640sbgg6/Mu-DauTruongs1.net_v1.7z/file" 
+                    href="https://www.mediafire.com/file/0tp6wj1yko12318/Mu-DauTruongs1.net_v1.1.7z/file" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
-                    📥 Tải Client v1
+                    📥 Tải Client v1.1
                   </a>
                 </div>
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-white mb-4">MEGA</h3>
                   <p className="text-sm text-gray-400 mb-3">Alternative download</p>
                   <a 
-                    href="https://mega.nz/file/pNdlTZDS#1z8QH4q-BKyF_UfTgBlIpQdYHOJ_La5IMrX7RzuUYPY" 
+                    href="https://mega.nz/file/4UNwiZhL#MJzsMKtdv4vQI765iDdd200fdOPZPwSBxoB1xUaacyw" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors inline-block"
                   >
-                    📥 Tải Client v1
+                    📥 Tải Client v1.1
                   </a>
                 </div>
               </div>
@@ -471,13 +530,13 @@ export default function Home() {
                   alt="Mu Logo" 
                   width={24}
                   height={24}
-                  className="w-6 h-6 rounded"
+                  className="w-4 h-4 sm:w-6 sm:h-6 rounded"
                 />
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-400 text-xs sm:text-sm">
                   © 2025 MuDauTruongSS1.Net. Tất cả quyền được bảo lưu.
                 </p>
               </div>
-              <div className="flex items-center space-x-6 text-sm text-gray-400">
+              <div className="flex items-center space-x-3 sm:space-x-6 text-xs sm:text-sm text-gray-400">
                 <span>Được phát triển với MGeS</span>
                 <span>•</span>
                 <span>Version 1.2</span>
@@ -491,6 +550,9 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-red-900/20"></div>
       </div>
+      
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import RankingTable from '@/components/RankingTable';
@@ -8,53 +8,132 @@ import GuildRankingTable from '@/components/GuildRankingTable';
 
 export default function RankingsPage() {
   const [activeTab, setActiveTab] = useState<'characters' | 'guilds'>('characters');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setScrollY(scrollTop);
+      setIsScrolled(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen relative" style={{
-      background: 'url(/logoweb.jpg) center/cover no-repeat fixed',
       fontFamily: 'Roboto, sans-serif'
     }}>
+      {/* Background Image - Desktop Only */}
+      {isClient && (
+        <>
+          <div 
+            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url(/logoweb.jpg)',
+              backgroundAttachment: 'fixed'
+            }}
+          ></div>
+          
+          {/* Mobile Background - Simple gradient */}
+          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
+        </>
+      )}
+      
       {/* Background Overlay */}
       <div className="fixed inset-0 bg-black/70 -z-10"></div>
       
-      {/* Top Header */}
-      <div className="bg-black/95 py-2 border-b border-gray-600 relative z-50">
-        <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="text-green-400 text-xs sm:text-sm font-medium">🟢 Server Online</div>
-          <div className="flex gap-2 sm:gap-5">
-            <Link href="/register" className="text-white text-xs sm:text-sm font-medium px-2 sm:px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
+      {/* Top Header - Hidden initially, shows on scroll */}
+      <div className={`fixed top-0 left-0 right-0 bg-black/95 py-2 border-b border-gray-600 z-50 transition-all duration-500 ${
+        isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+      }`}>
+        <div className="max-w-6xl mx-auto px-5 flex justify-between items-center">
+          <div className="text-green-400 text-sm font-medium whitespace-nowrap">🟢 Server Online</div>
+          <div className="flex gap-3 items-center">
+            <Link href="/register" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
               ĐĂNG KÝ
             </Link>
-            <Link href="/login" className="text-white text-xs sm:text-sm font-medium px-2 sm:px-4 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all">
+            <span className="text-gray-400">|</span>
+            <Link href="/login" className="text-white text-sm font-medium px-3 py-1 rounded hover:text-blue-300 hover:bg-blue-500/10 transition-all whitespace-nowrap">
               ĐĂNG NHẬP
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="bg-black/95 py-4 border-b-2 border-blue-400 relative z-50">
+      {/* Navigation - Hidden initially, shows on scroll */}
+      <nav className={`fixed top-12 left-0 right-0 bg-black/95 py-4 border-b-2 border-blue-400 z-50 transition-all duration-500 ${
+        isClient && isScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+      }`}>
         <div className="max-w-6xl mx-auto px-5">
-          <div className="flex justify-center">
-            <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-8 justify-center">
-              <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex justify-center">
+            <div className="flex gap-8 justify-center">
+              <Link href="/" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 TRANG CHỦ
               </Link>
-              <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/info" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 THÔNG TIN
               </Link>
-              <Link href="/download" className="text-blue-300 font-bold hover:text-blue-200 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/download" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 TẢI GAME
               </Link>
-              <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/donate" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 QUYÊN GÓP
               </Link>
-              <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/news" className="text-white font-bold hover:text-blue-300 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 TIN TỨC
               </Link>
-              <Link href="/rankings" className="text-white font-bold hover:text-blue-300 transition-colors relative z-10 px-2 sm:px-4 py-2 rounded hover:bg-blue-500/10 text-sm sm:text-base">
+              <Link href="/rankings" className="text-blue-300 font-bold hover:text-blue-200 transition-colors px-4 py-2 rounded hover:bg-blue-500/10">
                 XẾP HẠNG
               </Link>
+            </div>
+          </div>
+          
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Image 
+                  src="/Mu.PNG" 
+                  alt="Mu Logo" 
+                  width={40}
+                  height={16}
+                  className="w-8 h-auto"
+                />
+                <span className="text-white font-bold text-sm">MuDauTruongSS1</span>
+              </div>
+              
+              <button 
+                className="text-white p-2"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Mobile Menu */}
+            <div className={`transition-all duration-300 ${
+              mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            } overflow-hidden`}>
+              <div className="py-4 space-y-3 border-t border-gray-700 mt-3">
+                <Link href="/" className="block text-white hover:text-blue-400 transition-colors py-2">TRANG CHỦ</Link>
+                <Link href="/info" className="block text-white hover:text-blue-400 transition-colors py-2">THÔNG TIN</Link>
+                <Link href="/download" className="block text-white hover:text-blue-400 transition-colors py-2">TẢI GAME</Link>
+                <Link href="/donate" className="block text-white hover:text-blue-400 transition-colors py-2">QUYÊN GÓP</Link>
+                <Link href="/news" className="block text-white hover:text-blue-400 transition-colors py-2">TIN TỨC</Link>
+                <Link href="/rankings" className="block text-blue-300 hover:text-blue-200 transition-colors py-2">XẾP HẠNG</Link>
+              </div>
             </div>
           </div>
         </div>
@@ -76,10 +155,10 @@ export default function RankingsPage() {
 
           {/* Tab Navigation */}
           <div className="flex justify-center mb-8">
-            <div className="bg-gray-800 rounded-lg p-1 flex">
+            <div className="bg-gray-800 rounded-lg p-1 flex w-full max-w-md">
               <button
                 onClick={() => setActiveTab('characters')}
-                className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
                   activeTab === 'characters'
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'
@@ -89,7 +168,7 @@ export default function RankingsPage() {
               </button>
               <button
                 onClick={() => setActiveTab('guilds')}
-                className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
                   activeTab === 'guilds'
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'

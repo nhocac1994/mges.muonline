@@ -86,16 +86,24 @@ export function useNotifications() {
   }, [isSupported, permission.granted]);
 
   const showEventNotification = useCallback((eventName: string, timeLeft: number, isStarting: boolean = false) => {
-    const title = isStarting ? '🎮 Sự kiện đã bắt đầu!' : '⏰ Sự kiện sắp bắt đầu!';
-    const body = isStarting 
-      ? `${eventName} đã bắt đầu! Hãy tham gia ngay!`
-      : `${eventName} sẽ bắt đầu trong ${Math.floor(timeLeft / 60)} phút!`;
+    let title, body;
+    
+    if (eventName === 'Chào mừng!') {
+      title = '🎉 Chào mừng đến với MuDauTruongSS1!';
+      body = 'Bạn sẽ nhận thông báo về các sự kiện quan trọng trong game!';
+    } else if (isStarting) {
+      title = '🎮 Sự kiện đã bắt đầu!';
+      body = `${eventName} đã bắt đầu! Hãy tham gia ngay!`;
+    } else {
+      title = '⏰ Sự kiện sắp bắt đầu!';
+      body = `${eventName} sẽ bắt đầu trong ${Math.floor(timeLeft / 60)} phút!`;
+    }
 
     return showNotification({
       title,
       body,
       tag: `event-${eventName.toLowerCase().replace(/\s+/g, '-')}`,
-      requireInteraction: isStarting
+      requireInteraction: isStarting || eventName === 'Chào mừng!'
     });
   }, [showNotification]);
 

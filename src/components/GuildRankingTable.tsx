@@ -122,36 +122,36 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
       <h2 className="text-2xl font-bold text-yellow-400 mb-6">{title}</h2>
       
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-xs sm:text-sm">
           <thead>
             <tr className="border-b border-gray-600">
-              <th className="text-left py-3 px-2 text-yellow-400">Hạng</th>
-              <th className="text-left py-3 px-2 text-yellow-400">Logo</th>
-              <th className="text-left py-3 px-2 text-yellow-400">Tên Guild</th>
-              <th className="text-left py-3 px-2 text-yellow-400">Guild Master</th>
-              <th className="text-left py-3 px-2 text-yellow-400">Thành viên</th>
-              <th className="text-left py-3 px-2 text-yellow-400">Điểm số</th>
+              <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Hạng</th>
+              <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Logo</th>
+              <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Tên Guild</th>
+              <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Guild Master</th>
+              <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Thành viên</th>
+              <th className="text-left py-2 sm:py-3 px-1 sm:px-2 text-yellow-400">Điểm số</th>
             </tr>
           </thead>
           <tbody>
             {guilds.map((guild, index) => (
               <tr key={guild.guildName} className="border-b border-gray-700 hover:bg-gray-700">
-                <td className="py-3 px-2 text-yellow-300 font-bold">
+                <td className="py-2 sm:py-3 px-1 sm:px-2 text-yellow-300 font-bold">
                   {getRankIcon(index)}
                 </td>
-                <td className="py-3 px-2">
+                <td className="py-2 sm:py-3 px-1 sm:px-2">
                   {getGuildLogo(guild.guildName)}
                 </td>
-                <td className="py-3 px-2 text-white font-medium">
+                <td className="py-2 sm:py-3 px-1 sm:px-2 text-white font-medium">
                   {guild.guildName || 'Unknown'}
                 </td>
-                <td className="py-3 px-2 text-blue-300">
+                <td className="py-2 sm:py-3 px-1 sm:px-2 text-blue-300">
                   {guild.guildMaster || 'Unknown'}
                 </td>
-                <td className="py-3 px-2 text-green-300">
+                <td className="py-2 sm:py-3 px-1 sm:px-2 text-green-300">
                   {formatValue(guild.memberCount)}
                 </td>
-                <td className="py-3 px-2 text-purple-300 font-bold">
+                <td className="py-2 sm:py-3 px-1 sm:px-2 text-purple-300 font-bold">
                   {formatValue(guild.score)}
                 </td>
               </tr>
