@@ -27,7 +27,10 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
     // Hàm để xác định số lượng nodes dựa trên kích thước màn hình
     const getNodeCount = () => {
       const width = window.innerWidth;
-      return width <= 768 ? 80 : 200; // Mobile: 80 nodes, PC: 200 nodes
+      // Giảm nodes trên mobile để tối ưu performance
+      if (width <= 480) return 100; // Mobile nhỏ: 25 nodes
+      if (width <= 768) return 50; // Mobile: 35 nodes
+      return 200; // PC: 200 nodes
     };
     
     // Detect mobile
@@ -66,13 +69,13 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
       nodes.length = 0;
       nodeCount = newNodeCount;
       
-      // Khởi tạo nodes với vị trí và vận tốc ngẫu nhiên
+      // Khởi tạo nodes với vị trí và vận tốc ngẫu nhiên - Tăng tốc độ ban đầu
       for (let i = 0; i < nodeCount; i++) {
         nodes.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 10.5,
-          vy: (Math.random() - 0.5) * 10.5
+          vx: (Math.random() - 0.5) * 20, // Tăng từ 10.5 lên 20
+          vy: (Math.random() - 0.5) * 20
         });
       }
     };
@@ -130,7 +133,7 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
     let animationFrame: number;
     // Giảm FPS trên mobile để tối ưu performance
     const currentIsMobile = window.innerWidth <= 768;
-    const targetFPS = currentIsMobile ? 20 : 30;
+    const targetFPS = currentIsMobile ? 30 : 30; // Giảm từ 20 xuống 15 trên mobile
     const frameInterval = 1000 / targetFPS;
     let lastTime = performance.now();
 
@@ -176,12 +179,26 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
           node.vy += Math.sin(angle) * force * repulsionStrength;
         }
 
-        // Giảm vận tốc dần (damping) - giảm rất ít để giữ tốc độ cao
-        node.vx *= 0.995; // Tăng từ 0.99 lên 0.995 để giữ tốc độ lâu hơn nữa
-        node.vy *= 0.995;
+        // Giảm damping xuống tối thiểu để giữ tốc độ cao - gần như không giảm
+        node.vx *= 0.999; // Giảm damping xuống 0.999 để giữ tốc độ tốt hơn
+        node.vy *= 0.999;
 
-        // Giới hạn vận tốc tối đa
-        const maxSpeed = 16; // Tăng từ 4 lên 6 (nhanh hơn 50%)
+        // Đảm bảo nodes luôn có vận tốc tối thiểu để không đứng yên
+        const minSpeed = 3; // Tốc độ tối thiểu
+        const currentSpeed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
+        if (currentSpeed < minSpeed && currentSpeed > 0) {
+          // Nếu tốc độ quá chậm, tăng lại
+          const angle = Math.atan2(node.vy, node.vx);
+          node.vx = Math.cos(angle) * minSpeed;
+          node.vy = Math.sin(angle) * minSpeed;
+        } else if (currentSpeed === 0) {
+          // Nếu đứng yên, cho vận tốc ngẫu nhiên
+          node.vx = (Math.random() - 0.5) * 15;
+          node.vy = (Math.random() - 0.5) * 15;
+        }
+
+        // Giới hạn vận tốc tối đa - tăng lên để nhanh hơn
+        const maxSpeed = 25; // Tăng từ 16 lên 25
         const speed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
         if (speed > maxSpeed) {
           node.vx = (node.vx / speed) * maxSpeed;
@@ -192,22 +209,19 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
         node.x += node.vx;
         node.y += node.vy;
 
-        // Wrap around edges
+        // Wrap around edges - Giữ nguyên vận tốc để không bị chậm
         if (node.x < 0) {
           node.x = width;
-          node.vx *= 0.5; // Giảm vận tốc khi wrap
+          // Không giảm vận tốc khi wrap để giữ tốc độ
         }
         if (node.x > width) {
           node.x = 0;
-          node.vx *= 0.5;
         }
         if (node.y < 0) {
           node.y = height;
-          node.vy *= 0.5;
         }
         if (node.y > height) {
           node.y = 0;
-          node.vy *= 0.5;
         }
       });
 
@@ -220,9 +234,11 @@ export default function NetworkOverlay({ className = '' }: NetworkOverlayProps) 
           const dy = nodeA.y - nodeB.y;
           const distanceSq = dx * dx + dy * dy;
 
-          if (distanceSq < 150 * 150) {
+          // Giảm connection distance trên mobile để tối ưu
+          const connectionDistance = currentIsMobile ? 120 : 150;
+          if (distanceSq < connectionDistance * connectionDistance) {
             const distance = Math.sqrt(distanceSq);
-            const opacity = (1 - distance / 150) * 0.5; // Tăng từ 0.2 lên 0.5 để rõ hơn
+            const opacity = (1 - distance / connectionDistance) * (currentIsMobile ? 0.3 : 0.5);
 
             ctx.beginPath();
             ctx.moveTo(nodeA.x, nodeA.y);

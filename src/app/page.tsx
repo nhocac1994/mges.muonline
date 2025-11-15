@@ -10,6 +10,7 @@ import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import AnimatedSection from '@/components/AnimatedSection';
 import NetworkOverlay from '@/components/NetworkOverlay';
 import MultiTypewriter from '@/components/MultiTypewriter';
+import LoadingScreen from '@/components/LoadingScreen';
 
 // Lazy load các components nặng
 const FloatingParticles = dynamic(() => import('@/components/FloatingParticles'), {
@@ -25,6 +26,14 @@ const Network3D = dynamic(() => import('@/components/Network3D'), {
 // Logo Section Component - Tách riêng để tránh hooks trong callback
 const LogoSection = () => {
   const logoRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: logoRef,
     offset: ["start end", "end start"]
@@ -37,10 +46,11 @@ const LogoSection = () => {
     { clamp: false }
   );
 
+  // Tối ưu useInView cho mobile - chỉ dùng isMobile sau khi mount
   const logoInView = useInView(logoRef, {
-    amount: 0.2,
-    once: false,
-    margin: "0px 0px -200px 0px"
+    amount: isMounted && isMobile ? 0.1 : 0.2,
+    once: isMounted && isMobile, // Chỉ chạy 1 lần trên mobile
+    margin: isMounted && isMobile ? "0px 0px -100px 0px" : "0px 0px -200px 0px"
   });
 
   return (
@@ -49,17 +59,23 @@ const LogoSection = () => {
       className="relative w-full h-full flex items-center justify-center"
       style={{ opacity: logoOpacity }}
     >
-      <div className="relative w-[60vw] sm:w-[50vw] md:w-[45vw] lg:w-[40vw] xl:w-[35vw] h-[60vw] sm:h-[50vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw] max-w-3xl max-h-3xl mx-auto">
+      <div className={`relative ${isMounted && isMobile ? 'w-[85vw] h-[85vw]' : 'w-[60vw] sm:w-[50vw] md:w-[45vw] lg:w-[40vw] xl:w-[35vw] h-[60vw] sm:h-[50vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw]'} max-w-3xl max-h-3xl mx-auto`}>
         {/* Part 1: Top Left */}
         <motion.div
           className="absolute inset-0"
           initial={false}
           animate={logoInView ? { x: 0, y: 0, opacity: 1 } : { x: '-100vw', y: '-100vh', opacity: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ 
+            duration: isMounted && isMobile ? 0.4 : 0.8, // Nhanh hơn trên mobile
+            ease: [0.22, 1, 0.36, 1] as const
+          }}
           style={{
             clipPath: 'polygon(0 0, 50% 0, 50% 50%, 0 50%)',
-            zIndex: 1
+            zIndex: 1,
+            willChange: isMounted && isMobile ? 'opacity' : 'transform, opacity', // Tối ưu trên mobile
+            transform: 'translateZ(0)' // GPU acceleration
           }}
+          suppressHydrationWarning
         >
           <Image 
             src="/MU-DAUTRUONG.PNG" 
@@ -76,11 +92,18 @@ const LogoSection = () => {
           className="absolute inset-0"
           initial={false}
           animate={logoInView ? { x: 0, y: 0, opacity: 1 } : { x: '100vw', y: '-100vh', opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ 
+            duration: isMounted && isMobile ? 0.4 : 0.8,
+            delay: isMounted && isMobile ? 0 : 0.1, // Bỏ delay trên mobile
+            ease: [0.22, 1, 0.36, 1] as const
+          }}
           style={{
             clipPath: 'polygon(50% 0, 100% 0, 100% 50%, 50% 50%)',
-            zIndex: 1
+            zIndex: 1,
+            willChange: isMounted && isMobile ? 'opacity' : 'transform, opacity',
+            transform: 'translateZ(0)'
           }}
+          suppressHydrationWarning
         >
           <Image 
             src="/MU-DAUTRUONG.PNG" 
@@ -97,11 +120,18 @@ const LogoSection = () => {
           className="absolute inset-0"
           initial={false}
           animate={logoInView ? { x: 0, y: 0, opacity: 1 } : { x: '-100vw', y: '100vh', opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ 
+            duration: isMounted && isMobile ? 0.4 : 0.8,
+            delay: isMounted && isMobile ? 0 : 0.2,
+            ease: [0.22, 1, 0.36, 1] as const
+          }}
           style={{
             clipPath: 'polygon(0 50%, 50% 50%, 50% 100%, 0 100%)',
-            zIndex: 1
+            zIndex: 1,
+            willChange: isMounted && isMobile ? 'opacity' : 'transform, opacity',
+            transform: 'translateZ(0)'
           }}
+          suppressHydrationWarning
         >
           <Image 
             src="/MU-DAUTRUONG.PNG" 
@@ -118,11 +148,18 @@ const LogoSection = () => {
           className="absolute inset-0"
           initial={false}
           animate={logoInView ? { x: 0, y: 0, opacity: 1 } : { x: '100vw', y: '100vh', opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ 
+            duration: isMounted && isMobile ? 0.4 : 0.8,
+            delay: isMounted && isMobile ? 0 : 0.3,
+            ease: [0.22, 1, 0.36, 1] as const
+          }}
           style={{
             clipPath: 'polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%)',
-            zIndex: 1
+            zIndex: 1,
+            willChange: isMounted && isMobile ? 'opacity' : 'transform, opacity',
+            transform: 'translateZ(0)'
           }}
+          suppressHydrationWarning
         >
           <Image 
             src="/MU-DAUTRUONG.PNG" 
@@ -134,38 +171,42 @@ const LogoSection = () => {
           />
         </motion.div>
 
-        {/* Ánh sáng vàng hình tròn xung quanh logo - Chỉ hiện khi ghép thành công */}
-        <motion.div 
-          className="absolute inset-0 pointer-events-none"
-          initial={false}
-          animate={logoInView ? { 
-            opacity: [0, 1, 0.8, 1, 0.7],
-            scale: [0.8, 1.15, 1, 1.1, 1]
-          } : { opacity: 0, scale: 0.8 }}
-          transition={{ 
-            duration: 2,
-            delay: 0.6,
-            ease: "easeOut"
-          }}
-          style={{
-            background: 'radial-gradient(circle, transparent 40%, rgba(255, 215, 0, 0.4) 50%, rgba(255, 223, 0, 0.6) 55%, rgba(255, 215, 0, 0.4) 60%, rgba(255, 200, 0, 0.3) 70%, transparent 85%)',
-            filter: 'blur(25px)',
-            zIndex: 0,
-            width: '120%',
-            height: '120%',
-            left: '-10%',
-            top: '-10%'
-          }}
-        />
+        {/* Ánh sáng vàng hình tròn xung quanh logo - Ẩn trên mobile để tối ưu */}
+        {isMounted && !isMobile && (
+          <motion.div 
+            className="absolute inset-0 pointer-events-none"
+            initial={false}
+            animate={logoInView ? { 
+              opacity: [0, 1, 0.8, 1, 0.7],
+              scale: [0.8, 1.15, 1, 1.1, 1]
+            } : { opacity: 0, scale: 0.8 }}
+            transition={{ 
+              duration: 2,
+              delay: 0.6,
+              ease: "easeOut"
+            }}
+            style={{
+              background: 'radial-gradient(circle, transparent 40%, rgba(255, 215, 0, 0.4) 50%, rgba(255, 223, 0, 0.6) 55%, rgba(255, 215, 0, 0.4) 60%, rgba(255, 200, 0, 0.3) 70%, transparent 85%)',
+              filter: 'blur(25px)',
+              zIndex: 0,
+              width: '120%',
+              height: '120%',
+              left: '-10%',
+              top: '-10%'
+            }}
+          />
+        )}
       </div>
       
-      {/* Floating Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-float" style={{animationDelay: '0s'}}></div>
-        <div className="absolute top-1/4 right-1/4 w-1 h-1 bg-purple-400 rounded-full animate-float" style={{animationDelay: '1s'}}></div>
-        <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-red-400 rounded-full animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-cyan-400 rounded-full animate-float" style={{animationDelay: '3s'}}></div>
-      </div>
+      {/* Floating Particles - Ẩn trên mobile để tối ưu */}
+      {isMounted && !isMobile && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-float" style={{animationDelay: '0s'}}></div>
+          <div className="absolute top-1/4 right-1/4 w-1 h-1 bg-purple-400 rounded-full animate-float" style={{animationDelay: '1s'}}></div>
+          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-red-400 rounded-full animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-cyan-400 rounded-full animate-float" style={{animationDelay: '3s'}}></div>
+        </div>
+      )}
     </motion.div>
   );
 };
@@ -442,6 +483,7 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -553,6 +595,9 @@ export default function Home() {
 
   return (
     <>
+    {/* Loading Screen - Hiển thị trước khi các effects load xong */}
+    <LoadingScreen onLoadingComplete={() => setIsLoadingComplete(true)} />
+    
     <div className="min-h-screen relative overflow-x-hidden" style={{
       fontFamily: 'Roboto, sans-serif',
       margin: 0,
@@ -560,7 +605,8 @@ export default function Home() {
       width: '100%',
       minWidth: '100%',
       maxWidth: '100%',
-      overflowY: 'auto',
+      overflowY: isMobile ? 'visible' : 'auto',
+      height: isMobile ? 'auto' : undefined,
       position: 'relative'
     }}>
       {/* Structured Data for SEO */}
@@ -748,8 +794,8 @@ export default function Home() {
             </div>
         </section>
 
-        {/* Video Trailer Section - Full Screen */}
-        {isClient ? <VideoSection /> : (
+        {/* Video Trailer Section - Full Screen - Ẩn trên mobile để tối ưu performance */}
+        {!isMobile && (isClient ? <VideoSection /> : (
           <section className="min-h-screen flex flex-col items-center justify-center relative bg-black/40 backdrop-blur-sm">
             {/* Gradient Overlay - Tối dần từ trên xuống dưới để khớp với background */}
             <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black z-10 pointer-events-none"></div>
@@ -794,10 +840,10 @@ export default function Home() {
               </div>
             </div>
           </section>
-        )}
+        ))}
 
-        {/* Game Gallery Sections - Mỗi hình ảnh là một section full-screen với fade effect - Nằm ngoài main */}
-        {gameImages.map((image, index) => (
+        {/* Game Gallery Sections - Ẩn trên mobile để tối ưu performance và scroll */}
+        {!isMobile && gameImages.map((image, index) => (
           <ImageSection key={index} image={image} index={index} />
         ))}
 
