@@ -156,11 +156,11 @@ export function validateAccountIdWithLogging(
  * Wrapper function để bảo vệ API route handler
  * Tự động kiểm tra bảo mật trước khi chạy handler
  */
-export function withSecurity<T>(
+export function withSecurity<T = any>(
   handler: (request: NextRequest) => Promise<NextResponse<T>>,
   endpoint: string
 ) {
-  return async (request: NextRequest): Promise<NextResponse<T>> => {
+  return async (request: NextRequest): Promise<NextResponse<any>> => {
     // Chạy security middleware
     const securityCheck = await securityMiddleware(request, endpoint);
     
