@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import siteConfig from '@/config/site.config.json';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -81,7 +82,7 @@ export default function PWAInstallPrompt() {
           <div className="flex-shrink-0">
             <Image 
               src="/icon.jpg" 
-              alt="MuDauTruongSS1.net Logo" 
+              alt={`${siteConfig.serverName} Logo`} 
               width={40} 
               height={40}
               className="w-10 h-10 rounded-lg"
@@ -89,7 +90,7 @@ export default function PWAInstallPrompt() {
           </div>
           <div className="flex-1">
             <h3 className="text-white font-semibold text-sm mb-1">
-              Cài đặt MuDauTruongSS1.net
+              Cài đặt {siteConfig.serverName}
             </h3>
             <p className="text-gray-300 text-xs mb-3">
               Thêm vào màn hình chính để nhận thông báo sự kiện ngay cả khi đóng app!

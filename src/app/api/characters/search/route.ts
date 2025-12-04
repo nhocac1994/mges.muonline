@@ -1,8 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
+import { validateCharacterName, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
+import { getClientIP } from '@/lib/utils';
+import { securityMiddleware } from '@/lib/security-middleware';
 
 export async function GET(request: NextRequest) {
   try {
+    const clientIP = getClientIP(request);
+    
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/characters/search');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
+
     const pool = await connectToDatabase();
     const { searchParams } = new URL(request.url);
     const characterName = searchParams.get('name');
@@ -11,6 +25,24 @@ export async function GET(request: NextRequest) {
     let result;
 
     if (characterName && characterName.trim()) {
+      // ✅ Security: Validate character name
+      const characterNameValidation = validateCharacterName(characterName.trim());
+      if (!characterNameValidation.valid) {
+        logSuspiciousActivity(clientIP, '/api/characters/search', characterName, 'Invalid character name format');
+        return NextResponse.json({ 
+          success: false, 
+          message: characterNameValidation.error || 'Tên nhân vật không hợp lệ' 
+        }, { status: 400 });
+      }
+
+      // ✅ Security: Detect SQL injection
+      if (detectSQLInjection(characterName)) {
+        logSuspiciousActivity(clientIP, '/api/characters/search', characterName, 'SQL Injection attempt detected');
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Input không hợp lệ' 
+        }, { status: 400 });
+      }
       // Tìm kiếm character cụ thể
       query = `
         SELECT 

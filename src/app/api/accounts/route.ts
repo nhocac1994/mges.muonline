@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
 import sql from 'mssql';
+import { securityMiddleware } from '@/lib/security-middleware';
 
 export async function GET(request: NextRequest) {
   try {
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/accounts');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
+
     console.log('Getting available accounts...');
     const pool = await connectToDatabase();
     console.log('Database connected successfully');

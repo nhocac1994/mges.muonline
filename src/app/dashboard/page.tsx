@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import NetworkOverlay from '@/components/NetworkOverlay';
+import siteConfig from '@/config/site.config.json';
 
 interface Character {
   name: string;
@@ -341,46 +341,65 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      fontFamily: 'Roboto, sans-serif'
+    <div className="min-h-screen relative overflow-hidden mu-retro-bg-texture" style={{
+      fontFamily: 'Cinzel, serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
-      
-      {/* Background Image - Desktop Only */}
+      {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
-        <>
+        <div 
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundImage: 'url(/panael-mu.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+            zIndex: 0,
+            pointerEvents: 'none',
+            margin: 0,
+            padding: 0,
+            filter: 'brightness(1.3) contrast(1.1)'
+          }}
+        >
+          {/* Retro Overlay */}
           <div 
-            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-            // style={{
-            //   backgroundImage: 'url(/logoweb.jpg)',
-            //   backgroundAttachment: 'fixed'
-            // }}
-          ></div>
-          
-          {/* Mobile Background - Simple gradient */}
-          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
-        </>
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}
+          />
+        </div>
       )}
       
-      {/* Background Overlay */}
-      <div className="fixed inset-0 bg-black/60"></div>
+      {/* Background for main content */}
+      <div className="fixed inset-0 -z-10 bg-black/20"></div>
       
       {/* Content */}
-      <div className="relative z-10 pt-28">
+      <div className="relative z-10" style={{ paddingTop: '92px' }}>
         {/* User Info Header - Always visible */}
-        <div className="bg-gradient-to-r from-blue-900/80 to-purple-900/80 backdrop-blur-sm border-b border-blue-500/30">
+        <div className="bg-black/50 backdrop-blur-sm border-b border-[#FFD700]/30" style={{
+          background: 'linear-gradient(135deg, rgba(139, 69, 19, 0.8) 0%, rgba(101, 67, 33, 0.8) 100%)',
+          boxShadow: '0 4px 15px rgba(255, 215, 0, 0.3)'
+        }}>
           <div className="max-w-6xl mx-auto px-5 py-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="flex items-center space-x-4">
                 <Image src="/icon.jpg" alt="Mu Online Logo" width={40} height={40} className="rounded-lg"/>
                 <div>
-                  <h1 className="text-lg font-bold text-white">MuDauTruongSS1.net</h1>
-                  <p className="text-blue-300 text-xs">Đấu Trường SS1</p>
+                  <h1 className="text-lg font-bold mu-text-gold">{siteConfig.serverName}</h1>
+                  <p className="mu-text-gold text-xs">{siteConfig.serverVersion}</p>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4">
-                <span className="text-white text-sm">Xin chào, {user?.memb_name}</span>
+                <span className="text-white text-sm">Xin chào, <span className="mu-text-gold">{user?.memb_name}</span></span>
                 
                 {/* Character Selector */}
                 {characters.length > 0 && (
@@ -390,7 +409,7 @@ export default function Dashboard() {
                       value={selectedCharacter?.name || ''}
                       onChange={(e) => handleCharacterChange(e.target.value)}
                       disabled={charactersLoading}
-                      className="bg-gray-800 text-white px-3 py-1 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                      className="mu-retro-input px-3 py-1 text-sm"
                     >
                       {characters.map((char) => (
                         <option key={char.name} value={char.name}>
@@ -404,14 +423,15 @@ export default function Dashboard() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setShowAccountModal(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                    className="mu-retro-btn px-3 py-1 text-sm"
                   >
                     Quản lý
                   </button>
                   
                   <button 
                     onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                    className="mu-retro-btn px-3 py-1 text-sm"
+                    style={{ background: 'linear-gradient(135deg, #CC0000 0%, #990000 100%)' }}
                   >
                     Đăng xuất
                   </button>
@@ -423,19 +443,20 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <main className="relative z-10 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto px-4">
           <div className="text-center text-white mb-12">
-            <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
+            <h1 className="text-5xl mu-retro-title mb-4">
               DASHBOARD
             </h1>
-            <p className="text-xl text-gray-300">Chào mừng bạn đến với MuDauTruongSS1.net</p>
+            <p className="text-xl text-gray-300">Chào mừng bạn đến với {siteConfig.serverName}</p>
           </div>
 
           {/* User Info Cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {/* Thông tin tài khoản */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Thông tin tài khoản</h3>
+            <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Thông tin tài khoản</h3>
               <div className="space-y-2">
                 <p className="text-white"><span className="text-gray-400">Tên đăng nhập:</span> {dashboardData?.account.id}</p>
                 <p className="text-white"><span className="text-gray-400">Nhân vật chính:</span> {dashboardData?.character.name}</p>
@@ -466,33 +487,38 @@ export default function Dashboard() {
                   </span>
                 </p>
               </div>
+              </div>
             </div>
 
             {/* Trạng thái game */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Trạng thái game</h3>
-              <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Server:</span> <span className="text-green-400">Online</span></p>
-                <p className="text-white"><span className="text-gray-400">Cấp độ:</span> {dashboardData?.character.level}</p>
-                <p className="text-white"><span className="text-gray-400">Class:</span> {getClassName(dashboardData?.character.class || 0)}</p>
-                <p className="text-white"><span className="text-gray-400">Kinh nghiệm:</span> {formatMoney(dashboardData?.character.experience || 0)}/{formatMoney(dashboardData?.character.nextLevelExp || 0)}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
-                  <div 
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300" 
-                    style={{ width: `${dashboardData?.character.expProgress || 0}%` }}
-                  ></div>
+            <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Trạng thái game</h3>
+                <div className="space-y-2">
+                  <p className="text-white"><span className="text-gray-400">Server:</span> <span className="text-green-400">Online</span></p>
+                  <p className="text-white"><span className="text-gray-400">Cấp độ:</span> {dashboardData?.character.level}</p>
+                  <p className="text-white"><span className="text-gray-400">Class:</span> {getClassName(dashboardData?.character.class || 0)}</p>
+                  <p className="text-white"><span className="text-gray-400">Kinh nghiệm:</span> {formatMoney(dashboardData?.character.experience || 0)}/{formatMoney(dashboardData?.character.nextLevelExp || 0)}</p>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300" 
+                      style={{ width: `${dashboardData?.character.expProgress || 0}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Thống kê */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Thống kê</h3>
-              <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Thời gian chơi:</span> {formatTime(dashboardData?.character.playTimeHours || 0, dashboardData?.character.playTimeMinutes || 0)}</p>
-                <p className="text-white"><span className="text-gray-400">PK Count:</span> {dashboardData?.character.pkCount}</p>
-                <p className="text-white"><span className="text-gray-400">PK Level:</span> {dashboardData?.character.pkLevel}</p>
-                <p className="text-white"><span className="text-gray-400">Vị trí:</span> Map {dashboardData?.character.mapNumber} ({dashboardData?.character.mapPosX}, {dashboardData?.character.mapPosY})</p>
+            <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Thống kê</h3>
+                <div className="space-y-2">
+                  <p className="text-white"><span className="text-gray-400">Thời gian chơi:</span> {formatTime(dashboardData?.character.playTimeHours || 0, dashboardData?.character.playTimeMinutes || 0)}</p>
+                  <p className="text-white"><span className="text-gray-400">PK Count:</span> {dashboardData?.character.pkCount}</p>
+                  <p className="text-white"><span className="text-gray-400">PK Level:</span> {dashboardData?.character.pkLevel}</p>
+                  <p className="text-white"><span className="text-gray-400">Vị trí:</span> Map {dashboardData?.character.mapNumber} ({dashboardData?.character.mapPosX}, {dashboardData?.character.mapPosY})</p>
+                </div>
               </div>
             </div>
           </div>
@@ -500,8 +526,9 @@ export default function Dashboard() {
           {/* Character Stats */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {/* Stats */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6 min-h-[400px]">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Chỉ số nhân vật</h3>
+            <div className="mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px', minHeight: '400px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Chỉ số nhân vật</h3>
               <div className="space-y-2">
                 {/* Basic Stats */}
                 <div className="space-y-2">
@@ -555,49 +582,55 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
+              </div>
             </div>
 
             {/* Life & Mana */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">HP & MP</h3>
-              <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Life:</span> {Math.floor(selectedCharacter?.life || dashboardData?.character.life || 0)}/{Math.floor(selectedCharacter?.maxLife || dashboardData?.character.maxLife || 0)}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-red-500 h-2 rounded-full" 
-                    style={{ width: `${Math.min(100, ((selectedCharacter?.life || dashboardData?.character.life || 0) / (selectedCharacter?.maxLife || dashboardData?.character.maxLife || 1)) * 100)}%` }}
-                  ></div>
-                </div>
-                <p className="text-white"><span className="text-gray-400">Mana:</span> {Math.floor(selectedCharacter?.mana || dashboardData?.character.mana || 0)}/{Math.floor(selectedCharacter?.maxMana || dashboardData?.character.maxMana || 0)}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-blue-500 h-2 rounded-full" 
-                    style={{ width: `${Math.min(100, ((selectedCharacter?.mana || dashboardData?.character.mana || 0) / (selectedCharacter?.maxMana || dashboardData?.character.maxMana || 1)) * 100)}%` }}
-                  ></div>
+            <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">HP & MP</h3>
+                <div className="space-y-2">
+                  <p className="text-white"><span className="text-gray-400">Life:</span> {Math.floor(selectedCharacter?.life || dashboardData?.character.life || 0)}/{Math.floor(selectedCharacter?.maxLife || dashboardData?.character.maxLife || 0)}</p>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div 
+                      className="bg-red-500 h-2 rounded-full" 
+                      style={{ width: `${Math.min(100, ((selectedCharacter?.life || dashboardData?.character.life || 0) / (selectedCharacter?.maxLife || dashboardData?.character.maxLife || 1)) * 100)}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-white"><span className="text-gray-400">Mana:</span> {Math.floor(selectedCharacter?.mana || dashboardData?.character.mana || 0)}/{Math.floor(selectedCharacter?.maxMana || dashboardData?.character.maxMana || 0)}</p>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full" 
+                      style={{ width: `${Math.min(100, ((selectedCharacter?.mana || dashboardData?.character.mana || 0) / (selectedCharacter?.maxMana || dashboardData?.character.maxMana || 1)) * 100)}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Money */}
-            <div className="bg-black bg-opacity-70 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Tiền tệ</h3>
-              <div className="space-y-2">
-                <p className="text-white"><span className="text-gray-400">Tiền nhân vật:</span></p>
-                <p className="text-green-400 font-bold">{formatMoney(selectedCharacter?.money || dashboardData?.character.money || 0)} Zen</p>
-                <p className="text-white"><span className="text-gray-400">Tiền kho:</span></p>
-                <p className="text-green-400 font-bold">{formatMoney(dashboardData?.warehouse.money || 0)} Zen</p>
+            <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Tiền tệ</h3>
+                <div className="space-y-2">
+                  <p className="text-white"><span className="text-gray-400">Tiền nhân vật:</span></p>
+                  <p className="text-green-400 font-bold">{formatMoney(selectedCharacter?.money || dashboardData?.character.money || 0)} Zen</p>
+                  <p className="text-white"><span className="text-gray-400">Tiền kho:</span></p>
+                  <p className="text-green-400 font-bold">{formatMoney(dashboardData?.warehouse.money || 0)} Zen</p>
+                </div>
               </div>
             </div>
 
           </div>
 
           {/* Reset Info - Full Width Layout */}
-          <div className="bg-black bg-opacity-70 rounded-lg p-6 mb-8 hover:bg-opacity-80 transition-all duration-300">
-            <h3 className="text-xl font-bold text-yellow-400 mb-4 flex items-center">
-              Reset
-            </h3>
+          <div className="mu-retro-card-blur mb-8" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+            <div className="relative z-10">
+              <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold flex items-center">
+                Reset
+              </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Reset Thường */}
               <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-500/30 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
                 <h4 className="text-lg font-semibold text-blue-400 mb-3 flex items-center">
@@ -707,21 +740,24 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
+              </div>
             </div>
           </div>
 
           {/* Guild Info */}
           {dashboardData?.guild && (
-            <div className="bg-black bg-opacity-70 rounded-lg p-6 mb-8">
-              <h3 className="text-xl font-bold text-yellow-400 mb-4">Thông tin Guild</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-white"><span className="text-gray-400">Tên Guild:</span> {dashboardData.guild.name}</p>
-                  <p className="text-white"><span className="text-gray-400">Guild Master:</span> {dashboardData.guild.master}</p>
-                </div>
-                <div>
-                  <p className="text-white"><span className="text-gray-400">Điểm số:</span> {formatMoney(dashboardData.guild.score)}</p>
-                  <p className="text-white"><span className="text-gray-400">Số thành viên:</span> {dashboardData.guild.memberCount}</p>
+            <div className="mu-retro-card-blur mb-8" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Thông tin Guild</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-white"><span className="text-gray-400">Tên Guild:</span> {dashboardData.guild.name}</p>
+                    <p className="text-white"><span className="text-gray-400">Guild Master:</span> {dashboardData.guild.master}</p>
+                  </div>
+                  <div>
+                    <p className="text-white"><span className="text-gray-400">Điểm số:</span> {formatMoney(dashboardData.guild.score)}</p>
+                    <p className="text-white"><span className="text-gray-400">Số thành viên:</span> {dashboardData.guild.memberCount}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -729,26 +765,30 @@ export default function Dashboard() {
 
           {/* Action Buttons */}
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-black bg-opacity-70 rounded-lg p-8 text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-4">Bắt đầu chơi</h3>
-              <p className="text-gray-300 mb-6">Tải game và bắt đầu hành trình Mu Online</p>
-              <a 
-                href="/download" 
-                className="bg-gradient-to-r from-yellow-500 to-red-500 text-white font-bold py-3 px-6 rounded-lg hover:from-yellow-600 hover:to-red-600 transition-all inline-block"
-              >
-                TẢI GAME NGAY
-              </a>
+            <div className="mu-retro-card-blur text-center" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-2xl mu-retro-title-small mb-4 mu-text-gold">Bắt đầu chơi</h3>
+                <p className="text-gray-300 mb-6 text-lg">Tải game và bắt đầu hành trình Mu Online</p>
+                <a 
+                  href="/download" 
+                  className="mu-retro-btn-classic inline-block"
+                >
+                  TẢI GAME NGAY
+                </a>
+              </div>
             </div>
 
-            <div className="bg-black bg-opacity-70 rounded-lg p-8 text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-4">Thông tin server</h3>
-              <p className="text-gray-300 mb-6">Xem thông tin chi tiết về server và cài đặt</p>
-              <a 
-                href="/info" 
-                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all inline-block"
-              >
-                XEM THÔNG TIN
-              </a>
+            <div className="mu-retro-card-blur text-center" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <h3 className="text-2xl mu-retro-title-small mb-4 mu-text-gold">Thông tin server</h3>
+                <p className="text-gray-300 mb-6 text-lg">Xem thông tin chi tiết về server và cài đặt</p>
+                <a 
+                  href="/info" 
+                  className="mu-retro-btn inline-block"
+                >
+                  XEM THÔNG TIN
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -759,8 +799,9 @@ export default function Dashboard() {
       {/* Account Management Modal */}
       {showAccountModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-xl font-bold text-yellow-400 mb-4">Quản lý tài khoản</h3>
+          <div className="mu-modal-bg rounded-lg p-6 w-full max-w-md mx-4 relative overflow-hidden">
+            <div className="mu-modal-content">
+            <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Quản lý tài khoản</h3>
             
             <div className="space-y-4">
               <div>
@@ -769,7 +810,7 @@ export default function Dashboard() {
                   type="text"
                   defaultValue={user?.memb_name || ''}
                   id="memb_name"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="mu-retro-input w-full"
                 />
               </div>
               
@@ -778,7 +819,7 @@ export default function Dashboard() {
                 <input
                   type="email"
                   id="mail_addr"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="mu-retro-input w-full"
                 />
               </div>
               
@@ -787,7 +828,7 @@ export default function Dashboard() {
                 <input
                   type="tel"
                   id="phon_numb"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="mu-retro-input w-full"
                 />
               </div>
               
@@ -802,14 +843,14 @@ export default function Dashboard() {
                     handleUpdateAccount(updateData);
                   }}
                   disabled={updateLoading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors disabled:opacity-50"
+                  className="mu-retro-btn flex-1 disabled:opacity-50"
                 >
                   {updateLoading ? 'Đang cập nhật...' : 'Cập nhật'}
                 </button>
                 
                 <button
                   onClick={() => setShowPasswordModal(true)}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors"
+                  className="mu-retro-btn flex-1"
                 >
                   Đổi mật khẩu
                 </button>
@@ -817,10 +858,12 @@ export default function Dashboard() {
               
               <button
                 onClick={() => setShowAccountModal(false)}
-                className="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors"
+                className="mu-retro-btn w-full"
+                style={{ background: 'linear-gradient(135deg, #666 0%, #444 100%)' }}
               >
                 Đóng
               </button>
+            </div>
             </div>
           </div>
         </div>
@@ -829,8 +872,9 @@ export default function Dashboard() {
       {/* Password Change Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-xl font-bold text-yellow-400 mb-4">Đổi mật khẩu</h3>
+          <div className="mu-modal-bg rounded-lg p-6 w-full max-w-md mx-4 relative overflow-hidden">
+            <div className="mu-modal-content">
+            <h3 className="text-xl mu-retro-title-small mb-4 mu-text-gold">Đổi mật khẩu</h3>
             
             <div className="space-y-4">
               <div>
@@ -838,7 +882,7 @@ export default function Dashboard() {
                 <input
                   type="password"
                   id="currentPassword"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="mu-retro-input w-full"
                 />
               </div>
               
@@ -847,7 +891,7 @@ export default function Dashboard() {
                 <input
                   type="password"
                   id="newPassword"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="mu-retro-input w-full"
                 />
               </div>
               
@@ -856,7 +900,7 @@ export default function Dashboard() {
                 <input
                   type="password"
                   id="confirmPassword"
-                  className="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="mu-retro-input w-full"
                 />
               </div>
               
@@ -875,18 +919,20 @@ export default function Dashboard() {
                     handleChangePassword({ currentPassword, newPassword });
                   }}
                   disabled={updateLoading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors disabled:opacity-50"
+                  className="mu-retro-btn flex-1 disabled:opacity-50"
                 >
                   {updateLoading ? 'Đang đổi...' : 'Đổi mật khẩu'}
                 </button>
                 
                 <button
                   onClick={() => setShowPasswordModal(false)}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors"
+                  className="mu-retro-btn flex-1"
+                  style={{ background: 'linear-gradient(135deg, #666 0%, #444 100%)' }}
                 >
                   Hủy
                 </button>
               </div>
+            </div>
             </div>
           </div>
         </div>

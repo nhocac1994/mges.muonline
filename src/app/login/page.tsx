@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SimpleCaptcha from '@/components/SimpleCaptcha';
-import NetworkOverlay from '@/components/NetworkOverlay';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -93,38 +92,54 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      fontFamily: 'Roboto, sans-serif'
+    <div className="min-h-screen relative overflow-hidden mu-retro-bg-texture" style={{
+      fontFamily: 'Cinzel, serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
-      
-      {/* Background Image - Desktop Only */}
+      {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
-        <>
+        <div 
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundImage: 'url(/panael-mu.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+            zIndex: 0,
+            pointerEvents: 'none',
+            margin: 0,
+            padding: 0,
+            filter: 'brightness(1.3) contrast(1.1)'
+          }}
+        >
+          {/* Retro Overlay */}
           <div 
-            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-            // style={{
-            //   backgroundImage: 'url(/logoweb.jpg)',
-            //   backgroundAttachment: 'fixed'
-            // }}
-          ></div>
-          
-          {/* Mobile Background - Simple gradient */}
-          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
-        </>
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}
+          />
+        </div>
       )}
       
-      {/* Background Overlay */}
-      <div className="fixed inset-0 bg-black/60"></div>
+      {/* Background for main content */}
+      <div className="fixed inset-0 -z-10 bg-black/20"></div>
       
       {/* Content */}
-      <div className="relative z-10 pt-28">
+      <div className="relative z-10" style={{ paddingTop: '92px' }}>
         {/* Main Content */}
         <main className="relative z-10 py-8">
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto px-4">
           <div className="text-center text-white mb-12">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl mu-retro-title mb-4">
               ĐĂNG NHẬP
             </h1>
             <p className="text-lg text-gray-300">
@@ -132,72 +147,72 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="bg-black bg-opacity-70 rounded-lg p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-white font-semibold mb-2">
-                  Tên đăng nhập *
-                </label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                    errors.username ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                  }`}
-                  placeholder="Nhập tên đăng nhập"
-                />
-                {errors.username && <p className="text-red-400 text-sm mt-1">{errors.username}</p>}
-              </div>
+          <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+            <div className="relative z-10">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-white font-semibold mb-2 mu-text-gold">
+                    Tên đăng nhập *
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    className={`mu-retro-input w-full ${
+                      errors.username ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Nhập tên đăng nhập"
+                  />
+                  {errors.username && <p className="mu-text-red text-sm mt-1">{errors.username}</p>}
+                </div>
 
-              <div>
-                <label className="block text-white font-semibold mb-2">
-                  Mật khẩu *
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                    errors.password ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
-                  }`}
-                  placeholder="Nhập mật khẩu"
-                />
-                {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
-              </div>
+                <div>
+                  <label className="block text-white font-semibold mb-2 mu-text-gold">
+                    Mật khẩu *
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`mu-retro-input w-full ${
+                      errors.password ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Nhập mật khẩu"
+                  />
+                  {errors.password && <p className="mu-text-red text-sm mt-1">{errors.password}</p>}
+                </div>
 
-              <div className="text-right">
-                <Link href="#" className="text-yellow-400 hover:text-yellow-300 text-sm">
-                  Quên mật khẩu?
-                </Link>
-              </div>
-
-              {/* CAPTCHA */}
-              <SimpleCaptcha onVerify={setCaptchaValid} />
-
-              <button
-                type="submit"
-                disabled={!captchaValid}
-                className={`w-full font-bold py-3 px-6 rounded-lg transition-all ${
-                  captchaValid 
-                    ? 'bg-gradient-to-r from-yellow-500 to-red-500 text-white hover:from-yellow-600 hover:to-red-600' 
-                    : 'bg-gray-500 text-gray-300 cursor-not-allowed'
-                }`}
-              >
-                {captchaValid ? 'ĐĂNG NHẬP' : 'VUI LÒNG XÁC THỰC CAPTCHA'}
-              </button>
-
-              <div className="text-center text-white">
-                <p>
-                  Chưa có tài khoản?{' '}
-                  <Link href="/register" className="text-yellow-400 hover:text-yellow-300">
-                    Đăng ký ngay
+                <div className="text-right">
+                  <Link href="#" className="mu-retro-link text-sm">
+                    Quên mật khẩu?
                   </Link>
-                </p>
-              </div>
-            </form>
+                </div>
+
+                {/* CAPTCHA */}
+                <SimpleCaptcha onVerify={setCaptchaValid} />
+
+                <button
+                  type="submit"
+                  disabled={!captchaValid}
+                  className={`mu-retro-btn-classic w-full font-bold py-3 px-6 ${
+                    !captchaValid ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {captchaValid ? 'ĐĂNG NHẬP' : 'VUI LÒNG XÁC THỰC CAPTCHA'}
+                </button>
+
+                <div className="text-center text-white">
+                  <p className="text-lg">
+                    Chưa có tài khoản?{' '}
+                    <Link href="/register" className="mu-retro-link">
+                      Đăng ký ngay
+                    </Link>
+                  </p>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
         </main>

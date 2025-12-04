@@ -1,15 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
 import sql from 'mssql';
+import { validateAccountId, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
+import { getClientIP } from '@/lib/utils';
+import { securityMiddleware, validateAccountIdWithLogging } from '@/lib/security-middleware';
 
 export async function GET(request: NextRequest) {
   try {
+    const clientIP = getClientIP(request);
+    
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/characters');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
+
     const accountId = request.nextUrl.searchParams.get('accountId');
     
     if (!accountId) {
       return NextResponse.json({ 
         success: false, 
         message: 'Account ID không được cung cấp' 
+      }, { status: 400 });
+    }
+
+    // ✅ Security: Validate accountId với logging tự động
+    const accountIdValidation = validateAccountIdWithLogging(accountId, '/api/characters', clientIP);
+    if (!accountIdValidation.valid) {
+      return NextResponse.json({ 
+        success: false, 
+        message: accountIdValidation.error || 'Account ID không hợp lệ' 
       }, { status: 400 });
     }
 

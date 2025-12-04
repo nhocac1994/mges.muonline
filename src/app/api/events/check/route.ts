@@ -1,7 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { securityMiddleware } from '@/lib/security-middleware';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/events/check');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
     // Get current time
     const now = new Date();
     const currentHour = now.getHours();

@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
+import { securityMiddleware } from '@/lib/security-middleware';
 
 export async function GET(request: NextRequest) {
   try {
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/rankings/guild');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
+
     const pool = await connectToDatabase();
     
     // Lấy top 50 guilds với xử lý dữ liệu null/0

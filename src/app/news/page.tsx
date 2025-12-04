@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NetworkOverlay from '@/components/NetworkOverlay';
+import siteConfig from '@/config/site.config.json';
 
 export default function News() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,19 +31,40 @@ export default function News() {
     <div className="min-h-screen relative overflow-hidden" style={{
       fontFamily: 'Roboto, sans-serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
-      
       {/* Background Image - Desktop Only */}
       {isClient && (
         <>
+        <div 
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundImage: 'url(/panael-mu.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+            zIndex: 0,
+            pointerEvents: 'none',
+            margin: 0,
+            padding: 0,
+            filter: 'brightness(1.3) contrast(1.1)'
+          }}
+        >
+          {/* Retro Overlay - Giảm độ tối để sáng hơn */}
           <div 
-            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-            // style={{
-            //   backgroundImage: 'url(/logoweb.jpg)',
-            //   backgroundAttachment: 'fixed'
-            // }}
-          ></div>
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}
+          />
+        </div>
           
           {/* Mobile Background - Simple gradient */}
           <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
@@ -94,10 +116,10 @@ export default function News() {
                   <span className="text-gray-400">22/09/2024</span>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-4">
-                  HƯỚNG DẪN CHƠI MU DAU TRUONG - SEASON 1
+                  HƯỚNG DẪN CHƠI {siteConfig.serverName.toUpperCase()} - {siteConfig.serverVersion.toUpperCase()}
                 </h2>
                 <p className="text-gray-300 mb-6">
-                  Hướng dẫn chi tiết cách chơi game Mu Online Season 1, từ việc tạo nhân vật đến các tính năng nâng cao. 
+                  Hướng dẫn chi tiết cách chơi game {siteConfig.gameTitle}, từ việc tạo nhân vật đến các tính năng nâng cao. 
                   Tìm hiểu về các class, kỹ năng, và cách phát triển nhân vật hiệu quả nhất.
                 </p>
                 <Link href="/news/guide" className="text-blue-400 hover:text-blue-300 transition-colors font-semibold">

@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `${config.nameGame} - ${config.gameTitle} | Server Game MU Online`,
-    description: "Server Mu Online Season 1 với tỷ lệ exp cao, drop rate tốt. Game MMORPG miễn phí với PvP, Guild System. Tải game ngay!",
+    description: config.metaDescription,
     images: ['/panael-mu.jpg', '/logoweb.jpg'],
   },
   robots: {

@@ -181,17 +181,39 @@ export default function MyAccount() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
       
       {/* Background Image */}
       <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        // style={{
-        //   backgroundImage: 'url(/logoweb.jpg)',
-        //   backgroundAttachment: 'fixed'
-        // }}
-      ></div>
+            className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundImage: 'url(/panael-mu.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              backgroundRepeat: 'no-repeat',
+              backgroundAttachment: 'scroll',
+              zIndex: 0,
+              pointerEvents: 'none',
+              margin: 0,
+              padding: 0,
+              filter: 'brightness(1.3) contrast(1.1)'
+            }}
+          >
+            {/* Retro Overlay */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+                pointerEvents: 'none',
+                zIndex: 1
+              }}
+            />
+          </div>
       
       {/* Background Overlay */}
       <div className="fixed inset-0 bg-black/60"></div>

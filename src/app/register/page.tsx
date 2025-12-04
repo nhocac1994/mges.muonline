@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SimpleCaptcha from '@/components/SimpleCaptcha';
-import NetworkOverlay from '@/components/NetworkOverlay';
+import siteConfig from '@/config/site.config.json';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -134,38 +134,54 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      fontFamily: 'Roboto, sans-serif'
+    <div className="min-h-screen relative overflow-hidden mu-retro-bg-texture" style={{
+      fontFamily: 'Cinzel, serif'
     }}>
-      {/* Network Overlay - Luôn chạy trên background */}
-      <NetworkOverlay />
-      
-      {/* Background Image - Desktop Only */}
+      {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
-        <>
+        <div 
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundImage: 'url(/panael-mu.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+            zIndex: 0,
+            pointerEvents: 'none',
+            margin: 0,
+            padding: 0,
+            filter: 'brightness(1.3) contrast(1.1)'
+          }}
+        >
+          {/* Retro Overlay */}
           <div 
-            className="hidden md:block fixed inset-0 bg-cover bg-center bg-no-repeat"
-            // style={{
-            //   backgroundImage: 'url(/logoweb.jpg)',
-            //   backgroundAttachment: 'fixed'
-            // }}
-          ></div>
-          
-          {/* Mobile Background - Simple gradient */}
-          <div className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900"></div>
-        </>
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}
+          />
+        </div>
       )}
       
-      {/* Background Overlay */}
-      <div className="fixed inset-0 bg-black/60"></div>
+      {/* Background for main content */}
+      <div className="fixed inset-0 -z-10 bg-black/20"></div>
       
       {/* Content */}
-      <div className="relative z-10 pt-28">
+      <div className="relative z-10" style={{ paddingTop: '92px' }}>
         {/* Main Content */}
         <main className="relative z-10 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto px-4">
           <div className="text-center text-white mb-12">
-            <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
+            <h1 className="text-5xl mu-retro-title mb-4">
               ĐĂNG KÝ TÀI KHOẢN
             </h1>
             <p className="text-xl text-gray-300">
@@ -175,17 +191,18 @@ export default function Register() {
 
           {/* Success Message */}
           {isSuccess && successData && (
-            <div className="mb-8 bg-green-900/20 border border-green-500/30 rounded-lg p-8">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl">✅</span>
+            <div className="mb-8 mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white text-2xl">✅</span>
+                  </div>
+                  <h2 className="text-3xl mu-retro-title mb-2 mu-text-gold">ĐĂNG KÝ THÀNH CÔNG!</h2>
+                  <p className="text-green-300 text-lg">Tài khoản của bạn đã được tạo thành công</p>
                 </div>
-                <h2 className="text-3xl font-bold text-green-400 mb-2">ĐĂNG KÝ THÀNH CÔNG!</h2>
-                <p className="text-green-300">Tài khoản của bạn đã được tạo thành công</p>
-              </div>
 
-              <div className="bg-black/50 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-4 text-center">📋 THÔNG TIN TÀI KHOẢN</h3>
+                <div className="bg-black/50 rounded-lg p-6">
+                  <h3 className="text-xl mu-retro-title-small mb-4 text-center">📋 THÔNG TIN TÀI KHOẢN</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="bg-gray-800/50 rounded-lg p-4">
@@ -221,13 +238,14 @@ export default function Register() {
                     </div>
                   </div>
                 </div>
+                </div>
 
-                <div className="mt-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-                  <h4 className="text-lg font-bold text-blue-400 mb-2">🎮 BƯỚC TIẾP THEO</h4>
-                  <ul className="text-gray-300 space-y-1">
-                    <li>• Tải game client từ trang <Link href="/download" className="text-blue-400 hover:text-blue-300">TẢI GAME</Link></li>
+                <div className="mt-6 p-4 bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30">
+                  <h4 className="text-lg mu-retro-title-small mb-2 mu-text-gold">🎮 BƯỚC TIẾP THEO</h4>
+                  <ul className="text-gray-300 space-y-1 text-lg">
+                    <li>• Tải game client từ trang <Link href="/download" className="mu-retro-link">TẢI GAME</Link></li>
                     <li>• Đăng nhập với thông tin tài khoản trên</li>
-                    <li>• Bắt đầu hành trình Mu Online Season 1</li>
+                    <li>• Bắt đầu hành trình {siteConfig.gameTitle}</li>
                     <li>• Tham gia cộng đồng game thủ Việt Nam</li>
                   </ul>
                 </div>
@@ -235,13 +253,13 @@ export default function Register() {
                 <div className="text-center mt-6">
                   <button
                     onClick={() => setIsSuccess(false)}
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all mr-4"
+                    className="mu-retro-btn mr-4"
                   >
                     ĐĂNG KÝ TÀI KHOẢN KHÁC
                   </button>
                   <Link
                     href="/login"
-                    className="inline-block bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold py-3 px-6 rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all"
+                    className="mu-retro-btn-classic inline-block"
                   >
                     ĐĂNG NHẬP NGAY
                   </Link>
@@ -251,11 +269,12 @@ export default function Register() {
           )}
 
           {!isSuccess && (
-            <div className="bg-black bg-opacity-70 rounded-lg p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Thông tin tài khoản */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Thông tin tài khoản</h3>
+            <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="relative z-10">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Thông tin tài khoản */}
+                <div>
+                  <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Thông tin tài khoản</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-white font-semibold mb-2">
@@ -266,8 +285,8 @@ export default function Register() {
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.username ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.username ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập tên đăng nhập"
                     />
@@ -283,8 +302,8 @@ export default function Register() {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.password ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.password ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập mật khẩu"
                     />
@@ -300,8 +319,8 @@ export default function Register() {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.confirmPassword ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.confirmPassword ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập lại mật khẩu"
                     />
@@ -317,8 +336,8 @@ export default function Register() {
                       name="characterName"
                       value={formData.characterName}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.characterName ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.characterName ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập tên nhân vật"
                     />
@@ -327,9 +346,9 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Thông tin cá nhân */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Thông tin cá nhân</h3>
+                {/* Thông tin cá nhân */}
+                <div>
+                  <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Thông tin cá nhân</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-white font-semibold mb-2">
@@ -340,8 +359,8 @@ export default function Register() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.email ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.email ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập email"
                     />
@@ -357,8 +376,8 @@ export default function Register() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.phone ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.phone ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập số điện thoại"
                     />
@@ -367,9 +386,9 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Bảo mật */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Bảo mật</h3>
+                {/* Bảo mật */}
+                <div>
+                  <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Bảo mật</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-white font-semibold mb-2">
@@ -379,8 +398,8 @@ export default function Register() {
                       name="securityQuestion"
                       value={formData.securityQuestion}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.securityQuestion ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.securityQuestion ? 'border-red-500' : ''
                       }`}
                     >
                       <option value="">Chọn câu hỏi bảo mật</option>
@@ -401,8 +420,8 @@ export default function Register() {
                       name="securityAnswer"
                       value={formData.securityAnswer}
                       onChange={handleInputChange}
-                      className={`w-full p-3 bg-gray-800 text-white border rounded-lg focus:outline-none ${
-                        errors.securityAnswer ? 'border-red-500' : 'border-gray-600 focus:border-yellow-400'
+                      className={`mu-retro-input w-full ${
+                        errors.securityAnswer ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập câu trả lời"
                     />
@@ -411,50 +430,49 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* CAPTCHA */}
-              <div>
-                <h3 className="text-2xl font-bold text-yellow-400 mb-6">Xác thực bảo mật</h3>
-                <SimpleCaptcha onVerify={setCaptchaValid} />
-              </div>
+                {/* CAPTCHA */}
+                <div>
+                  <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Xác thực bảo mật</h3>
+                  <SimpleCaptcha onVerify={setCaptchaValid} />
+                </div>
 
-              {/* Submit Button */}
-              <div className="text-center">
-                <button
-                  type="submit"
-                  disabled={!captchaValid || isLoading}
-                  className={`font-bold py-4 px-8 rounded-lg transition-all text-lg flex items-center justify-center gap-3 ${
-                    captchaValid && !isLoading
-                      ? 'bg-gradient-to-r from-yellow-500 to-red-500 text-white hover:from-yellow-600 hover:to-red-600' 
-                      : 'bg-gray-500 text-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-                      ĐANG XỬ LÝ...
-                    </>
-                  ) : captchaValid ? (
-                    'TẠO TÀI KHOẢN'
-                  ) : (
-                    'VUI LÒNG XÁC THỰC CAPTCHA'
-                  )}
-                </button>
-              </div>
+                {/* Submit Button */}
+                <div className="text-center">
+                  <button
+                    type="submit"
+                    disabled={!captchaValid || isLoading}
+                    className={`mu-retro-btn-classic font-bold py-4 px-8 text-lg flex items-center justify-center gap-3 mx-auto ${
+                      !captchaValid || isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="loading-dots">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                        ĐANG XỬ LÝ...
+                      </>
+                    ) : captchaValid ? (
+                      'TẠO TÀI KHOẢN'
+                    ) : (
+                      'VUI LÒNG XÁC THỰC CAPTCHA'
+                    )}
+                  </button>
+                </div>
 
-              {/* Login Link */}
-              <div className="text-center text-white">
-                <p>
-                  Đã có tài khoản?{' '}
-                  <Link href="/login" className="text-yellow-400 hover:text-yellow-300">
-                    Đăng nhập ngay
-                  </Link>
-                </p>
+                {/* Login Link */}
+                <div className="text-center text-white">
+                  <p className="text-lg">
+                    Đã có tài khoản?{' '}
+                    <Link href="/login" className="mu-retro-link">
+                      Đăng nhập ngay
+                    </Link>
+                  </p>
+                </div>
+                </form>
               </div>
-              </form>
             </div>
           )}
         </div>

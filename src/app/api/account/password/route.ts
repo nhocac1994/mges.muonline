@@ -1,9 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
 import sql from 'mssql';
+import { validateAccountId, validatePassword, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
+import { getClientIP } from '@/lib/utils';
+import { securityMiddleware } from '@/lib/security-middleware';
 
 export async function PUT(request: NextRequest) {
   try {
+    const clientIP = getClientIP(request);
+    
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/account/password');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
+
     const body = await request.json();
     const { accountId, currentPassword, newPassword } = body;
     
@@ -16,10 +30,32 @@ export async function PUT(request: NextRequest) {
       }, { status: 400 });
     }
 
-    if (newPassword.length < 6) {
+    // ✅ Security: Validate accountId
+    const accountIdValidation = validateAccountId(accountId);
+    if (!accountIdValidation.valid) {
+      logSuspiciousActivity(clientIP, '/api/account/password', accountId, 'Invalid account ID format');
       return NextResponse.json({ 
         success: false, 
-        message: 'Mật khẩu mới phải có ít nhất 6 ký tự' 
+        message: accountIdValidation.error || 'Account ID không hợp lệ' 
+      }, { status: 400 });
+    }
+
+    // ✅ Security: Validate new password
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.valid) {
+      logSuspiciousActivity(clientIP, '/api/account/password', '***', 'Invalid password format');
+      return NextResponse.json({ 
+        success: false, 
+        message: passwordValidation.error || 'Mật khẩu mới không hợp lệ' 
+      }, { status: 400 });
+    }
+
+    // ✅ Security: Detect SQL injection
+    if (detectSQLInjection(accountId) || detectSQLInjection(newPassword) || (currentPassword && detectSQLInjection(currentPassword))) {
+      logSuspiciousActivity(clientIP, '/api/account/password', accountId, 'SQL Injection attempt detected');
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Input không hợp lệ' 
       }, { status: 400 });
     }
 

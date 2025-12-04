@@ -1,15 +1,72 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
 import sql from 'mssql';
+import { validateAccountId, validateCharacterName, validateEmail, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
+import { getClientIP } from '@/lib/utils';
+import { securityMiddleware } from '@/lib/security-middleware';
 
 export async function PUT(request: NextRequest) {
   try {
+    const clientIP = getClientIP(request);
+    
+    // ✅ Security: Kiểm tra bảo mật tổng quát
+    const securityCheck = await securityMiddleware(request, '/api/account/update');
+    if (securityCheck && !securityCheck.allowed) {
+      return NextResponse.json({ 
+        success: false, 
+        message: securityCheck.error || 'Request không hợp lệ' 
+      }, { status: securityCheck.statusCode || 400 });
+    }
+
     const { accountId, updateData } = await request.json();
     
     if (!accountId) {
       return NextResponse.json({ 
         success: false, 
         message: 'Account ID không được cung cấp' 
+      }, { status: 400 });
+    }
+
+    // ✅ Security: Validate accountId
+    const accountIdValidation = validateAccountId(accountId);
+    if (!accountIdValidation.valid) {
+      logSuspiciousActivity(clientIP, '/api/account/update', accountId, 'Invalid account ID format');
+      return NextResponse.json({ 
+        success: false, 
+        message: accountIdValidation.error || 'Account ID không hợp lệ' 
+      }, { status: 400 });
+    }
+
+    // ✅ Security: Validate update data fields
+    if (updateData.memb_name !== undefined) {
+      const nameValidation = validateCharacterName(updateData.memb_name);
+      if (!nameValidation.valid) {
+        logSuspiciousActivity(clientIP, '/api/account/update', updateData.memb_name, 'Invalid character name format');
+        return NextResponse.json({ 
+          success: false, 
+          message: nameValidation.error || 'Tên nhân vật không hợp lệ' 
+        }, { status: 400 });
+      }
+    }
+
+    if (updateData.mail_addr !== undefined) {
+      const emailValidation = validateEmail(updateData.mail_addr);
+      if (!emailValidation.valid) {
+        logSuspiciousActivity(clientIP, '/api/account/update', updateData.mail_addr, 'Invalid email format');
+        return NextResponse.json({ 
+          success: false, 
+          message: emailValidation.error || 'Email không hợp lệ' 
+        }, { status: 400 });
+      }
+    }
+
+    // ✅ Security: Detect SQL injection in all update fields
+    const allUpdateValues = Object.values(updateData).filter(v => v !== undefined) as string[];
+    if (allUpdateValues.some(value => typeof value === 'string' && detectSQLInjection(value))) {
+      logSuspiciousActivity(clientIP, '/api/account/update', accountId, 'SQL Injection attempt detected in update data');
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Input chứa ký tự không hợp lệ' 
       }, { status: 400 });
     }
 

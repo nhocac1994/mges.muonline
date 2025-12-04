@@ -32,11 +32,43 @@ yarn-error.log*
 # Database test files (contains sensitive info)
 test-db-connection.js
 *test-db*.js
+*test*.sql
+*test*.js
+*test*.py
+
+# Debug files
+debug-*.js
+*debug*.ts
+
+# Template and script files
+*_template.js
+clean_*.js
+clean_*.sh
+restart-*.sh
+
+# Documentation files (keep only README.md and SECURITY_GUIDE.md)
+*.md
+!README.md
+!SECURITY_GUIDE.md
 
 # Sensitive configuration files
 *config*.js
 *password*.txt
 *secret*.txt
+
+# HTML/Lua/Text files (except important config files)
+*.html
+*.lua
+*.txt
+!package.json
+!tsconfig.json
+!next.config.js
+!next.config.ts
+!postcss.config.mjs
+!eslint.config.mjs
+!netlify.toml
+!vercel.json
+!env-template.txt
 
 # vercel
 .vercel
@@ -52,4 +84,9 @@ next-env.d.ts
 *.swo
 
 # OS
-Thumbs.db.env.local
+Thumbs.db
+.env.local
+
+# SQL files (except MuOnline.sql if needed for schema)
+*.sql
+!MuOnline.sql

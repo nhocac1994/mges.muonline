@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import siteConfig from '@/config/site.config.json';
 
 interface NotificationPermission {
   granted: boolean;
@@ -89,7 +90,7 @@ export function useNotifications() {
     let title, body;
     
     if (eventName === 'Chào mừng!') {
-      title = '🎉 Chào mừng đến với MuDauTruongSS1.net!';
+      title = `🎉 Chào mừng đến với ${siteConfig.serverName}!`;
       body = 'Bạn sẽ nhận thông báo về các sự kiện quan trọng trong game!';
     } else if (isStarting) {
       title = '🎮 Sự kiện đã bắt đầu!';
