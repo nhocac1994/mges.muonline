@@ -228,58 +228,62 @@ export default function Home() {
         </section>
 
         {/* Content Sections */}
-        <div className="max-w-6xl mx-auto px-4 py-8 relative z-10">
+        <div className="max-w-6xl mx-auto px-2 sm:px-4 py-8 relative z-10">
           {/* Content Grid */}
-          <section className="grid lg:grid-cols-2 gap-8 mb-12">
+          <section className="grid lg:grid-cols-2 gap-4 sm:gap-8 mb-12">
             {/* Game Events Section */}
             <AnimatedSection direction="left" delay={0.2}>
-              <div className="mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
               <div className="relative z-10">
-                <div className="text-center mb-14">
-                  <h3 className="text-2xl mu-retro-title">Sự Kiện</h3>
+                <div className="text-center mb-6 sm:mb-14">
+                  <h3 className="text-xl sm:text-2xl mu-retro-title">Sự Kiện</h3>
                 </div>
+                <div style={{ marginTop: '50px' }}>
                 <EventCountdown />
+                </div>
               </div>
               </div>
             </AnimatedSection>
 
             {/* News Section */}
             <AnimatedSection direction="right" delay={0.3}>
-              <div className="space-y-6">
-              <div className="mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="space-y-4 sm:space-y-6">
+              <div className="mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
                 <div className="relative z-10">
-                  <div className="text-center mb-14">
-                    <h3 className="text-2xl mu-retro-title">Bản Tin Mới</h3>
+                  <div className="text-center mb-6 sm:mb-14">
+                    <h3 className="text-xl sm:text-2xl mu-retro-title">Bản Tin Mới</h3>
                   </div>
-                  <div className="space-y-5">
+                  <div style={{ marginTop: '50px' }}>
+                  <div className="space-y-3 sm:space-y-5">
                     {news.map((item, index) => (
-                      <div key={index} className="p-6 group" style={{ backgroundColor: 'transparent' }}>
-                        <div className="flex items-start gap-3">
-                          <span className={`mu-retro-badge text-xs ${
+                      <div key={index} className="p-3 sm:p-6 group" style={{ backgroundColor: 'transparent' }}>
+                        <div className="flex items-start gap-2 sm:gap-3">
+                          <span className={`mu-retro-badge text-[10px] sm:text-xs ${
                             item.type === 'Notice' ? 'mu-retro-badge-notice' : 
                             item.type === 'Event' ? 'mu-retro-badge-event' : ''
                           }`}>{item.type}</span>
-                          <div className="flex-1">
-                            <h4 className="mu-text-gold font-semibold mb-1 text-sm">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="mu-text-gold font-semibold mb-1 text-xs sm:text-sm">
                               <Link href={item.link} className="mu-retro-link">
                                 {item.title}
                               </Link>
                             </h4>
-                            <span className="text-gray-400 text-xs">{item.date}</span>
+                            <span className="text-gray-400 text-[10px] sm:text-xs">{item.date}</span>
+                          </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
               
               {/* Join Banner */}
-              <div className="mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+              <div className="mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
                 <div className="relative z-10 text-center">
-                  <h2 className="text-2xl mu-retro-title mb-8">THAM GIA NGAY</h2>
+                  <h2 className="text-xl sm:text-2xl mu-retro-title mb-4 sm:mb-8">THAM GIA NGAY</h2>
                   <div style={{ marginTop: '100px' }}>
-                    <Link href="/register" className="mu-retro-btn-classic inline-block">
+                    <Link href="/register" className="mu-retro-btn-classic inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3">
                       Đăng Ký Ngay
                     </Link>
                   </div>
@@ -291,42 +295,42 @@ export default function Home() {
 
 
           {/* Download Section */}
-          <section className="py-16">
-            <div className="container mx-auto px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl mu-retro-title mb-4">
+          <section className="py-8 sm:py-16">
+            <div className="container mx-auto px-2 sm:px-4">
+              <div className="text-center mb-6 sm:mb-12">
+                <h2 className="text-2xl sm:text-4xl mu-retro-title mb-2 sm:mb-4">
                     TẢI GAME NGAY
                 </h2>
-                <p className="text-xl mu-text-orange">Tải client và launcher để bắt đầu hành trình Mu Online</p>
+                <p className="text-sm sm:text-xl mu-text-orange">Tải client và launcher để bắt đầu hành trình Mu Online</p>
               </div>
               <div className="mu-retro-divider"></div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="text-center mu-retro-card p-10">
+              <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                <div className="text-center mu-retro-card p-4 sm:p-10">
                   <div className="relative z-10">
-                    <h3 className="text-xl mu-retro-title-small mb-6">MediaFire</h3>
+                    <h3 className="text-lg sm:text-xl mu-retro-title-small mb-4 sm:mb-6">MediaFire</h3>
                     <div style={{ marginTop: '100px' }}>
                     <a 
-                      href="https://www.mediafire.com/file/0tp6wj1yko12318/Mu-DauTruongs1.net_v1.1.7z/file" 
+                      href={siteConfig.downloadLinks.mediafire} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="mu-retro-btn inline-block"
+                      className="mu-retro-btn inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3"
                     >
-                      📥 Tải Client v1.1
+                      📥 Tải Client {siteConfig.downloadLinks.clientVersion}
                     </a>
                     </div>
                   </div>
                 </div>
-                <div className="text-center mu-retro-card p-10">
+                <div className="text-center mu-retro-card p-4 sm:p-10">
                   <div className="relative z-10">
-                    <h3 className="text-xl mu-retro-title-small mb-6">MEGA</h3>
+                    <h3 className="text-lg sm:text-xl mu-retro-title-small mb-4 sm:mb-6">MEGA</h3>
                     <div style={{ marginTop: '100px' }}>
                     <a 
-                      href="https://mega.nz/file/4UNwiZhL#MJzsMKtdv4vQI765iDdd200fdOPZPwSBxoB1xUaacyw" 
+                      href={siteConfig.downloadLinks.mega} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="mu-retro-btn inline-block"
+                      className="mu-retro-btn inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3"
                     >
-                      📥 Tải Client v1.1
+                      📥 Tải Client {siteConfig.downloadLinks.clientVersion}
                     </a>
                     </div>
                   </div>
@@ -336,36 +340,36 @@ export default function Home() {
           </section>
 
           {/* Game Features */}
-          <section className="grid lg:grid-cols-3 gap-8">
+          <section className="grid lg:grid-cols-3 gap-4 sm:gap-8">
             <AnimatedSection direction="up" delay={0.1}>
-              <div className="mu-retro-card p-5 text-center">
+              <div className="mu-retro-card p-3 sm:p-5 text-center">
                 <div className="relative z-10">
-                  <div className="text-4xl mb-6">⚔️</div>
-                  <div style={{ marginTop: '30px' }}>
-                  <h3 className="text-xl mu-retro-title-small mb-4">PvP Combat</h3>
-                  <p className="text-gray-300">Chiến đấu với người chơi khác trong các cuộc chiến gay cấn</p>
+                  <div className="text-2xl sm:text-4xl mb-3 sm:mb-6">⚔️</div>
+                  <div style={{ marginTop: '50px' }}>
+                  <h3 className="text-base sm:text-xl mu-retro-title-small mb-2 sm:mb-4">PvP Combat</h3>
+                  <p className="text-gray-300 text-xs sm:text-base">Chiến đấu với người chơi khác trong các cuộc chiến gay cấn</p>
                   </div>
                 </div>
               </div>
             </AnimatedSection>
             <AnimatedSection direction="up" delay={0.2}>
-              <div className="mu-retro-card p-5 text-center">
+              <div className="mu-retro-card p-3 sm:p-5 text-center">
                 <div className="relative z-10">
-                  <div className="text-4xl mb-6">🏰</div>
-                  <div style={{ marginTop: '30px' }}>
-                  <h3 className="text-xl mu-retro-title-small mb-4">Guild System</h3>
-                  <p className="text-gray-300">Tham gia guild và chiến đấu cùng đồng đội hỗ trợ nhau trong các cuộc chiến</p>
+                  <div className="text-2xl sm:text-4xl mb-3 sm:mb-6">🏰</div>
+                  <div style={{ marginTop: '50px' }}>
+                  <h3 className="text-base sm:text-xl mu-retro-title-small mb-2 sm:mb-4">Guild System</h3>
+                  <p className="text-gray-300 text-xs sm:text-base">Tham gia guild và chiến đấu cùng đồng đội hỗ trợ nhau trong các cuộc chiến</p>
                   </div>
                 </div>
               </div>
             </AnimatedSection>
             <AnimatedSection direction="up" delay={0.3}>
-              <div className="mu-retro-card p-5 text-center">
+              <div className="mu-retro-card p-3 sm:p-5 text-center">
                 <div className="relative z-10">
-                  <div className="text-4xl mb-6">🎯</div>
-                  <div style={{ marginTop: '30px' }}>
-                  <h3 className="text-xl mu-retro-title-small mb-4">Events</h3>
-                  <p className="text-gray-300">Tham gia các sự kiện đặc biệt và nhận phần thưởng</p>
+                  <div className="text-2xl sm:text-4xl mb-3 sm:mb-6">🎯</div>
+                  <div style={{ marginTop: '50px' }}>
+                  <h3 className="text-base sm:text-xl mu-retro-title-small mb-2 sm:mb-4">Events</h3>
+                  <p className="text-gray-300 text-xs sm:text-base">Tham gia các sự kiện đặc biệt và nhận phần thưởng</p>
                   </div>
                 </div>
               </div>

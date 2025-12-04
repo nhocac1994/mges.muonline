@@ -42,6 +42,24 @@ export default function Header() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  // Ngăn body scroll khi menu mở
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [mobileMenuOpen]);
+
   const isActive = (path: string) => {
     return pathname === path;
   };
@@ -249,85 +267,148 @@ export default function Header() {
           </div>
           
           {/* Mobile Navigation */}
-          <div className="md:hidden h-full flex items-center">
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center space-x-2">
+          <div className="md:hidden h-full flex items-center relative w-full">
+            <div className="flex items-center space-x-2 flex-shrink-0">
                 <Image 
                   src="/logo-muty.PNG" 
-                  alt={`${siteConfig.serverName} - ${siteConfig.gameTitle} Mobile Logo`} 
+                alt={`${siteConfig.serverName} - ${siteConfig.gameTitle} Mobile Logo`} 
                   width={40}
                   height={16}
                   className="w-8 h-auto"
                 />
-                <span className="mu-text-gold font-bold text-xs">{siteConfig.serverName}</span>
+              <span className="mu-text-gold font-bold text-xs">{siteConfig.serverName}</span>
               </div>
+            
+            <div className="flex-1"></div>
               
               <button 
-                className="mu-text-gold p-1"
+              className="mu-text-gold p-2 z-[101] flex-shrink-0"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Toggle menu"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-            </div>
             
-            {/* Mobile Menu */}
-            <div className={`transition-all duration-300 ${
-              mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}>
-              <div className="py-4 space-y-3 border-t border-[#FFD700] mt-3">
+            {/* Mobile Menu Overlay */}
+            {mobileMenuOpen && (
+              <motion.div 
+                className="fixed inset-0 bg-black/70 z-[99] mobile-menu-overlay"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ top: '92px' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
+            
+            {/* Mobile Sidebar Menu */}
+            <motion.div
+              className="fixed top-[92px] right-0 h-[calc(100vh-92px)] z-[100] overflow-y-auto mobile-sidebar mobile-sidebar-menu"
+              style={{
+                width: '66.666%',
+                maxWidth: '66.666vw',
+                background: 'linear-gradient(135deg, rgba(30, 20, 10, 0.98) 0%, rgba(50, 35, 15, 1) 50%, rgba(30, 20, 10, 0.98) 100%)',
+                boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8), inset -1px 0 0 rgba(255, 215, 0, 0.3)',
+                borderLeft: '2px solid #FFD700',
+                pointerEvents: mobileMenuOpen ? 'auto' : 'none'
+              }}
+              initial={false}
+              animate={{
+                x: mobileMenuOpen ? 0 : '100%',
+                opacity: mobileMenuOpen ? 1 : 0,
+              }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="py-6 px-4 space-y-1">
                 <Link 
                   href="/" 
-                  className={`block transition-colors py-2 mu-retro-title-small ${
-                    isActive('/') ? 'mu-text-gold' : 'text-white'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-all py-3 px-4 rounded mu-retro-title-small mobile-menu-item ${
+                    isActive('/') 
+                      ? 'mu-text-gold bg-black/30' 
+                      : 'text-white active:bg-black/20'
                   }`}
+                  style={{
+                    textShadow: isActive('/') ? '0 0 10px rgba(255, 215, 0, 0.8)' : 'none'
+                  }}
                 >
                   TRANG CHỦ
                 </Link>
                 <Link 
                   href="/info" 
-                  className={`block transition-colors py-2 mu-retro-title-small ${
-                    isActive('/info') ? 'mu-text-gold' : 'text-white'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-all py-3 px-4 rounded mu-retro-title-small mobile-menu-item ${
+                    isActive('/info') 
+                      ? 'mu-text-gold bg-black/30' 
+                      : 'text-white active:bg-black/20'
                   }`}
+                  style={{
+                    textShadow: isActive('/info') ? '0 0 10px rgba(255, 215, 0, 0.8)' : 'none'
+                  }}
                 >
                   THÔNG TIN
                 </Link>
                 <Link 
                   href="/download" 
-                  className={`block transition-colors py-2 mu-retro-title-small ${
-                    isActive('/download') ? 'mu-text-gold' : 'text-white'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-all py-3 px-4 rounded mu-retro-title-small mobile-menu-item ${
+                    isActive('/download') 
+                      ? 'mu-text-gold bg-black/30' 
+                      : 'text-white active:bg-black/20'
                   }`}
+                  style={{
+                    textShadow: isActive('/download') ? '0 0 10px rgba(255, 215, 0, 0.8)' : 'none'
+                  }}
                 >
                   TẢI GAME
                 </Link>
                 <Link 
                   href="/donate" 
-                  className={`block transition-colors py-2 mu-retro-title-small ${
-                    isActive('/donate') ? 'mu-text-gold' : 'text-white'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-all py-3 px-4 rounded mu-retro-title-small mobile-menu-item ${
+                    isActive('/donate') 
+                      ? 'mu-text-gold bg-black/30' 
+                      : 'text-white active:bg-black/20'
                   }`}
+                  style={{
+                    textShadow: isActive('/donate') ? '0 0 10px rgba(255, 215, 0, 0.8)' : 'none'
+                  }}
                 >
                   QUYÊN GÓP
                 </Link>
                 <Link 
                   href="/news" 
-                  className={`block transition-colors py-2 mu-retro-title-small ${
-                    isActive('/news') ? 'mu-text-gold' : 'text-white'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-all py-3 px-4 rounded mu-retro-title-small mobile-menu-item ${
+                    isActive('/news') 
+                      ? 'mu-text-gold bg-black/30' 
+                      : 'text-white active:bg-black/20'
                   }`}
+                  style={{
+                    textShadow: isActive('/news') ? '0 0 10px rgba(255, 215, 0, 0.8)' : 'none'
+                  }}
                 >
                   TIN TỨC
                 </Link>
                 <Link 
                   href="/rankings" 
-                  className={`block transition-colors py-2 mu-retro-title-small ${
-                    isActive('/rankings') ? 'mu-text-gold' : 'text-white'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-all py-3 px-4 rounded mu-retro-title-small mobile-menu-item ${
+                    isActive('/rankings') 
+                      ? 'mu-text-gold bg-black/30' 
+                      : 'text-white active:bg-black/20'
                   }`}
+                  style={{
+                    textShadow: isActive('/rankings') ? '0 0 10px rgba(255, 215, 0, 0.8)' : 'none'
+                  }}
                 >
                   XẾP HẠNG
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </motion.nav>

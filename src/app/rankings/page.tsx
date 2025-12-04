@@ -65,22 +65,22 @@ export default function RankingsPage() {
       <div className="relative z-10" style={{ paddingTop: '92px' }}>
         {/* Main Content */}
         <main className="relative z-10 py-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-14">
-            <h1 className="text-5xl mu-retro-title mb-4">
+        <div className="container mx-auto px-2 sm:px-4">
+          <div className="text-center mb-6 sm:mb-14">
+            <h1 className="text-2xl sm:text-5xl mu-retro-title mb-2 sm:mb-4">
               Bảng Xếp Hạng MuOnline
             </h1>
-            <p className="text-xl text-gray-300">
+            <p className="text-sm sm:text-xl text-gray-300">
               Top players và guilds của server
             </p>
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-4 sm:mb-8">
             <div className="bg-black/50 backdrop-blur-sm rounded-lg p-1 flex w-full max-w-md border border-gray-700/50">
               <button
                 onClick={() => setActiveTab('characters')}
-                className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
+                className={`flex-1 px-2 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all text-xs sm:text-base ${
                   activeTab === 'characters'
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-black/60'
@@ -90,7 +90,7 @@ export default function RankingsPage() {
               </button>
               <button
                 onClick={() => setActiveTab('guilds')}
-                className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
+                className={`flex-1 px-2 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all text-xs sm:text-base ${
                   activeTab === 'guilds'
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-black/60'
@@ -119,22 +119,22 @@ export default function RankingsPage() {
             )}
           </div>
 
-          <div className="mt-8 bg-black/50 backdrop-blur-sm rounded-lg p-8 max-w-6xl mx-auto border border-gray-700/50">
-            <h3 className="text-xl mu-retro-title-small mb-6 text-center">
+          <div className="mt-4 sm:mt-8 bg-black/50 backdrop-blur-sm rounded-lg p-4 sm:p-8 max-w-6xl mx-auto border border-gray-700/50">
+            <h3 className="text-base sm:text-xl mu-retro-title-small mb-4 sm:mb-6 text-center">
               Thông tin về Ranking
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-300" style={{ marginTop: '30px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-sm sm:text-lg text-gray-300" style={{ marginTop: '20px' }}>
               <div>
-                <h4 className="font-bold mu-text-gold mb-3">Top Resets:</h4>
-                <ul className="space-y-2">
+                <h4 className="font-bold mu-text-gold mb-2 sm:mb-3 text-xs sm:text-base">Top Resets:</h4>
+                <ul className="space-y-1 sm:space-y-2 text-xs sm:text-base">
                   <li>• Xếp hạng dựa trên tổng số resets của nhân vật</li>
                   <li>• Hiển thị top 100 người chơi đầu tiên</li>
                   <li>• Chỉ tính các nhân vật có CtlCode &lt; 8 hoặc NULL</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold mu-text-gold mb-3">Top Guilds:</h4>
-                <ul className="space-y-2">
+                <h4 className="font-bold mu-text-gold mb-2 sm:mb-3 text-xs sm:text-base">Top Guilds:</h4>
+                <ul className="space-y-1 sm:space-y-2 text-xs sm:text-base">
                   <li>• Xếp hạng dựa trên điểm số guild (G_Score)</li>
                   <li>• Hiển thị top 50 guild đầu tiên</li>
                   <li>• Bao gồm Guild Master và số thành viên</li>

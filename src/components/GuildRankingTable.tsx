@@ -83,7 +83,7 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
     const colorIndex = guildName.length % colors.length;
     
     return (
-      <div className={`w-8 h-8 ${colors[colorIndex]} rounded flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+      <div className={`w-6 h-6 sm:w-8 sm:h-8 ${colors[colorIndex]} rounded flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-lg`}>
         {firstLetter}
       </div>
     );
@@ -99,8 +99,8 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
 
   if (loading) {
     return (
-      <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-gray-700/50">
-        <h2 className="text-2xl mu-retro-title-small mb-4 text-center">{title}</h2>
+      <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 sm:p-8 border border-gray-700/50">
+        <h2 className="text-lg sm:text-2xl mu-retro-title-small mb-4 text-center">{title}</h2>
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
         </div>
@@ -110,48 +110,48 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
 
   if (error) {
     return (
-      <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-gray-700/50">
-        <h2 className="text-2xl mu-retro-title-small mb-4 text-center">{title}</h2>
-        <div className="text-red-400 text-center">{error}</div>
+      <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 sm:p-8 border border-gray-700/50">
+        <h2 className="text-lg sm:text-2xl mu-retro-title-small mb-4 text-center">{title}</h2>
+        <div className="text-red-400 text-center text-xs sm:text-base">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-black/50 backdrop-blur-sm rounded-lg p-8 border border-gray-700/50">
-      <h2 className="text-2xl mu-retro-title-small mb-6 text-center">{title}</h2>
+    <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 sm:p-8 border border-gray-700/50">
+      <h2 className="text-lg sm:text-2xl mu-retro-title-small mb-4 sm:mb-6 text-center">{title}</h2>
       
       <div className="overflow-x-auto">
-        <table className="w-full text-sm sm:text-base">
+        <table className="w-full text-xs sm:text-base">
           <thead>
             <tr className="border-b" style={{ borderColor: '#FFD700' }}>
-              <th className="text-left py-4 px-4 mu-text-gold font-bold text-lg">Hạng</th>
-              <th className="text-left py-4 px-4 mu-text-gold font-bold text-lg">Logo</th>
-              <th className="text-left py-4 px-4 mu-text-gold font-bold text-lg">Tên Guild</th>
-              <th className="text-left py-4 px-4 mu-text-gold font-bold text-lg">Guild Master</th>
-              <th className="text-left py-4 px-4 mu-text-gold font-bold text-lg">Thành viên</th>
-              <th className="text-left py-4 px-4 mu-text-gold font-bold text-lg">Điểm số</th>
+              <th className="text-left py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">Hạng</th>
+              <th className="text-left py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">Logo</th>
+              <th className="text-left py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">Tên Guild</th>
+              <th className="text-left py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">Guild Master</th>
+              <th className="text-left py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">Thành viên</th>
+              <th className="text-left py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">Điểm số</th>
             </tr>
           </thead>
           <tbody>
             {guilds.map((guild, index) => (
               <tr key={guild.guildName} className="border-b border-gray-700/50 hover:bg-black/20 transition-colors">
-                <td className="py-4 px-4 mu-text-gold font-bold text-lg">
+                <td className="py-2 sm:py-4 px-2 sm:px-4 mu-text-gold font-bold text-xs sm:text-lg">
                   {getRankIcon(index)}
                 </td>
-                <td className="py-4 px-4">
+                <td className="py-2 sm:py-4 px-2 sm:px-4">
                   {getGuildLogo(guild.guildName)}
                 </td>
-                <td className="py-4 px-4 text-white font-medium text-lg">
+                <td className="py-2 sm:py-4 px-2 sm:px-4 text-white font-medium text-xs sm:text-lg">
                   {guild.guildName || 'Unknown'}
                 </td>
-                <td className="py-4 px-4 text-blue-300 text-lg">
+                <td className="py-2 sm:py-4 px-2 sm:px-4 text-blue-300 text-xs sm:text-lg">
                   {guild.guildMaster || 'Unknown'}
                 </td>
-                <td className="py-4 px-4 text-green-300 text-lg">
+                <td className="py-2 sm:py-4 px-2 sm:px-4 text-green-300 text-xs sm:text-lg">
                   {formatValue(guild.memberCount)}
                 </td>
-                <td className="py-4 px-4 text-purple-300 font-bold text-lg">
+                <td className="py-2 sm:py-4 px-2 sm:px-4 text-purple-300 font-bold text-xs sm:text-lg">
                   {formatValue(guild.score)}
                 </td>
               </tr>
@@ -161,15 +161,15 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
       </div>
       
       {guilds.length === 0 && (
-        <div className="text-center text-gray-400 py-8">
+        <div className="text-center text-gray-400 py-4 sm:py-8">
           <div className="mb-4">
-            <div className="text-6xl mb-2">🏰</div>
-            <p className="text-lg font-medium">Chưa có dữ liệu guild</p>
-            <p className="text-sm mt-2 mb-4">Có thể database chưa có guild nào hoặc dữ liệu chưa được cập nhật</p>
+            <div className="text-4xl sm:text-6xl mb-2">🏰</div>
+            <p className="text-sm sm:text-lg font-medium">Chưa có dữ liệu guild</p>
+            <p className="text-xs sm:text-sm mt-2 mb-4">Có thể database chưa có guild nào hoặc dữ liệu chưa được cập nhật</p>
             <button
               onClick={addSampleGuilds}
               disabled={isAddingSample}
-              className="mu-retro-btn px-6 py-2 disabled:opacity-50"
+              className="mu-retro-btn px-4 sm:px-6 py-1.5 sm:py-2 disabled:opacity-50 text-xs sm:text-base"
             >
               {isAddingSample ? 'Đang thêm...' : '➕ Thêm dữ liệu mẫu'}
             </button>
@@ -178,7 +178,7 @@ export default function GuildRankingTable({ title, endpoint }: GuildRankingTable
       )}
       
       {guilds.length > 0 && (
-        <div className="mt-4 text-center text-gray-400 text-sm">
+        <div className="mt-4 text-center text-gray-400 text-xs sm:text-sm">
           Hiển thị {guilds.length} guild đầu tiên
         </div>
       )}

@@ -260,32 +260,32 @@ const EventCountdown: React.FC = () => {
 
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 sm:space-y-4">
       {/* Events List */}
-      <div className="space-y-5">
+      <div className="space-y-2 sm:space-y-5">
         {events.map((event, index) => (
-          <div 
-            key={index}
-            className="py-6 sm:py-7 px-5"
+        <div 
+          key={index}
+            className="py-2 sm:py-6 px-0 sm:px-5"
             style={{
               backgroundColor: 'transparent',
               border: 'none',
               boxShadow: 'none'
             }}
-          >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5">
-            <div className="flex items-center gap-3 sm:gap-4 flex-1">
-              <div className={`w-3 h-3 sm:w-4 sm:h-4 ${getDotColor(event)} rounded-full animate-pulse flex-shrink-0`}></div>
-              <span className="mu-text-gold font-semibold text-base sm:text-lg">
+        >
+          <div className="flex items-center justify-between gap-2 sm:gap-5">
+            <div className="flex items-center gap-2 sm:gap-2 flex-1 min-w-0">
+              <div className={`w-2 h-2 sm:w-4 sm:h-4 ml-2 sm:ml-0 ${getDotColor(event)} rounded-full animate-pulse flex-shrink-0`}></div>
+              <span className="mu-text-gold font-semibold text-xs sm:text-lg truncate ml-2 sm:ml-0 sm:mt-0">
                 {event.name}
-                {isEventRunning(event) && <span className="mu-text-orange ml-2 text-sm sm:text-base">(Đang diễn ra)</span>}
+                {isEventRunning(event) && <span className="mu-text-orange ml-1 sm:ml-2 text-[10px] sm:text-base hidden sm:inline">(Đang diễn ra)</span>}
               </span>
             </div>
-            <div className={`${event.color} font-mono text-lg sm:text-xl font-bold flex-shrink-0`}>
+            <div className={`${event.color} font-mono text-xs sm:text-xl mr-5 sm:mr-0 font-bold flex-shrink-0`}>
               {formatTime(timeLeft[event.name] || 0)}
             </div>
           </div>
-          </div>
+        </div>
         ))}
       </div>
     </div>

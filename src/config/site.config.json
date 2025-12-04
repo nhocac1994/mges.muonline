@@ -36,6 +36,17 @@
   "primaryColor": "#FFD700",
   "secondaryColor": "#FFA500",
   "accentColor": "#FF0000",
+  "downloadLinks": {
+    "mediafire": "https://www.mediafire.com/file/0tp6wj1yko12318/Mu-DauTruongs1.net_v1.1.7z/file",
+    "mega": "https://mega.nz/file/4UNwiZhL#MJzsMKtdv4vQI765iDdd200fdOPZPwSBxoB1xUaacyw",
+    "clientVersion": "v1.1"
+  },
+  "bankTransfer": {
+    "accountNumber": "0356673016",
+    "accountHolder": "NGUYEN CANH QUYEN",
+    "bankName": "MB-BANK",
+    "qrCodeUrl": "https://img.vietqr.io/image/MB-0356673016-qr_only.png"
+  },
   "features": {
     "pvp": true,
     "guild": true,

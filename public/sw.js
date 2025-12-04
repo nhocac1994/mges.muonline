@@ -9,7 +9,7 @@ const urlsToCache = [
   '/login',
   '/register',
   '/icon.jpg',
-  '/Mu.PNG'
+  '/logoweb.jpg'
 ];
 
 // Install event

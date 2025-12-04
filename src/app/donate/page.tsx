@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import siteConfig from '@/config/site.config.json';
 
 export default function Donate() {
   const [isClient, setIsClient] = useState(false);
@@ -59,45 +60,45 @@ export default function Donate() {
         <main className="relative z-10 py-8">
 
       {/* Page Header */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl mu-retro-title mb-4">ỦNG HỘ SERVER</h1>
-          <p className="text-xl text-gray-300">Hỗ trợ server phát triển và duy trì hoạt động</p>
+      <section className="py-8 sm:py-16">
+        <div className="container mx-auto px-2 sm:px-4 text-center">
+          <h1 className="text-2xl sm:text-5xl mu-retro-title mb-2 sm:mb-4">ỦNG HỘ SERVER</h1>
+          <p className="text-sm sm:text-xl text-gray-300">Hỗ trợ server phát triển và duy trì hoạt động</p>
         </div>
       </section>
 
       {/* Donate Packages */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-8 sm:py-16">
+        <div className="container mx-auto px-2 sm:px-4">
           
           <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-4 sm:gap-8">
               {/* Package 1 */}
-              <div className="text-center mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '15px' }}>
+              <div className="text-center mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
                 <div className="relative z-10">
-                  <h3 className="text-2xl mu-retro-title-small mb-4">Gói Chaos</h3>
+                  <h3 className="text-xl sm:text-2xl mu-retro-title-small mb-3 sm:mb-4">Gói Chaos</h3>
                   {/* <div className="text-5xl mt-10 mb-6" style={{ filter: 'brightness(2.5) drop-shadow(0 0 12px rgba(0, 255, 0, 0.6))' }}>💎</div> */}
-                  <div className="text-3xl font-bold mu-text-gold mb-2 mt-10">12.000đ</div>
-                  <p className="text-gray-300 text-lg mb-6">/ 1 Chaos</p>
-                  <div className="space-y-4" style={{ marginTop: '30px' }}>
+                  <div className="text-xl sm:text-3xl font-bold mu-text-gold mb-2 mt-10 sm:mt-10">12.000đ</div>
+                  <p className="text-gray-300 text-sm sm:text-lg mb-4 sm:mb-6">/ 1 Chaos</p>
+                  <div className="space-y-2 sm:space-y-4" style={{ marginTop: '20px' }}>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-green-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Nhận ngay 1 Chaos</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Nhận ngay 1 Chaos</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-green-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Sử dụng để up đồ</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Sử dụng để up đồ</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-green-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Tỷ lệ thành công cao</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Tỷ lệ thành công cao</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Package 2 */}
-              <div className="text-center mu-retro-card relative" style={{ padding: '56px 56px 56px 56px', paddingTop: '15px' }}>
+              <div className="text-center mu-retro-card relative" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
                 {/* <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
                   <span className="mu-retro-badge-event px-4 py-1 text-sm font-bold">
                     PHỔ BIẾN
@@ -105,51 +106,51 @@ export default function Donate() {
                 </div> */}
                 <div className="relative z-10">
                  
-                  <h3 className="text-2xl mu-retro-title-small mb-4">Gold Member</h3>
+                  <h3 className="text-xl sm:text-2xl mu-retro-title-small mb-3 sm:mb-4">Gold Member</h3>
                   {/* <div className="text-5xl mb-6 mt-10" style={{ filter: 'brightness(2.5) drop-shadow(0 0 12px rgba(255, 215, 0, 0.6))' }}>👑</div> */}
-                  <div className="text-3xl font-bold mu-text-gold mb-2 mt-10">100.000đ</div>
-                  <p className="text-gray-300 text-lg mb-6">/ 30 ngày</p>
-                  <div className="space-y-4" style={{ marginTop: '30px' }}>
+                  <div className="text-xl sm:text-3xl font-bold mu-text-gold mb-2 mt-10 sm:mt-10">100.000đ</div>
+                  <p className="text-gray-300 text-sm sm:text-lg mb-4 sm:mb-6">/ 30 ngày</p>
+                  <div className="space-y-2 sm:space-y-4" style={{ marginTop: '20px' }}>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-yellow-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Tăng 5% tỷ lệ up đồ</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Tăng 5% tỷ lệ up đồ</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-yellow-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Up đồ +10/+11/+12/+13</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Up đồ +10/+11/+12/+13</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-yellow-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Thời hạn 30 ngày</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Thời hạn 30 ngày</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-yellow-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Ưu đãi đặc biệt</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Ưu đãi đặc biệt</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Package 3 */}
-              <div className="text-center mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '15px' }}>
+              <div className="text-center mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
                 <div className="relative z-10">
                   
-                  <h3 className="text-2xl mu-retro-title-small mb-4">Gói Life</h3>
+                  <h3 className="text-xl sm:text-2xl mu-retro-title-small mb-3 sm:mb-4">Gói Life</h3>
                   {/* <div className="text-5xl mb-6 mt-10" style={{ filter: 'brightness(2.5) drop-shadow(0 0 12px rgba(0, 150, 255, 0.6))' }}>❤️</div> */}
-                  <div className="text-3xl font-bold mu-text-gold mb-2 mt-10">500đ</div>
-                  <p className="text-gray-300 text-lg mb-6">/ 1 Life</p>
-                  <div className="space-y-4" style={{ marginTop: '30px' }}>
+                  <div className="text-xl sm:text-3xl font-bold mu-text-gold mb-2 mt-10 sm:mt-10">500đ</div>
+                  <p className="text-gray-300 text-sm sm:text-lg mb-4 sm:mb-6">/ 1 Life</p>
+                  <div className="space-y-2 sm:space-y-4" style={{ marginTop: '20px' }}>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-blue-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Nhận ngay 1 Life</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Nhận ngay 1 Life</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-blue-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Hồi sinh khi chết</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Hồi sinh khi chết</span>
                     </div>
                     <div className="flex items-center justify-center">
-                      <span className="w-3 h-3 bg-blue-400 rounded-full mr-3"></span>
-                      <span className="text-white text-lg">Giá rẻ nhất</span>
+                      <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-2 sm:mr-3"></span>
+                      <span className="text-white text-xs sm:text-lg">Giá rẻ nhất</span>
                     </div>
                   </div>
                 </div>
@@ -160,38 +161,38 @@ export default function Donate() {
       </section>
 
       {/* Payment Information */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl mu-retro-title mb-4">THÔNG TIN CHUYỂN KHOẢN</h2>
-            <p className="text-xl text-gray-300">Thông tin tài khoản ngân hàng</p>
+      <section className="py-8 sm:py-16">
+        <div className="container mx-auto px-2 sm:px-4">
+          <div className="text-center mb-6 sm:mb-14">
+            <h2 className="text-2xl sm:text-4xl mu-retro-title mb-2 sm:mb-4">THÔNG TIN CHUYỂN KHOẢN</h2>
+            <p className="text-sm sm:text-xl text-gray-300">Thông tin tài khoản ngân hàng</p>
           </div>
           
           <div className="max-w-4xl mx-auto">
             {/* Bank Transfer */}
-            <div className="mu-retro-card text-center" style={{ padding: '56px 56px 56px 56px', paddingTop: '65px' }}>
+            <div className="mu-retro-card text-center" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
               <div className="relative z-10">
-                <h3 className="text-2xl mu-retro-title-small mb-8">CHUYỂN KHOẢN NGÂN HÀNG</h3>
-                <div className="space-y-5" style={{ marginTop: '150px' }}>
+                <h3 className="text-lg sm:text-2xl mu-retro-title-small mt-4 sm:mt-10 mb-4 sm:mb-8">CHUYỂN KHOẢN NGÂN HÀNG</h3>
+                <div className="space-y-3 sm:space-y-5" style={{ marginTop: '30px' }}>
                   <div className="bg-transparent rounded-lg p-2">
-                    <div className="text-sm text-gray-400 mb-2">Số tài khoản:</div>
-                    <div className="text-xl font-bold mu-text-gold">0356673016</div>
+                    <div className="text-xs sm:text-sm text-gray-400 mt-10 sm:mt-20 mb-1 sm:mb-2">Số tài khoản:</div>
+                    <div className="text-base sm:text-xl font-bold mu-text-gold">{siteConfig.bankTransfer.accountNumber}</div>
                   </div>
                   <div className="bg-transparent rounded-lg p-2">
-                    <div className="text-sm text-gray-400 mb-2">Chủ tài khoản:</div>
-                    <div className="text-xl font-bold mu-text-gold">NGUYEN CANH QUYEN</div>
+                    <div className="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">Chủ tài khoản:</div>
+                    <div className="text-base sm:text-xl font-bold mu-text-gold">{siteConfig.bankTransfer.accountHolder}</div>
                   </div>
                   <div className="bg-transparent rounded-lg p-2">
-                    <div className="text-sm text-gray-400 mb-2">Ngân hàng:</div>
-                    <div className="text-xl font-bold mu-text-gold">MB-BANK</div>
+                    <div className="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">Ngân hàng:</div>
+                    <div className="text-base sm:text-xl font-bold mu-text-gold">{siteConfig.bankTransfer.bankName}</div>
                   </div>
-                  <div className="text-center mt-6">
+                  <div className="text-center mt-4 sm:mt-6">
                     <Image 
-                      src="https://img.vietqr.io/image/MB-0356673016-qr_only.png" 
+                      src={siteConfig.bankTransfer.qrCodeUrl} 
                       alt="QR Code" 
                       width={200} 
                       height={200}
-                      className="mx-auto rounded-lg"
+                      className="mx-auto rounded-lg w-32 h-32 sm:w-48 sm:h-48"
                     />
                   </div>
                 </div>
@@ -199,15 +200,15 @@ export default function Donate() {
             </div>
 
             {/* Instructions */}
-            <div className="mt-8 mu-retro-card" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
+            <div className="mt-4 sm:mt-8 mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
               <div className="relative z-10">
-                <h3 className="text-xl mu-retro-title-small mb-6 mt-10 text-center">HƯỚNG DẪN THANH TOÁN</h3>
-                <div className="text-white space-y-3 text-lg ml-6" style={{ marginTop: '120px' }}>
-                  <p>1. Chọn gói ủng hộ phù hợp</p>
-                  <p>2. Chuyển khoản theo thông tin trên</p>
-                  <p>3. Ghi nội dung: &quot;Tên Tài Khoản + Gói ủng hộ&quot;</p>
-                  <p>4. Gửi bill cho Admin qua Zalo: 03377.14.654</p>
-                  <p>5. Chờ Admin xử lý và cấp phần thưởng</p>
+                <h3 className="text-base sm:text-xl mu-retro-title-small mb-4 sm:mb-6 mt-2 sm:mt-10 text-center">HƯỚNG DẪN THANH TOÁN</h3>
+                <div className="text-white space-y-2 sm:space-y-3 text-sm sm:text-lg mt-10 sm:mt-20 ml-10 sm:ml-20" style={{ marginTop: '30px' }}>
+                  <p className="mt-10 sm:mt-30">1. Chọn gói ủng hộ phù hợp</p>
+                  <p className="mt-1 sm:mt-2">2. Chuyển khoản theo thông tin trên</p>
+                  <p className="mt-1 sm:mt-2">3. Ghi nội dung: &quot;Tên Tài Khoản + Gói ủng hộ&quot;</p>
+                  <p className="mt-1 sm:mt-2">4. Gửi bill cho Admin qua Zalo: 03377.14.654</p>
+                  <p className="mt-1 sm:mt-2">5. Chờ Admin xử lý và cấp phần thưởng</p>
                 </div>
               </div>
             </div>
