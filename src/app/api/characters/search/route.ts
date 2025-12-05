@@ -1,96 +1,103 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/database';
-import { validateCharacterName, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
+import { getBackendUrl } from '@/config/backend.config';
 import { getClientIP } from '@/lib/utils';
-import { securityMiddleware } from '@/lib/security-middleware';
+import { securityMiddleware, validateAccountIdWithLogging } from '@/lib/security-middleware';
 
 export async function GET(request: NextRequest) {
+  console.log('🔍 [NEXTJS API] /api/characters/search called');
   try {
     const clientIP = getClientIP(request);
+    console.log(`🔍 [NEXTJS API] Client IP: ${clientIP}`);
     
     // ✅ Security: Kiểm tra bảo mật tổng quát
     const securityCheck = await securityMiddleware(request, '/api/characters/search');
     if (securityCheck && !securityCheck.allowed) {
+      console.log(`🚨 [NEXTJS API] Security check failed: ${securityCheck.error}`);
       return NextResponse.json({ 
         success: false, 
         message: securityCheck.error || 'Request không hợp lệ' 
       }, { status: securityCheck.statusCode || 400 });
     }
 
-    const pool = await connectToDatabase();
     const { searchParams } = new URL(request.url);
     const characterName = searchParams.get('name');
+    console.log(`🔍 [NEXTJS API] Search term: ${characterName}`);
 
-    let query: string;
-    let result;
+    if (!characterName || !characterName.trim()) {
+      return NextResponse.json({
+        success: false,
+        message: 'Tên nhân vật không được để trống'
+      }, { status: 400 });
+    }
 
-    if (characterName && characterName.trim()) {
-      // ✅ Security: Validate character name
-      const characterNameValidation = validateCharacterName(characterName.trim());
-      if (!characterNameValidation.valid) {
-        logSuspiciousActivity(clientIP, '/api/characters/search', characterName, 'Invalid character name format');
-        return NextResponse.json({ 
-          success: false, 
-          message: characterNameValidation.error || 'Tên nhân vật không hợp lệ' 
-        }, { status: 400 });
-      }
+    // ✅ Security: Basic validation
+    const trimmedName = characterName.trim();
+    if (trimmedName.length > 10) {
+      return NextResponse.json({
+        success: false,
+        message: 'Tên nhân vật quá dài'
+      }, { status: 400 });
+    }
 
-      // ✅ Security: Detect SQL injection
-      if (detectSQLInjection(characterName)) {
-        logSuspiciousActivity(clientIP, '/api/characters/search', characterName, 'SQL Injection attempt detected');
-        return NextResponse.json({ 
-          success: false, 
-          message: 'Input không hợp lệ' 
-        }, { status: 400 });
-      }
-      // Tìm kiếm character cụ thể
-      query = `
-        SELECT 
-          AccountID as account,
-          Name as character,
-          Class as class,
-          ResetCount as resets,
-          cLevel as level,
-          PkCount as pkcount
-        FROM Character 
-        WHERE Name LIKE @characterName 
-        AND (CtlCode < 8 OR CtlCode IS NULL)
-        ORDER BY ResetCount DESC
-      `;
-      
-      result = await pool.request()
-        .input('characterName', `%${characterName.trim()}%`)
-        .query(query);
+    // Forward query parameter to backend
+    const backendUrl = new URL(getBackendUrl('/api/rankings/search'));
+    backendUrl.searchParams.set('name', trimmedName);
+    console.log(`🔍 [NEXTJS API] Calling backend: ${backendUrl.toString()}`);
+    
+    // Gọi Backend API
+    const backendResponse = await fetch(backendUrl.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log(`🔍 [NEXTJS API] Backend response status: ${backendResponse.status}`);
+
+    if (!backendResponse.ok) {
+      const errorText = await backendResponse.text();
+      console.error(`❌ [NEXTJS API] Backend API error: ${backendResponse.status}`, errorText);
+      return NextResponse.json({
+        success: false,
+        message: `Lỗi từ backend API: ${backendResponse.status}`
+      }, { status: backendResponse.status });
+    }
+
+    const backendData = await backendResponse.json();
+    console.log(`🔍 [NEXTJS API] Backend data received:`, backendData.success ? `Success with ${backendData.data?.length || 0} results` : 'Failed');
+
+    if (backendData.success) {
+      // Transform data để match với format frontend
+      const transformedData = backendData.data.map((char: any) => ({
+        account: char.account || char.AccountID || '',
+        character: char.character || char.Name || '',
+        class: char.class ?? char.Class ?? 0,
+        resets: char.resets ?? char.ResetCount ?? 0,
+        level: char.level ?? char.cLevel ?? 0,
+        pkcount: char.pkcount ?? char.PkCount ?? 0,
+        isOnline: char.isOnline ?? char.IsOnline ?? 0
+      }));
+
+      console.log(`✅ [NEXTJS API] Returning ${transformedData.length} results`);
+      return NextResponse.json({
+        success: true,
+        data: transformedData,
+        message: backendData.message || `Tìm thấy ${transformedData.length} kết quả cho "${trimmedName}"`,
+        isSearch: true
+      });
     } else {
-      // Lấy top 100 characters
-      query = `
-        SELECT TOP 100 
-          AccountID as account,
-          Name as character,
-          Class as class,
-          ResetCount as resets
-        FROM Character 
-        WHERE CtlCode < 8 OR CtlCode IS NULL 
-        ORDER BY ResetCount DESC
-      `;
-      
-      result = await pool.request().query(query);
+      console.log(`❌ [NEXTJS API] Backend returned error: ${backendData.message}`);
+      return NextResponse.json({
+        success: false,
+        message: backendData.message || 'Lỗi khi tìm kiếm nhân vật'
+      }, { status: backendResponse.status });
     }
     
-    await pool.close();
-    
-    return NextResponse.json({
-      success: true,
-      data: result.recordset,
-      message: characterName ? `Tìm thấy ${result.recordset.length} kết quả cho "${characterName}"` : 'Lấy danh sách ranking thành công!',
-      isSearch: !!characterName
-    });
-    
   } catch (error) {
-    console.error('Character search error:', error);
+    console.error('💥 [NEXTJS API] Character search error:', error);
     return NextResponse.json({
       success: false,
-      message: 'Lỗi khi tìm kiếm nhân vật'
+      message: 'Lỗi kết nối đến server. Vui lòng thử lại sau.'
     }, { status: 500 });
   }
 }

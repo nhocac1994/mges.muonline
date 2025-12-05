@@ -18,7 +18,7 @@ export default function Donate() {
     }}>
       {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
-        <div 
+          <div 
           className="fixed inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             top: 0,
@@ -84,15 +84,15 @@ export default function Donate() {
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Nhận ngay 1 Chaos</span>
-                    </div>
+                  </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Sử dụng để up đồ</span>
-                    </div>
+                </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Tỷ lệ thành công cao</span>
-                    </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -114,19 +114,19 @@ export default function Donate() {
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Tăng 5% tỷ lệ up đồ</span>
-                    </div>
+                </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Up đồ +10/+11/+12/+13</span>
-                    </div>
+                  </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Thời hạn 30 ngày</span>
-                    </div>
+                </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Ưu đãi đặc biệt</span>
-                    </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -143,15 +143,15 @@ export default function Donate() {
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Nhận ngay 1 Life</span>
-                    </div>
+                  </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Hồi sinh khi chết</span>
-                    </div>
+                </div>
                     <div className="flex items-center justify-center">
                       <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-2 sm:mr-3"></span>
                       <span className="text-white text-xs sm:text-lg">Giá rẻ nhất</span>
-                    </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function Donate() {
           </div>
           
           <div className="max-w-4xl mx-auto">
-            {/* Bank Transfer */}
+                {/* Bank Transfer */}
             <div className="mu-retro-card text-center" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
               <div className="relative z-10">
                 <h3 className="text-lg sm:text-2xl mu-retro-title-small mt-4 sm:mt-10 mb-4 sm:mb-8">CHUYỂN KHOẢN NGÂN HÀNG</h3>
@@ -177,29 +177,29 @@ export default function Donate() {
                   <div className="bg-transparent rounded-lg p-2">
                     <div className="text-xs sm:text-sm text-gray-400 mt-10 sm:mt-20 mb-1 sm:mb-2">Số tài khoản:</div>
                     <div className="text-base sm:text-xl font-bold mu-text-gold">{siteConfig.bankTransfer.accountNumber}</div>
-                  </div>
+                    </div>
                   <div className="bg-transparent rounded-lg p-2">
                     <div className="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">Chủ tài khoản:</div>
                     <div className="text-base sm:text-xl font-bold mu-text-gold">{siteConfig.bankTransfer.accountHolder}</div>
-                  </div>
+                    </div>
                   <div className="bg-transparent rounded-lg p-2">
                     <div className="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">Ngân hàng:</div>
                     <div className="text-base sm:text-xl font-bold mu-text-gold">{siteConfig.bankTransfer.bankName}</div>
-                  </div>
+                    </div>
                   <div className="text-center mt-4 sm:mt-6">
-                    <Image 
+                      <Image 
                       src={siteConfig.bankTransfer.qrCodeUrl} 
-                      alt="QR Code" 
-                      width={200} 
-                      height={200}
+                        alt="QR Code" 
+                        width={200} 
+                        height={200}
                       className="mx-auto rounded-lg w-32 h-32 sm:w-48 sm:h-48"
-                    />
+                      />
+                    </div>
+                </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Instructions */}
+                {/* Instructions */}
             <div className="mt-4 sm:mt-8 mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
               <div className="relative z-10">
                 <h3 className="text-base sm:text-xl mu-retro-title-small mb-4 sm:mb-6 mt-2 sm:mt-10 text-center">HƯỚNG DẪN THANH TOÁN</h3>

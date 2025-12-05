@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAccount } from '@/lib/database';
+import { getBackendUrl } from '@/config/backend.config';
 import { validateAccountId, validatePassword, validateCharacterName, validateEmail, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
 import { getClientIP } from '@/lib/utils';
 import { securityMiddleware } from '@/lib/security-middleware';
@@ -78,21 +78,27 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Use the createAccount function from database.ts
-    const result = await createAccount({
-      username,
-      password,
-      characterName,
-      email,
-      phone,
-      securityQuestion,
-      securityAnswer
+    // Gọi Backend API
+    const backendResponse = await fetch(getBackendUrl('/api/auth/register'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        characterName,
+        email,
+        phone
+      }),
     });
 
-    if (result.success) {
+    const backendData = await backendResponse.json();
+
+    if (backendData.success) {
       return NextResponse.json({ 
         success: true, 
-        message: result.message,
+        message: backendData.message,
         data: {
           username,
           characterName,
@@ -103,15 +109,15 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json({ 
         success: false, 
-        message: result.message 
-      }, { status: 400 });
+        message: backendData.message 
+      }, { status: backendResponse.status });
     }
 
-  } catch {
-    console.error('Registration error: [Hidden for security]');
+  } catch (error) {
+    console.error('Registration error:', error);
     return NextResponse.json({ 
       success: false, 
-      message: 'Lỗi hệ thống. Vui lòng thử lại sau.' 
+      message: 'Lỗi kết nối đến server. Vui lòng thử lại sau.' 
     }, { status: 500 });
   }
 }

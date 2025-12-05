@@ -35,6 +35,7 @@ export default function Login() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    // Đảm bảo giữ nguyên case của user input, không tự động uppercase
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -76,8 +77,10 @@ export default function Login() {
       const result = await response.json();
       
       if (result.success) {
-        // Store user data in localStorage
-        localStorage.setItem('auth_token', 'temp_token_' + Date.now());
+        // Store JWT token và user data in localStorage
+        if (result.data.token) {
+          localStorage.setItem('auth_token', result.data.token);
+        }
         localStorage.setItem('user_data', JSON.stringify(result.data));
         
         // Redirect to dashboard
@@ -163,6 +166,11 @@ export default function Login() {
                       errors.username ? 'border-red-500' : ''
                     }`}
                     placeholder="Nhập tên đăng nhập"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    autoComplete="off"
+                    spellCheck="false"
+                    style={{ textTransform: 'none' }}
                   />
                   {errors.username && <p className="mu-text-red text-sm mt-1">{errors.username}</p>}
                 </div>
@@ -180,6 +188,11 @@ export default function Login() {
                       errors.password ? 'border-red-500' : ''
                     }`}
                     placeholder="Nhập mật khẩu"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    autoComplete="off"
+                    spellCheck="false"
+                    style={{ textTransform: 'none' }}
                   />
                   {errors.password && <p className="mu-text-red text-sm mt-1">{errors.password}</p>}
                 </div>

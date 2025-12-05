@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { loginAccount } from '@/lib/database';
+import { getBackendUrl } from '@/config/backend.config';
 import { getClientIP } from '@/lib/utils';
 import { validateAccountId, validatePassword, detectSQLInjection, logSuspiciousActivity } from '@/lib/security';
 import { securityMiddleware } from '@/lib/security-middleware';
@@ -74,8 +74,16 @@ export async function POST(request: NextRequest) {
       }, { status: 429 });
     }
 
-    // Use the loginAccount function from database.ts
-    const result = await loginAccount(username, password);
+    // Gọi Backend API
+    const backendResponse = await fetch(getBackendUrl('/api/auth/login'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const backendData = await backendResponse.json();
 
     // Increment rate limit counter
     await fetch(`${request.nextUrl.origin}/api/rate-limit`, {
@@ -84,24 +92,27 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({ ip: clientIP, action: 'increment' })
     });
 
-    if (result.success) {
+    if (backendData.success) {
       return NextResponse.json({ 
         success: true, 
-        message: result.message,
-        data: result.user
+        message: backendData.message,
+        data: {
+          ...backendData.user,
+          token: backendData.token // Thêm JWT token
+        }
       });
     } else {
       return NextResponse.json({ 
         success: false, 
-        message: result.message 
-      }, { status: 401 });
+        message: backendData.message 
+      }, { status: backendResponse.status });
     }
 
-  } catch {
-    console.error('Login error: [Hidden for security]');
+  } catch (error) {
+    console.error('Login error:', error);
     return NextResponse.json({ 
       success: false, 
-      message: 'Lỗi hệ thống. Vui lòng thử lại sau.' 
+      message: 'Lỗi kết nối đến server. Vui lòng thử lại sau.' 
     }, { status: 500 });
   }
 }

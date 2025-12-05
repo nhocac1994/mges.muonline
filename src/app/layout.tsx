@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "../styles/mobile.css";
+// mobile.css được import trong globals.css để đảm bảo thứ tự @import đúng
 import SecurityGuard from "@/components/SecurityGuard";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -113,6 +113,10 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
+        {/* Google Fonts - Load trước để tránh lỗi @import trong CSS */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

@@ -34,7 +34,7 @@ const LogoSection = () => {
           />
         </div>
       </div>
-    );
+  );
   }
 
   return (
@@ -252,10 +252,10 @@ export default function Home() {
                 <div className="relative z-10">
                   <div className="text-center mb-6 sm:mb-14">
                     <h3 className="text-xl sm:text-2xl mu-retro-title">Bản Tin Mới</h3>
-                  </div>
+                </div>
                   <div style={{ marginTop: '50px' }}>
                   <div className="space-y-3 sm:space-y-5">
-                    {news.map((item, index) => (
+                  {news.map((item, index) => (
                       <div key={index} className="p-3 sm:p-6 group" style={{ backgroundColor: 'transparent' }}>
                         <div className="flex items-start gap-2 sm:gap-3">
                           <span className={`mu-retro-badge text-[10px] sm:text-xs ${
@@ -265,14 +265,14 @@ export default function Home() {
                           <div className="flex-1 min-w-0">
                             <h4 className="mu-text-gold font-semibold mb-1 text-xs sm:text-sm">
                               <Link href={item.link} className="mu-retro-link">
-                                {item.title}
-                              </Link>
-                            </h4>
+                              {item.title}
+                            </Link>
+                          </h4>
                             <span className="text-gray-400 text-[10px] sm:text-xs">{item.date}</span>
-                          </div>
-                          </div>
                         </div>
-                      ))}
+                      </div>
+                    </div>
+                  ))}
                     </div>
                   </div>
                 </div>
@@ -284,8 +284,8 @@ export default function Home() {
                   <h2 className="text-xl sm:text-2xl mu-retro-title mb-4 sm:mb-8">THAM GIA NGAY</h2>
                   <div style={{ marginTop: '100px' }}>
                     <Link href="/register" className="mu-retro-btn-classic inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3">
-                      Đăng Ký Ngay
-                    </Link>
+                    Đăng Ký Ngay
+                  </Link>
                   </div>
                 </div>
               </div>
@@ -309,14 +309,14 @@ export default function Home() {
                   <div className="relative z-10">
                     <h3 className="text-lg sm:text-xl mu-retro-title-small mb-4 sm:mb-6">MediaFire</h3>
                     <div style={{ marginTop: '100px' }}>
-                    <a 
+                  <a 
                       href={siteConfig.downloadLinks.mediafire} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                    target="_blank" 
+                    rel="noopener noreferrer"
                       className="mu-retro-btn inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3"
-                    >
+                  >
                       📥 Tải Client {siteConfig.downloadLinks.clientVersion}
-                    </a>
+                  </a>
                     </div>
                   </div>
                 </div>
@@ -324,14 +324,14 @@ export default function Home() {
                   <div className="relative z-10">
                     <h3 className="text-lg sm:text-xl mu-retro-title-small mb-4 sm:mb-6">MEGA</h3>
                     <div style={{ marginTop: '100px' }}>
-                    <a 
+                  <a 
                       href={siteConfig.downloadLinks.mega} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                    target="_blank" 
+                    rel="noopener noreferrer"
                       className="mu-retro-btn inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3"
-                    >
+                  >
                       📥 Tải Client {siteConfig.downloadLinks.clientVersion}
-                    </a>
+                  </a>
                     </div>
                   </div>
                 </div>

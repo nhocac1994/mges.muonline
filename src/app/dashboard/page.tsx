@@ -163,6 +163,30 @@ export default function Dashboard() {
     return new Intl.NumberFormat('vi-VN').format(money);
   };
 
+  const formatText = (text: string | null | undefined): string => {
+    if (!text) return '';
+    // Giữ nguyên nếu là số hoặc có chữ số
+    if (/^\d+$/.test(text) || /\d/.test(text)) {
+      return text;
+    }
+    // Format title case: chữ cái đầu viết hoa, còn lại viết thường
+    return text
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const formatAccountName = (name: string | null | undefined): string => {
+    if (!name) return '';
+    // Giữ nguyên nếu có số hoặc ký tự đặc biệt
+    if (/\d/.test(name) || /[^a-zA-Z0-9]/.test(name)) {
+      return name;
+    }
+    // Format: chữ cái đầu viết hoa, còn lại viết thường
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  };
+
   const formatTime = (hours: number, minutes: number): string => {
     if (hours > 0) {
       return `${hours} giờ ${minutes} phút`;
@@ -173,7 +197,13 @@ export default function Dashboard() {
   const fetchCharacters = async (accountId: string) => {
     try {
       setCharactersLoading(true);
-      const response = await fetch(`/api/characters?accountId=${accountId}`);
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`/api/characters?accountId=${accountId}`, {
+        headers: {
+          'Authorization': `Bearer ${token || ''}`,
+          'Content-Type': 'application/json',
+        }
+      });
       const result = await response.json();
       
       if (result.success) {
@@ -285,10 +315,22 @@ export default function Dashboard() {
         }
         
         // Parse user data để lấy account ID
-        const user = JSON.parse(userData);
-        const accountId = user.memb___id;
+        const parsedUser = JSON.parse(userData);
+        const accountId = parsedUser.memb___id || parsedUser.username || parsedUser.accountId || parsedUser.id;
+        
+        if (!accountId) {
+          console.error('Không tìm thấy account ID');
+          router.push('/login');
+          return;
+        }
         
         console.log('Loading dashboard for account:', accountId);
+        
+        // Set user từ localStorage trước
+        setUser({
+          memb___id: accountId,
+          memb_name: parsedUser.memb_name || parsedUser.username || parsedUser.characterName || accountId
+        });
         
         // Fetch characters first
         await fetchCharacters(accountId);
@@ -306,10 +348,13 @@ export default function Dashboard() {
           const result = await response.json();
           if (result.success) {
             setDashboardData(result.data);
-            setUser({
-              memb___id: result.data.account.id,
-              memb_name: result.data.character.name
-            });
+            // Cập nhật user với thông tin từ API nếu có
+            if (result.data.account?.id) {
+              setUser(prev => ({
+                memb___id: result.data.account.id,
+                memb_name: prev?.memb_name || result.data.account.id
+              }));
+            }
           } else {
             console.error('Failed to load dashboard data:', result.message);
           }
@@ -342,7 +387,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen relative overflow-hidden mu-retro-bg-texture" style={{
-      fontFamily: 'Cinzel, serif'
+      fontFamily: 'Arial, Helvetica, sans-serif'
     }}>
       {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
@@ -461,34 +506,34 @@ export default function Dashboard() {
             {/* Thông tin tài khoản */}
             <div className="mu-retro-card-blur" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
               <div className="relative z-10">
-                <h3 className="text-base sm:text-xl mu-retro-title-small mb-3 sm:mb-4 mu-text-gold">Thông tin tài khoản</h3>
-              <div className="space-y-1.5 sm:space-y-2">
-                <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Tên đăng nhập:</span> {dashboardData?.account.id}</p>
-                <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Nhân vật chính:</span> {dashboardData?.character.name}</p>
-                <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Số nhân vật:</span> {dashboardData?.account.characterCount}</p>
+                <h3 className="text-base sm:text-xl mu-retro-title-small mb-3 sm:mb-4 mu-text-gold" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>Thông tin tài khoản</h3>
+              <div className="space-y-2 sm:space-y-3">
+                <p className="text-white text-sm sm:text-lg leading-relaxed"><span className="text-gray-300 font-semibold">Tên đăng nhập:</span> <span className="mu-text-gold font-bold text-base sm:text-lg ml-2">{formatAccountName(user?.memb___id || dashboardData?.account?.id || 'N/A')}</span></p>
+                <p className="text-white text-sm sm:text-lg leading-relaxed"><span className="text-gray-300 font-semibold">Nhân vật chính:</span> <span className="mu-text-gold font-bold text-base sm:text-lg ml-2">{formatAccountName(dashboardData?.character?.name || selectedCharacter?.name || 'Chưa có')}</span></p>
+                <p className="text-white text-sm sm:text-lg leading-relaxed"><span className="text-gray-300 font-semibold">Số nhân vật:</span> <span className="mu-text-gold font-bold text-base sm:text-lg ml-2">{dashboardData?.account?.characterCount ?? characters.length ?? 0}</span></p>
                 <div className="flex items-center space-x-2 flex-wrap">
                   <span className="text-gray-400 text-xs sm:text-base">Loại tài khoản:</span>
                   <span 
                     className="px-2 py-1 rounded text-xs sm:text-sm font-semibold"
                     style={{ 
-                      backgroundColor: dashboardData?.account.levelColor || '#808080',
+                      backgroundColor: dashboardData?.account?.levelColor || '#808080',
                       color: '#000'
                     }}
                   >
-                    {dashboardData?.account.levelName || 'Thường'}
+                    {formatText(dashboardData?.account?.levelName || 'Thường')}
                   </span>
                 </div>
-                {dashboardData?.account.expireDate && (
+                {dashboardData?.account?.expireDate && (
                   <p className="text-white text-xs sm:text-base">
                     <span className="text-gray-400">Hết hạn:</span> 
-                    <span className={dashboardData?.account.isExpired ? 'text-red-400' : 'text-green-400'}>
+                    <span className={dashboardData?.account?.isExpired ? 'text-red-400' : 'text-green-400'}>
                       {new Date(dashboardData.account.expireDate).toLocaleDateString('vi-VN')}
                     </span>
                   </p>
                 )}
                 <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Trạng thái:</span> 
-                  <span className={`ml-2 ${dashboardData?.character.isOnline ? 'text-green-400' : 'text-red-400'}`}>
-                    {dashboardData?.character.isOnline ? 'Online' : 'Offline'}
+                  <span className={`ml-2 ${dashboardData?.character?.isOnline ? 'text-green-400' : 'text-red-400'}`}>
+                    {dashboardData?.character?.isOnline ? 'Online' : 'Offline'}
                   </span>
                 </p>
               </div>
@@ -501,13 +546,13 @@ export default function Dashboard() {
                 <h3 className="text-base sm:text-xl mu-retro-title-small mb-3 sm:mb-4 mu-text-gold">Trạng thái game</h3>
                 <div className="space-y-1.5 sm:space-y-2">
                   <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Server:</span> <span className="text-green-400">Online</span></p>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Cấp độ:</span> {dashboardData?.character.level}</p>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Class:</span> {getClassName(dashboardData?.character.class || 0)}</p>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Kinh nghiệm:</span> {formatMoney(dashboardData?.character.experience || 0)}/{formatMoney(dashboardData?.character.nextLevelExp || 0)}</p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Cấp độ:</span> <span className="mu-text-gold">{selectedCharacter?.level ?? dashboardData?.character?.level ?? 0}</span></p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Class:</span> <span className="mu-text-gold">{formatText(selectedCharacter?.className || getClassName(dashboardData?.character?.class ?? 0))}</span></p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Kinh nghiệm:</span> <span className="mu-text-gold">{formatMoney(dashboardData?.character?.experience ?? 0)}/{formatMoney(dashboardData?.character?.nextLevelExp ?? 0)}</span></p>
                   <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
                     <div 
                       className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300" 
-                      style={{ width: `${dashboardData?.character.expProgress || 0}%` }}
+                      style={{ width: `${dashboardData?.character?.expProgress ?? 0}%` }}
                     ></div>
                   </div>
                 </div>
@@ -519,10 +564,10 @@ export default function Dashboard() {
               <div className="relative z-10">
                 <h3 className="text-base sm:text-xl mu-retro-title-small mb-3 sm:mb-4 mu-text-gold">Thống kê</h3>
                 <div className="space-y-1.5 sm:space-y-2">
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Thời gian chơi:</span> {formatTime(dashboardData?.character.playTimeHours || 0, dashboardData?.character.playTimeMinutes || 0)}</p>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">PK Count:</span> {dashboardData?.character.pkCount}</p>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">PK Level:</span> {dashboardData?.character.pkLevel}</p>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Vị trí:</span> Map {dashboardData?.character.mapNumber} ({dashboardData?.character.mapPosX}, {dashboardData?.character.mapPosY})</p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Thời gian chơi:</span> <span className="mu-text-gold">{formatTime(dashboardData?.character?.playTimeHours ?? 0, dashboardData?.character?.playTimeMinutes ?? 0)}</span></p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">PK Count:</span> <span className="mu-text-gold">{selectedCharacter?.pkCount ?? dashboardData?.character?.pkCount ?? 0}</span></p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">PK Level:</span> <span className="mu-text-gold">{selectedCharacter?.pkLevel ?? dashboardData?.character?.pkLevel ?? 0}</span></p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Vị trí:</span> <span className="mu-text-gold">Map {selectedCharacter?.mapNumber ?? dashboardData?.character?.mapNumber ?? 0} ({selectedCharacter?.mapPosX ?? dashboardData?.character?.mapPosX ?? 0}, {selectedCharacter?.mapPosY ?? dashboardData?.character?.mapPosY ?? 0})</span></p>
                 </div>
               </div>
             </div>
@@ -539,23 +584,23 @@ export default function Dashboard() {
                 <div className="space-y-2 sm:space-y-2.5">
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Strength:</span> 
-                    <span className="font-bold text-orange-400 text-xs sm:text-base">{selectedCharacter?.stats.strength || dashboardData?.character.strength}</span>
+                    <span className="font-bold text-orange-400 text-xs sm:text-base">{selectedCharacter?.stats?.strength ?? dashboardData?.character?.strength ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Dexterity:</span> 
-                    <span className="font-bold text-blue-400 text-xs sm:text-base">{selectedCharacter?.stats.dexterity || dashboardData?.character.dexterity}</span>
+                    <span className="font-bold text-blue-400 text-xs sm:text-base">{selectedCharacter?.stats?.dexterity ?? dashboardData?.character?.dexterity ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Vitality:</span> 
-                    <span className="font-bold text-red-400 text-xs sm:text-base">{selectedCharacter?.stats.vitality || dashboardData?.character.vitality}</span>
+                    <span className="font-bold text-red-400 text-xs sm:text-base">{selectedCharacter?.stats?.vitality ?? dashboardData?.character?.vitality ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Energy:</span> 
-                    <span className="font-bold text-purple-400 text-xs sm:text-base">{selectedCharacter?.stats.energy || dashboardData?.character.energy}</span>
+                    <span className="font-bold text-purple-400 text-xs sm:text-base">{selectedCharacter?.stats?.energy ?? dashboardData?.character?.energy ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Leadership:</span> 
-                    <span className="font-bold text-yellow-400 text-xs sm:text-base">{selectedCharacter?.stats.leadership || dashboardData?.character.leadership}</span>
+                    <span className="font-bold text-yellow-400 text-xs sm:text-base">{selectedCharacter?.stats?.leadership ?? dashboardData?.character?.leadership ?? 0}</span>
                   </div>
                 </div>
                 
@@ -563,27 +608,27 @@ export default function Dashboard() {
                 <div className="pt-2 sm:pt-3 border-t border-gray-600/50 mt-2 sm:mt-3 space-y-2 sm:space-y-2.5">
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Level:</span> 
-                    <span className="font-bold text-green-400 text-xs sm:text-base">{selectedCharacter?.level || dashboardData?.character.level}</span>
+                    <span className="font-bold text-green-400 text-xs sm:text-base">{selectedCharacter?.level ?? dashboardData?.character?.level ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Class:</span> 
-                    <span className="font-bold text-cyan-400 text-xs sm:text-base">{selectedCharacter?.className || getClassName(dashboardData?.character.class || 0)}</span>
+                    <span className="font-bold text-cyan-400 text-xs sm:text-base">{formatText(selectedCharacter?.className || getClassName(dashboardData?.character?.class ?? 0))}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">PK Count:</span> 
-                    <span className="font-bold text-red-300 text-xs sm:text-base">{selectedCharacter?.pkCount || dashboardData?.character.pkCount}</span>
+                    <span className="font-bold text-red-300 text-xs sm:text-base">{selectedCharacter?.pkCount ?? dashboardData?.character?.pkCount ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">PK Level:</span> 
-                    <span className="font-bold text-red-300 text-xs sm:text-base">{selectedCharacter?.pkLevel || dashboardData?.character.pkLevel}</span>
+                    <span className="font-bold text-red-300 text-xs sm:text-base">{selectedCharacter?.pkLevel ?? dashboardData?.character?.pkLevel ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Reset Count:</span> 
-                    <span className="font-bold text-blue-300 text-xs sm:text-base">{selectedCharacter?.resetCount || dashboardData?.character.resetCount}</span>
+                    <span className="font-bold text-blue-300 text-xs sm:text-base">{selectedCharacter?.resetCount ?? dashboardData?.character?.resetCount ?? 0}</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 sm:py-2">
                     <span className="text-gray-300 text-xs sm:text-sm">Master Reset:</span> 
-                    <span className="font-bold text-purple-300 text-xs sm:text-base">{selectedCharacter?.masterResetCount || dashboardData?.character.masterResetCount}</span>
+                    <span className="font-bold text-purple-300 text-xs sm:text-base">{selectedCharacter?.masterResetCount ?? dashboardData?.character?.masterResetCount ?? 0}</span>
                   </div>
                 </div>
               </div>
@@ -595,18 +640,18 @@ export default function Dashboard() {
               <div className="relative z-10">
                 <h3 className="text-base sm:text-xl mu-retro-title-small mb-3 sm:mb-4 mu-text-gold">HP & MP</h3>
                 <div className="space-y-1.5 sm:space-y-2">
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Life:</span> {Math.floor(selectedCharacter?.life || dashboardData?.character.life || 0)}/{Math.floor(selectedCharacter?.maxLife || dashboardData?.character.maxLife || 0)}</p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Life:</span> <span className="mu-text-gold">{Math.floor(selectedCharacter?.life ?? dashboardData?.character?.life ?? 0)}/{Math.floor(selectedCharacter?.maxLife ?? dashboardData?.character?.maxLife ?? 0)}</span></p>
                   <div className="w-full bg-gray-700 rounded-full h-2">
                     <div 
                       className="bg-red-500 h-2 rounded-full" 
-                      style={{ width: `${Math.min(100, ((selectedCharacter?.life || dashboardData?.character.life || 0) / (selectedCharacter?.maxLife || dashboardData?.character.maxLife || 1)) * 100)}%` }}
+                      style={{ width: `${Math.min(100, ((selectedCharacter?.life ?? dashboardData?.character?.life ?? 0) / (selectedCharacter?.maxLife ?? dashboardData?.character?.maxLife ?? 1)) * 100)}%` }}
                     ></div>
                   </div>
-                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Mana:</span> {Math.floor(selectedCharacter?.mana || dashboardData?.character.mana || 0)}/{Math.floor(selectedCharacter?.maxMana || dashboardData?.character.maxMana || 0)}</p>
+                  <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Mana:</span> <span className="mu-text-gold">{Math.floor(selectedCharacter?.mana ?? dashboardData?.character?.mana ?? 0)}/{Math.floor(selectedCharacter?.maxMana ?? dashboardData?.character?.maxMana ?? 0)}</span></p>
                   <div className="w-full bg-gray-700 rounded-full h-2">
                     <div 
                       className="bg-blue-500 h-2 rounded-full" 
-                      style={{ width: `${Math.min(100, ((selectedCharacter?.mana || dashboardData?.character.mana || 0) / (selectedCharacter?.maxMana || dashboardData?.character.maxMana || 1)) * 100)}%` }}
+                      style={{ width: `${Math.min(100, ((selectedCharacter?.mana ?? dashboardData?.character?.mana ?? 0) / (selectedCharacter?.maxMana ?? dashboardData?.character?.maxMana ?? 1)) * 100)}%` }}
                     ></div>
                   </div>
                 </div>
@@ -619,9 +664,9 @@ export default function Dashboard() {
                 <h3 className="text-base sm:text-xl mu-retro-title-small mb-3 sm:mb-4 mu-text-gold">Tiền tệ</h3>
                 <div className="space-y-1.5 sm:space-y-2">
                   <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Tiền nhân vật:</span></p>
-                  <p className="text-green-400 font-bold text-xs sm:text-base">{formatMoney(selectedCharacter?.money || dashboardData?.character.money || 0)} Zen</p>
+                  <p className="text-green-400 font-bold text-xs sm:text-base">{formatMoney(selectedCharacter?.money ?? dashboardData?.character?.money ?? 0)} Zen</p>
                   <p className="text-white text-xs sm:text-base"><span className="text-gray-400">Tiền kho:</span></p>
-                  <p className="text-green-400 font-bold text-xs sm:text-base">{formatMoney(dashboardData?.warehouse.money || 0)} Zen</p>
+                  <p className="text-green-400 font-bold text-xs sm:text-base">{formatMoney(dashboardData?.warehouse?.money ?? 0)} Zen</p>
                 </div>
               </div>
             </div>

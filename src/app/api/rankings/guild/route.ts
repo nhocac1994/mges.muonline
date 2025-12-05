@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/database';
+import { getBackendUrl } from '@/config/backend.config';
 import { securityMiddleware } from '@/lib/security-middleware';
 
 export async function GET(request: NextRequest) {
@@ -13,35 +13,43 @@ export async function GET(request: NextRequest) {
       }, { status: securityCheck.statusCode || 400 });
     }
 
-    const pool = await connectToDatabase();
-    
-    // Lấy top 50 guilds với xử lý dữ liệu null/0
-    const result = await pool.request().query(`
-      SELECT TOP 50 
-        G_Name as guildName,
-        ISNULL(G_Score, 0) as score,
-        ISNULL(G_Master, 'Unknown') as guildMaster,
-        ISNULL(G_Count, 0) as memberCount,
-        G_Mark as guildMark
-      FROM Guild 
-      WHERE G_Name IS NOT NULL 
-      AND G_Name != ''
-      ORDER BY ISNULL(G_Score, 0) DESC, G_Name ASC
-    `);
-    
-    await pool.close();
-    
-    return NextResponse.json({
-      success: true,
-      data: result.recordset,
-      message: 'Lấy danh sách guild ranking thành công!'
+    // Gọi Backend API
+    const backendResponse = await fetch(getBackendUrl('/api/rankings/guild'), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
+
+    const backendData = await backendResponse.json();
+
+    if (backendData.success) {
+      // Transform data để match với format cũ nếu cần
+      const transformedData = backendData.data.map((guild: any) => ({
+        guildName: guild.G_Name || guild.guildName,
+        score: guild.G_Score || guild.score || 0,
+        guildMaster: guild.G_Master || guild.guildMaster || 'Unknown',
+        memberCount: guild.G_Count || guild.memberCount || 0,
+        guildMark: guild.G_Mark || guild.guildMark
+      }));
+
+      return NextResponse.json({
+        success: true,
+        data: transformedData,
+        message: 'Lấy danh sách guild ranking thành công!'
+      });
+    } else {
+      return NextResponse.json({
+        success: false,
+        message: backendData.message || 'Lỗi khi lấy danh sách guild ranking'
+      }, { status: backendResponse.status });
+    }
     
   } catch (error) {
     console.error('Guild ranking error:', error);
     return NextResponse.json({
       success: false,
-      message: 'Lỗi khi lấy danh sách guild ranking'
+      message: 'Lỗi kết nối đến server. Vui lòng thử lại sau.'
     }, { status: 500 });
   }
 }

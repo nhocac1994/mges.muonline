@@ -52,6 +52,7 @@ export default function Register() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    // Đảm bảo giữ nguyên case của user input, không tự động uppercase
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -139,37 +140,37 @@ export default function Register() {
     }}>
       {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
-        <div 
-          className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundImage: 'url(/panael-mu.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'scroll',
-            zIndex: 0,
-            pointerEvents: 'none',
-            margin: 0,
-            padding: 0,
-            filter: 'brightness(1.3) contrast(1.1)'
-          }}
-        >
-          {/* Retro Overlay */}
           <div 
-            className="absolute inset-0"
+            className="fixed inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundImage: 'url(/panael-mu.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              backgroundRepeat: 'no-repeat',
+              backgroundAttachment: 'scroll',
+              zIndex: 0,
               pointerEvents: 'none',
-              zIndex: 1
+              margin: 0,
+              padding: 0,
+              filter: 'brightness(1.3) contrast(1.1)'
             }}
-          />
-        </div>
+          >
+            {/* Retro Overlay */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 50%), linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%)',
+                pointerEvents: 'none',
+                zIndex: 1
+              }}
+            />
+          </div>
       )}
       
       {/* Background for main content */}
@@ -193,15 +194,15 @@ export default function Register() {
           {isSuccess && successData && (
             <div className="mb-8 mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
               <div className="relative z-10">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-2xl">✅</span>
-                  </div>
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl">✅</span>
+                </div>
                   <h2 className="text-3xl mu-retro-title mb-2 mu-text-gold">ĐĂNG KÝ THÀNH CÔNG!</h2>
                   <p className="text-green-300 text-lg">Tài khoản của bạn đã được tạo thành công</p>
-                </div>
+              </div>
 
-                <div className="bg-black/50 rounded-lg p-6">
+              <div className="bg-black/50 rounded-lg p-6">
                   <h3 className="text-xl mu-retro-title-small mb-4 text-center">📋 THÔNG TIN TÀI KHOẢN</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
@@ -236,8 +237,8 @@ export default function Register() {
                       <div className="text-sm text-gray-400 mb-1">Trạng thái:</div>
                       <div className="text-lg font-bold text-green-400">✅ Tài khoản đã kích hoạt</div>
                     </div>
+                    </div>
                   </div>
-                </div>
                 </div>
 
                 <div className="mt-6 p-4 bg-black/50 backdrop-blur-sm rounded-lg border border-blue-500/30">
@@ -271,9 +272,9 @@ export default function Register() {
           {!isSuccess && (
             <div className="mu-retro-card-blur" style={{ padding: '56px 56px 56px 56px', paddingTop: '40px' }}>
               <div className="relative z-10">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Thông tin tài khoản */}
-                <div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Thông tin tài khoản */}
+              <div>
                   <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Thông tin tài khoản</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -289,6 +290,11 @@ export default function Register() {
                         errors.username ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập tên đăng nhập"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.username && <p className="text-red-400 text-sm mt-1">{errors.username}</p>}
                   </div>
@@ -306,6 +312,11 @@ export default function Register() {
                         errors.password ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập mật khẩu"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
                   </div>
@@ -323,6 +334,11 @@ export default function Register() {
                         errors.confirmPassword ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập lại mật khẩu"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
                   </div>
@@ -340,14 +356,19 @@ export default function Register() {
                         errors.characterName ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập tên nhân vật"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.characterName && <p className="text-red-400 text-sm mt-1">{errors.characterName}</p>}
                   </div>
                 </div>
               </div>
 
-                {/* Thông tin cá nhân */}
-                <div>
+              {/* Thông tin cá nhân */}
+              <div>
                   <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Thông tin cá nhân</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -363,6 +384,11 @@ export default function Register() {
                         errors.email ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập email"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
                   </div>
@@ -380,14 +406,19 @@ export default function Register() {
                         errors.phone ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập số điện thoại"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
                   </div>
                 </div>
               </div>
 
-                {/* Bảo mật */}
-                <div>
+              {/* Bảo mật */}
+              <div>
                   <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Bảo mật</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -424,54 +455,59 @@ export default function Register() {
                         errors.securityAnswer ? 'border-red-500' : ''
                       }`}
                       placeholder="Nhập câu trả lời"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck="false"
+                      style={{ textTransform: 'none' } as React.CSSProperties}
                     />
                     {errors.securityAnswer && <p className="text-red-400 text-sm mt-1">{errors.securityAnswer}</p>}
                   </div>
                 </div>
               </div>
 
-                {/* CAPTCHA */}
-                <div>
+              {/* CAPTCHA */}
+              <div>
                   <h3 className="text-2xl mu-retro-title-small mb-6 mu-text-gold">Xác thực bảo mật</h3>
-                  <SimpleCaptcha onVerify={setCaptchaValid} />
-                </div>
+                <SimpleCaptcha onVerify={setCaptchaValid} />
+              </div>
 
-                {/* Submit Button */}
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    disabled={!captchaValid || isLoading}
+              {/* Submit Button */}
+              <div className="text-center">
+                <button
+                  type="submit"
+                  disabled={!captchaValid || isLoading}
                     className={`mu-retro-btn-classic font-bold py-4 px-8 text-lg flex items-center justify-center gap-3 mx-auto ${
                       !captchaValid || isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    {isLoading ? (
-                      <>
-                        <div className="loading-dots">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </div>
-                        ĐANG XỬ LÝ...
-                      </>
-                    ) : captchaValid ? (
-                      'TẠO TÀI KHOẢN'
-                    ) : (
-                      'VUI LÒNG XÁC THỰC CAPTCHA'
-                    )}
-                  </button>
-                </div>
+                  }`}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                      ĐANG XỬ LÝ...
+                    </>
+                  ) : captchaValid ? (
+                    'TẠO TÀI KHOẢN'
+                  ) : (
+                    'VUI LÒNG XÁC THỰC CAPTCHA'
+                  )}
+                </button>
+              </div>
 
-                {/* Login Link */}
-                <div className="text-center text-white">
+              {/* Login Link */}
+              <div className="text-center text-white">
                   <p className="text-lg">
-                    Đã có tài khoản?{' '}
+                  Đã có tài khoản?{' '}
                     <Link href="/login" className="mu-retro-link">
-                      Đăng nhập ngay
-                    </Link>
-                  </p>
-                </div>
-                </form>
+                    Đăng nhập ngay
+                  </Link>
+                </p>
+              </div>
+              </form>
               </div>
             </div>
           )}

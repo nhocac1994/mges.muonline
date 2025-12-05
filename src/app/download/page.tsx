@@ -34,7 +34,7 @@ export default function Download() {
     }}>
       {/* Background Image - Cho cả Mobile và Desktop */}
       {isClient && (
-        <div 
+          <div 
           className="fixed inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             top: 0,
@@ -93,35 +93,35 @@ export default function Download() {
                     <div className="relative z-10">
                       <h3 className="text-lg sm:text-xl mu-retro-title-small mb-4 sm:mb-6">MediaFire</h3>
                       <div style={{ marginTop: '60px' }}>
-                        <a 
+                  <a 
                           href={siteConfig.downloadLinks.mediafire} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
+                    target="_blank" 
+                    rel="noopener noreferrer"
                           className="mu-retro-btn-classic inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3"
                         >
                           📥 Tải Client {siteConfig.downloadLinks.clientVersion}
-                        </a>
-                      </div>
-                    </div>
+                  </a>
+                </div>
+              </div>
                   </div>
                   <div className="text-center mu-retro-card" style={{ padding: '20px 30px 20px 30px', paddingTop: '24px' }}>
                     <div className="relative z-10">
                       <h3 className="text-lg sm:text-xl mu-retro-title-small mb-4 sm:mb-6">MEGA</h3>
                       <div style={{ marginTop: '60px' }}>
-                        <a 
+                    <a 
                           href={siteConfig.downloadLinks.mega} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
+                      target="_blank" 
+                      rel="noopener noreferrer"
                           className="mu-retro-btn-classic inline-block text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-3"
-                        >
+                    >
                           📥 Tải Client {siteConfig.downloadLinks.clientVersion}
-                        </a>
-                      </div>
+                    </a>
+                  </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+        </div>
       </section>
 
       {/* System Requirements */}
@@ -137,23 +137,23 @@ export default function Download() {
                 <div className="relative z-10">
                   <h3 className="text-xl sm:text-2xl mu-retro-title-small mb-4 sm:mb-8">Tối Thiểu</h3>
                   <div className="space-y-3 sm:space-y-5" style={{ marginTop: '50px' }}>
-                    <div className="flex justify-between">
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">OS:</span>
                       <span className="text-white text-xs sm:text-lg">Windows 7/8/10/11</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">CPU:</span>
                       <span className="text-white text-xs sm:text-lg">Intel Core 2 Duo</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">RAM:</span>
                       <span className="text-white text-xs sm:text-lg">2 GB</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">GPU:</span>
                       <span className="text-white text-xs sm:text-lg">DirectX 9.0c</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">Storage:</span>
                       <span className="text-white text-xs sm:text-lg">5 GB</span>
                     </div>
@@ -164,23 +164,23 @@ export default function Download() {
                 <div className="relative z-10">
                   <h3 className="text-xl sm:text-2xl mu-retro-title-small mb-4">Khuyến Nghị</h3>
                   <div className="space-y-3 sm:space-y-5" style={{ marginTop: '50px' }}>
-                    <div className="flex justify-between">
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">OS:</span>
                       <span className="text-white text-xs sm:text-lg">Windows 10/11</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">CPU:</span>
                       <span className="text-white text-xs sm:text-lg">Intel Core i5</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">RAM:</span>
                       <span className="text-white text-xs sm:text-lg">8 GB</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">GPU:</span>
                       <span className="text-white text-xs sm:text-lg">DirectX 11</span>
-                    </div>
-                    <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
                       <span className="text-gray-300 text-xs sm:text-lg">Storage:</span>
                       <span className="text-white text-xs sm:text-lg">10 GB SSD</span>
                     </div>
@@ -205,7 +205,7 @@ export default function Download() {
                 <div className="space-y-6" style={{ marginTop: '30px' }}>
                   <div className="flex items-start space-x-5">
                     <div className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg" style={{ boxShadow: '0 0 12px rgba(255, 215, 0, 0.6)', flexShrink: 0 }}>1</div>
-                    <div>
+                  <div>
                       <h3 className="text-xl mu-retro-title-small mb-2">Tải xuống Client</h3>
                       <p className="text-gray-300 text-lg">Tải xuống file client từ link phía trên</p>
                     </div>
@@ -215,21 +215,21 @@ export default function Download() {
                     <div>
                       <h3 className="text-xl mu-retro-title-small mb-2">Giải nén file</h3>
                       <p className="text-gray-300 text-lg">Giải nén file .7z bằng WinRAR hoặc 7-Zip vào thư mục bạn muốn</p>
-                    </div>
+                </div>
                   </div>
                   <div className="flex items-start space-x-5">
                     <div className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg" style={{ boxShadow: '0 0 12px rgba(255, 215, 0, 0.6)', flexShrink: 0 }}>3</div>
                     <div>
                       <h3 className="text-xl mu-retro-title-small mb-2">Chạy Launcher</h3>
                       <p className="text-gray-300 text-lg">Chạy file launcher.exe để tự động cập nhật</p>
-                    </div>
+                </div>
                   </div>
                   <div className="flex items-start space-x-5">
                     <div className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg" style={{ boxShadow: '0 0 12px rgba(255, 215, 0, 0.6)', flexShrink: 0 }}>4</div>
                     <div>
                       <h3 className="text-xl mu-retro-title-small mb-2">Đăng nhập và chơi</h3>
                       <p className="text-gray-300 text-lg">Sử dụng tài khoản đã đăng ký để vào game</p>
-                    </div>
+                </div>
                   </div>
                 </div>
               </div>

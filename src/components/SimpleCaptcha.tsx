@@ -63,6 +63,11 @@ export default function SimpleCaptcha({ onVerify }: SimpleCaptchaProps) {
         placeholder="Nhập mã xác thực"
         className="mu-retro-input w-full"
         maxLength={5}
+        autoCapitalize="none"
+        autoCorrect="off"
+        autoComplete="off"
+        spellCheck="false"
+        style={{ textTransform: 'none' }}
       />
       {userInput && !isValid && (
         <p className="mu-text-red text-sm mt-1">Mã xác thực không đúng</p>

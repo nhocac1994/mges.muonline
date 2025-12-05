@@ -6,9 +6,10 @@ interface CharacterRank {
   account: string;
   character: string;
   class: number;
-  resets: number;
-  level?: number;
-  pkcount?: number;
+  resets?: number | null;
+  level?: number | null;
+  pkcount?: number | null;
+  isOnline?: number | boolean;
 }
 
 interface RankingTableProps {
@@ -140,6 +141,11 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
             onKeyPress={handleKeyPress}
             placeholder="Nhập tên nhân vật..."
             className="mu-retro-input flex-1 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-base text-white"
+            autoCapitalize="none"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck="false"
+            style={{ textTransform: 'none' } as React.CSSProperties}
           />
           <button
             onClick={handleSearch}
@@ -187,13 +193,18 @@ export default function RankingTable({ title, endpoint }: RankingTableProps) {
                   {isSearchMode ? `#${index + 1}` : getRankIcon(index)}
                 </td>
                 <td className="py-2 sm:py-4 px-2 sm:px-4 text-white font-medium text-xs sm:text-lg">
-                  {char.character}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span>{char.character}</span>
+                    <span className={`text-[10px] sm:text-xs font-semibold ${(char.isOnline === 1 || char.isOnline === true) ? 'text-green-400' : 'text-gray-500'}`}>
+                      {(char.isOnline === 1 || char.isOnline === true) ? '🟢 Online' : '⚫ Offline'}
+                    </span>
+                  </div>
                 </td>
                 <td className="py-2 sm:py-4 px-2 sm:px-4 text-blue-300 text-xs sm:text-lg">
                   {getClassName(char.class)}
                 </td>
                 <td className="py-2 sm:py-4 px-2 sm:px-4 text-purple-300 font-bold text-xs sm:text-lg">
-                  {char.resets.toLocaleString()}
+                  {(char.resets ?? 0).toLocaleString()}
                 </td>
                 {isSearchMode && (
                   <>
