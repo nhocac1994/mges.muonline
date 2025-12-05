@@ -72,3 +72,7 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+# Backend API (separate project, should not be built by Next.js)
+backend-api/
+backend/
